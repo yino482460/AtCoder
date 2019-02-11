@@ -27,11 +27,18 @@ int Time_to_minutes (int Time) {
     return minutes;
 }
 
-// imos法 配列
-int imos[298] = {0};
+// imos法 配列 24x12 = 288
+int imos[24][12] = {0};
 // imos法 実装
-void Imos(int Time) {
-    /* code */
+void Imos(int startTime, int endTime) {
+    int S_hour, S_minutes;
+    int E_hour, E_minutes;
+    // 時間と分の取得
+    S_hour = startTime/100; S_minutes = (startTime%100)%12;
+    E_hour = endTime/100; E_minutes = (endTime%100)%12;
+    //フラグの挿入
+    imos[S_hour][S_minutes] = 1;    //始点
+    imos[E_hour][E_minutes+1] = -1;     //終点の一つ先
 }
 
 
