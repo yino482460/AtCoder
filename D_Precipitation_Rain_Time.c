@@ -29,7 +29,7 @@ int Time_to_minutes (int Time) {
 
 // imos法 配列 24x12 = 288
 int imos[24][12] = {0};
-// imos法 実装 Nは繰り返し数
+// imos法 実装 Nはデータの数
 void Imos(int N, int startTime[], int endTime[]) {
     int S_hour, S_minutes;
     int E_hour, E_minutes;
@@ -38,21 +38,41 @@ void Imos(int N, int startTime[], int endTime[]) {
     for ( i = 0; i < N; i++) {
         // 時間と分の取得
         S_hour = startTime[i]/100;
-        S_minutes = (startTime[i]%100)%12;
+        S_minutes = (startTime[i]%100)/5;
         E_hour = endTime[i]/100;
-        E_minutes = (endTime[i]%100)%12;
+        E_minutes = (endTime[i]%100)/5;
         //フラグの挿入
         imos[S_hour][S_minutes] = 1;    //始点
         imos[E_hour][E_minutes+1] = -1;     //終点の一つ先
     }
     //和の計算
     for ( i = 0; i < 24; i++) {
-        for ( j = 0; j < 12; j++) {
+        for ( j = 1; j < 12; j++) {
             imos[i][j] += imos[i][j-1];
+        }
+    }
+}
+
+// 感雨時間をマージする関数
+void merge(int imos[24][12]) {
+    int i, j;
+    int period = 0;     //雨が降っている時間
+    int start, end;
+
+    for ( i = 0; i < 24; i++) {
+        for ( j = 0; j < 12; j++) {
+            if (imos[i][j] == 1) {
+                start = i*100 + j*11;
+            } else if ( imos[i][j] == 0 ) {
+                end = i*100 + (j-1)*11;
+            } else {
+                period ++;
+            }
         }
     }
 
 }
+
 
 
 int main(int argc, char const *argv[]) {
