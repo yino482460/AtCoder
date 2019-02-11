@@ -29,6 +29,9 @@ int Time_to_minutes (int Time) {
 
 // imos法 配列 24x12 = 288
 int imos[24][12] = {0};
+//雨が降っている期間
+int period[300] = {0};
+int start[300], end[300];
 // imos法 実装 Nはデータの数
 void Imos(int N, int startTime[], int endTime[]) {
     int S_hour, S_minutes;
@@ -52,26 +55,33 @@ void Imos(int N, int startTime[], int endTime[]) {
         }
     }
     // 降り始めと雨上がりのフラグを時間に換算
-    int period = 0;     //雨が降っている期間
-    int start, end;
-
+    int count = 0;
     for ( i = 0; i < 24; i++) {
         for ( j = 0; j < 12; j++) {
-            if ( (imos[i][j] == 1) && (imos[i][j] >= 1) ) {
-                start = i*100 + j*11;
-            } else if ( (imos[i][j] == 1) && (imos[i][j+1] == 0) ) {
-                end = i*100 + j*11;
+            if ( (imos[i][j]==1) && (imos[i][j+1]>=1) ) {
+                count ++;
+                start[count] = i*100 + j*11;
+                period[count] ++;
+            } else if ( (imos[i][j]==1) && (imos[i][j+1]==0) ) {
+                end[count] = i*100 + j*11;
             } else {
-                period ++;
+                period[count] ++;
             }
         }
     }
-
 }
 
 // 感雨時間をマージする関数
-void merge(int imos[24][12]) {
-
+void merge(int period[300]) {
+    int stmp, etmp;
+    for (size_t i = 0; i < 300; i++) {
+        for (size_t j = 0; j < 300; j++) {
+            if (period[i] > period[j]) {
+                stmp = start[i]; start[i] = start[j]; start[i] = stmp;
+                etmp = end[i]; end[i] = end[j]; end[i] = etmp;
+            }
+        }
+    }
 }
 
 
@@ -89,11 +99,13 @@ int main(int argc, char const *argv[]) {
         S[i] = minutes_to_Time(S[i]);
         E[i] = minutes_to_Time(E[i]);
     }
-
-
-    //確認用
+    //時刻データの整理
+    Imos(N, S, E);
+    // 並び替え
+    merge(period);
+    // 出力
     for ( i = 0; i < N; i++) {
-        printf("%04d %04d\n", S[i], E[i] );
+        printf("%04d-%04d\n", start[i], end[i] );
     }
     return 0;
 }
