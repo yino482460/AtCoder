@@ -29,16 +29,29 @@ int Time_to_minutes (int Time) {
 
 // imos法 配列 24x12 = 288
 int imos[24][12] = {0};
-// imos法 実装
-void Imos(int startTime, int endTime) {
+// imos法 実装 Nは繰り返し数
+void Imos(int N, int startTime[], int endTime[]) {
     int S_hour, S_minutes;
     int E_hour, E_minutes;
-    // 時間と分の取得
-    S_hour = startTime/100; S_minutes = (startTime%100)%12;
-    E_hour = endTime/100; E_minutes = (endTime%100)%12;
-    //フラグの挿入
-    imos[S_hour][S_minutes] = 1;    //始点
-    imos[E_hour][E_minutes+1] = -1;     //終点の一つ先
+    int i, j;
+    // 符号化処理
+    for ( i = 0; i < N; i++) {
+        // 時間と分の取得
+        S_hour = startTime[i]/100;
+        S_minutes = (startTime[i]%100)%12;
+        E_hour = endTime[i]/100;
+        E_minutes = (endTime[i]%100)%12;
+        //フラグの挿入
+        imos[S_hour][S_minutes] = 1;    //始点
+        imos[E_hour][E_minutes+1] = -1;     //終点の一つ先
+    }
+    //和の計算
+    for ( i = 0; i < 24; i++) {
+        for ( j = 0; j < 12; j++) {
+            imos[i][j] += imos[i][j-1];
+        }
+    }
+
 }
 
 
