@@ -3,6 +3,18 @@
 
 #define N_max 30001
 
+//時刻の切り下げ
+int Round_down_Time (int Time) {
+    Time = ((Time/100)*60 + Time%100)/5*5;
+    return Time;
+}
+//時刻の切り上げ
+int Round_up_Time (int Time) {
+    Time = ((Time/100)*60 + Time%100 + 4)/5*5;;
+    return Time;
+}
+
+//経過分を時刻に変換する関数
 int minutes_to_Time (int Time) {
     Time = (Time/60)*100 + Time%60;
     return Time;
@@ -16,9 +28,9 @@ int main(int argc, char const *argv[]) {
     //時刻の読み込み
     for (i = 0; i < N; i++) {
         scanf("%d-%d", &S[i], &E[i] );
-        //時刻を0:00からの経過分に換算
-        S[i] = ((S[i]/100)*60 + S[i]%100)/5*5;
-        E[i] = ((E[i]/100)*60 + S[i]%100 + 4)/5*5;
+        //時刻の切り下げ、切り上げ
+        S[i] = Round_down_Time(S[i]);
+        E[i] = Round_up_Time(E[i]);
         //換算した分を時刻に変換
         S[i] = minutes_to_Time(S[i]);
         E[i] = minutes_to_Time(E[i]);
