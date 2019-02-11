@@ -51,25 +51,26 @@ void Imos(int N, int startTime[], int endTime[]) {
             imos[i][j] += imos[i][j-1];
         }
     }
-}
-
-// 感雨時間をマージする関数
-void merge(int imos[24][12]) {
-    int i, j;
-    int period = 0;     //雨が降っている時間
+    // 降り始めと雨上がりのフラグを時間に換算
+    int period = 0;     //雨が降っている期間
     int start, end;
 
     for ( i = 0; i < 24; i++) {
         for ( j = 0; j < 12; j++) {
-            if (imos[i][j] == 1) {
+            if ( (imos[i][j] == 1) && (imos[i][j] >= 1) ) {
                 start = i*100 + j*11;
-            } else if ( imos[i][j] == 0 ) {
-                end = i*100 + (j-1)*11;
+            } else if ( (imos[i][j] == 1) && (imos[i][j+1] == 0) ) {
+                end = i*100 + j*11;
             } else {
                 period ++;
             }
         }
     }
+
+}
+
+// 感雨時間をマージする関数
+void merge(int imos[24][12]) {
 
 }
 
