@@ -92,12 +92,6 @@ void Imos(int N, int startTime[], int endTime[]) {
             }
         }
     }
-
-    //時刻の表示
-    for ( i = 0; i < N; i++) {
-        printf("%04d %04d\n", start[i], end[i] );
-    }
-
 }
 
 // 感雨時間をマージする関数
@@ -132,14 +126,11 @@ int main(int argc, char const *argv[]) {
     }
     //時刻データの整理
     Imos(N, S, E);
-    /* for ( i = 0; i < N; i++) {
-        printf("%04d-%04d\n", start[i], end[i] );
-    } */
     // 並び替え
     merge(N, period);
     // 出力
-    /* for ( i = 0; i < N; i++) {
+    for ( i = 0; i < N; i++) {
         printf("%04d-%04d\n", start[i], end[i] );
-    } */
+    }
     return 0;
 }
