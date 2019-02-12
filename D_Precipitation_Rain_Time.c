@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#define N_max 30002
-
 //時刻の切り下げ
 int Time_to_minutes_Round_dowm (int startTime) {
     int minutes;
@@ -35,9 +33,10 @@ int Time_to_minutes (int Time) {
 // imos法 配列 24x60
 #define H 25
 #define M 60
+# define N_max 30001
 int imos[H][M] = {0};
 //雨が降っている期間
-int start[300] = {0}, end[300] = {0};
+int start[N_max] = {0}, end[N_max] = {0};
 
 // imos法 実装 Nはデータの数
 void Imos(int N, int startTime[], int endTime[]) {
@@ -56,7 +55,6 @@ void Imos(int N, int startTime[], int endTime[]) {
         imos[S_hour][S_minutes] ++;    //始点
         imos[E_hour][E_minutes+1] --;     //終点の一つ先
     }
-    printf("1:imos[0][0] %d\n", imos[0][0]);
     //フラグの和の計算
     for ( i = 0; i < H; i++) {
         for ( j = 0; j < M; j++) {
@@ -69,18 +67,14 @@ void Imos(int N, int startTime[], int endTime[]) {
             }
         }
     }
-    printf("2:imos[0][0] %d\n", imos[0][0]);
-
-
     // 降り始めと雨上がりを時刻に換算
     int count = -1;
     for ( i = 0; i < H; i++) {
         for ( j = 0; j < M; j++) {
             // imos[0][0]の処理
-            if ( (i==0) && (j==0) ) {
+            if ( ((i==0) && (j==0)) && imos[0][0] == 1 ) {
                 count ++;
                 start[count] = 0;
-                printf("3:imos[0][0] %d\n", imos[0][0]);
                 // imos[0][0]は次に飛ぶ
                 j++;
                 continue;
@@ -104,8 +98,8 @@ void Imos(int N, int startTime[], int endTime[]) {
 int main(int argc, char const *argv[]) {
     //入力
     int N, i;
-    int S[N_max], E[N_max];
     scanf("%d", &N );
+    int S[N], E[N];
     //時刻の読み込み
     for (i = 0; i < N; i++) {
         scanf("%d-%d", &S[i], &E[i] );
@@ -117,7 +111,6 @@ int main(int argc, char const *argv[]) {
     //時刻データの整理
     Imos(N, S, E);
     // 出力
-    printf("start[0] %d, end[0] %d\n", start[0], end[0]);
     for ( i = 0; i < N; i++) {
         if (end[i] > 0) {
             printf("%04d-%04d\n", start[i], end[i] );
