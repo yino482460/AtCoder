@@ -37,10 +37,6 @@ void Imos(int N, int startTime[], int endTime[]) {
     int S_hour, S_minutes;
     int E_hour, E_minutes;
     int i, j;
-    // 時刻の表示 OK
-    for ( i = 0; i < N; i++) {
-        printf("%d %d\n", startTime[i], endTime[i] );
-    }
     // 符号化処理
     for ( i = 0; i < N; i++) {
         // 時間と分の取得
@@ -48,11 +44,13 @@ void Imos(int N, int startTime[], int endTime[]) {
         S_minutes = (startTime[i]%100)/5;
         E_hour = endTime[i]/100;
         E_minutes = (endTime[i]%100)/5;
-        //フラグの挿入
+        //フラグの挿入　2019 02 12 12:40 修正
         imos[S_hour][S_minutes] ++;    //始点
         imos[E_hour][E_minutes+1] --;     //終点の一つ先
     }
+
     // imos の表示
+    printf("imos1\n");
     for ( i = 0; i < 24; i++) {
         for ( j = 0; j < 12; j++) {
             printf("%2d", imos[i][j] );
@@ -60,16 +58,28 @@ void Imos(int N, int startTime[], int endTime[]) {
         printf("\n");
     }
     //和の計算
-    int count = 0;
     for ( i = 0; i < 24; i++) {
-        for ( j = 1; j < 12; j++) {
-            imos[i][j] += imos[i][j-1];
-            count++;
+        for ( j = 0; j < 12; j++) {
+            if ( (i==0) && (j==0) ) {
+                imos[0][1] += imos[0][0];
+                j++;
+            } else {
+                imos[i][j] += imos[i][j-1];
+            }
         }
     }
 
+    // imos の表示
+    printf("imos2\n");
+    for ( i = 0; i < 24; i++) {
+        for ( j = 0; j < 12; j++) {
+            printf("%2d", imos[i][j] );
+        }
+        printf("\n");
+    }
+
     // 降り始めと雨上がりを時刻に換算
-    count = 0;
+    int count = 0;
     for ( i = 0; i < 24; i++) {
         for ( j = 0; j < 12; j++) {
             count ++;
