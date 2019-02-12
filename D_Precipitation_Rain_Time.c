@@ -31,12 +31,16 @@ int Time_to_minutes (int Time) {
 int imos[24][12] = {0};
 //雨が降っている期間
 int period[300] = {0};
-int start[300], end[300];
+int start[300] = {0}, end[300] = {0};
 // imos法 実装 Nはデータの数
 void Imos(int N, int startTime[], int endTime[]) {
     int S_hour, S_minutes;
     int E_hour, E_minutes;
     int i, j;
+    // 時刻の表示 OK
+    for ( i = 0; i < N; i++) {
+        printf("%d %d\n", startTime[i], endTime[i] );
+    }
     // 符号化処理
     for ( i = 0; i < N; i++) {
         // 時間と分の取得
@@ -49,39 +53,54 @@ void Imos(int N, int startTime[], int endTime[]) {
         imos[E_hour][E_minutes+1] = -1;     //終点の一つ先
     }
     //和の計算
+    int count = 0;
     for ( i = 0; i < 24; i++) {
         for ( j = 1; j < 12; j++) {
             imos[i][j] += imos[i][j-1];
+            count++;
         }
     }
-    // 降り始めと雨上がりのフラグを時間に換算
-    int count = 0;
+    // imos の表示
     for ( i = 0; i < 24; i++) {
         for ( j = 0; j < 12; j++) {
+            printf("%2d", imos[i][j] );
+        }
+        printf("\n");
+    }
+
+    // 降り始めと雨上がりを時刻に換算
+    count = 0;
+    for ( i = 0; i < 24; i++) {
+        for ( j = 0; j < 12; j++) {
+            count ++;
             if ( (imos[i][j]==1) && (imos[i][j+1]>=1) ) {
-                count ++;
                 start[count] = i*100 + j*11;
                 period[count] ++;
             } else if ( (imos[i][j]==1) && (imos[i][j+1]==0) ) {
                 end[count] = i*100 + j*11;
             } else {
-                period[count] ++;
+                //period[count] ++;
             }
         }
     }
+    /* for ( i = 0; i < N; i++) {
+        printf("%d %d %d\n", period[i], start[i], end[i] );
+    } */
+
 }
 
 // 感雨時間をマージする関数
-void merge(int period[300]) {
+int merge(int N, int period[300]) {
     int stmp, etmp;
-    for (size_t i = 0; i < 300; i++) {
-        for (size_t j = 0; j < 300; j++) {
-            if (period[i] > period[j]) {
+    for (size_t i = 0; i < N; i++) {
+        for (size_t j = N-1; j > i; j--) {
+            if (period[i] < period[j]) {
                 stmp = start[i]; start[i] = start[j]; start[i] = stmp;
                 etmp = end[i]; end[i] = end[j]; end[i] = etmp;
             }
         }
     }
+    return 0;
 }
 
 
@@ -101,11 +120,14 @@ int main(int argc, char const *argv[]) {
     }
     //時刻データの整理
     Imos(N, S, E);
-    // 並び替え
-    merge(period);
-    // 出力
-    for ( i = 0; i < N; i++) {
+    /* for ( i = 0; i < N; i++) {
         printf("%04d-%04d\n", start[i], end[i] );
-    }
+    } */
+    // 並び替え
+    merge(N, period);
+    // 出力
+    /* for ( i = 0; i < N; i++) {
+        printf("%04d-%04d\n", start[i], end[i] );
+    } */
     return 0;
 }
