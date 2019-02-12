@@ -27,7 +27,7 @@ int Time_to_minutes (int Time) {
 }
 
 // imos法 配列 24x60
-#define H 24
+#define H 25
 #define M 60
 int imos[H][M] = {0};
 //雨が降っている期間
@@ -57,6 +57,7 @@ void Imos(int N, int startTime[], int endTime[]) {
             if ( (i==0) && (j==0) ) {
                 imos[0][1] += imos[0][0];
                 j++;
+                continue;
             } else {
                 imos[i][j] += imos[i][j-1];
             }
@@ -68,10 +69,10 @@ void Imos(int N, int startTime[], int endTime[]) {
     for ( i = 0; i < H; i++) {
         for ( j = 0; j < M; j++) {
             // imos[0][0]の処理
-            if (imos[0][0] == 1) {
+            if (imos[0][0] >= 1) {
                 count ++;
                 start[count] = 0;
-                // imos[0][0]は飛ぶ
+                // imos[0][0]は次に飛ぶ
                 j++;
                 continue;
             }
@@ -81,9 +82,9 @@ void Imos(int N, int startTime[], int endTime[]) {
                 start[count] = i*100 + j;
                 period[count] ++;
             //雨上がりの時刻
-            } else if ( (imos[i][j]==1) && (imos[i][j+1]==0) ) {
+            } else if ( (imos[i][j]>=1) && (imos[i][j+1]==0) ) {
                 end[count] = i*100 + j;
-            // 雨
+            // 雨が降っている間
             } else if ( (imos[i][j]>=1) && (imos[i][j+1]>=1) ) {
                 period[count] ++;
             } else {
