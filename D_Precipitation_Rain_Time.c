@@ -49,8 +49,15 @@ void Imos(int N, int startTime[], int endTime[]) {
         E_hour = endTime[i]/100;
         E_minutes = (endTime[i]%100)/5;
         //フラグの挿入
-        imos[S_hour][S_minutes] = 1;    //始点
-        imos[E_hour][E_minutes+1] = -1;     //終点の一つ先
+        imos[S_hour][S_minutes] ++;    //始点
+        imos[E_hour][E_minutes+1] --;     //終点の一つ先
+    }
+    // imos の表示
+    for ( i = 0; i < 24; i++) {
+        for ( j = 0; j < 12; j++) {
+            printf("%2d", imos[i][j] );
+        }
+        printf("\n");
     }
     //和の計算
     int count = 0;
@@ -59,13 +66,6 @@ void Imos(int N, int startTime[], int endTime[]) {
             imos[i][j] += imos[i][j-1];
             count++;
         }
-    }
-    // imos の表示
-    for ( i = 0; i < 24; i++) {
-        for ( j = 0; j < 12; j++) {
-            printf("%2d", imos[i][j] );
-        }
-        printf("\n");
     }
 
     // 降り始めと雨上がりを時刻に換算
