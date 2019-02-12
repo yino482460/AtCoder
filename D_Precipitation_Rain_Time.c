@@ -37,7 +37,6 @@ int Time_to_minutes (int Time) {
 #define M 60
 int imos[H][M] = {0};
 //雨が降っている期間
-int period[300] = {0};  //時間
 int start[300] = {0}, end[300] = {0};
 
 // imos法 実装 Nはデータの数
@@ -57,7 +56,7 @@ void Imos(int N, int startTime[], int endTime[]) {
         imos[S_hour][S_minutes] ++;    //始点
         imos[E_hour][E_minutes+1] --;     //終点の一つ先
     }
-
+    printf("1:imos[0][0] %d\n", imos[0][0]);
     //フラグの和の計算
     for ( i = 0; i < H; i++) {
         for ( j = 0; j < M; j++) {
@@ -70,15 +69,18 @@ void Imos(int N, int startTime[], int endTime[]) {
             }
         }
     }
+    printf("2:imos[0][0] %d\n", imos[0][0]);
+
 
     // 降り始めと雨上がりを時刻に換算
     int count = -1;
     for ( i = 0; i < H; i++) {
         for ( j = 0; j < M; j++) {
             // imos[0][0]の処理
-            if (imos[0][0] >= 1 ) {
+            if ( (i==0) && (j==0) ) {
                 count ++;
                 start[count] = 0;
+                printf("3:imos[0][0] %d\n", imos[0][0]);
                 // imos[0][0]は次に飛ぶ
                 j++;
                 continue;
@@ -87,13 +89,9 @@ void Imos(int N, int startTime[], int endTime[]) {
             if ( (imos[i][j-1]==0) && (imos[i][j]>=1)  ) {
                 count ++;
                 start[count] = i*100 + j;
-                period[count] ++;
             //雨上がりの時刻
             } else if ( (imos[i][j]>=1) && (imos[i][j+1]==0) ) {
                 end[count] = i*100 + j;
-            // 雨が降っている間
-            } else if ( (imos[i][j]>=1) && (imos[i][j+1]>=1) ) {
-                period[count] ++;
             } else {
                 // 何もしない
             }
@@ -119,6 +117,7 @@ int main(int argc, char const *argv[]) {
     //時刻データの整理
     Imos(N, S, E);
     // 出力
+    printf("start[0] %d, end[0] %d\n", start[0], end[0]);
     for ( i = 0; i < N; i++) {
         if (end[i] > 0) {
             printf("%04d-%04d\n", start[i], end[i] );
