@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#define N_max 30001
+#define N_max 30002
 
 //時刻の切り下げ
 int Time_to_minutes_Round_dowm (int startTime) {
@@ -101,21 +101,6 @@ void Imos(int N, int startTime[], int endTime[]) {
     }
 }
 
-// 感雨時間をマージ
-int merge(int N, int period[300]) {
-    int stmp, etmp;
-    for (int i = 0; i < N; i++) {
-        for (int j = N-1; j > i; j--) {
-            if (period[i] < period[j]) {
-                //交換
-                stmp = start[i]; start[i] = start[j]; start[i] = stmp;
-                etmp = end[i]; end[i] = end[j]; end[i] = etmp;
-            }
-        }
-    }
-    return 0;
-}
-
 
 // メイン
 int main(int argc, char const *argv[]) {
@@ -133,8 +118,6 @@ int main(int argc, char const *argv[]) {
     }
     //時刻データの整理
     Imos(N, S, E);
-    // 並び替え
-    merge(N, period);
     // 出力
     for ( i = 0; i < N; i++) {
         if (end[i] > 0) {
