@@ -13,7 +13,6 @@ int Time_to_minutes_Round_up (int Time) {
     Time = ((Time/100)*60 + Time%100 + 4)/5*5;;
     return Time;
 }
-
 //経過分を時刻に変換する関数
 int minutes_to_Time (int minutes) {
     int Time;
@@ -27,39 +26,34 @@ int Time_to_minutes (int Time) {
     return minutes;
 }
 
-// imos法 配列 24x12 = 288
-int imos[24][12] = {0};
+// imos法 配列 24x60
+#define H 24
+#define M 60
+int imos[H][M] = {0};
 //雨が降っている期間
-int period[300] = {0};
+int period[300] = {0};  //時間
 int start[300] = {0}, end[300] = {0};
 // imos法 実装 Nはデータの数
 void Imos(int N, int startTime[], int endTime[]) {
     int S_hour, S_minutes;
     int E_hour, E_minutes;
     int i, j;
-    // 符号化処理
+    // 符号化処理 OK
     for ( i = 0; i < N; i++) {
-        // 時間と分の取得
+        // 開始
         S_hour = startTime[i]/100;
-        S_minutes = (startTime[i]%100)/5;
+        S_minutes = startTime[i]%100;
+        // 終了
         E_hour = endTime[i]/100;
-        E_minutes = (endTime[i]%100)/5;
+        E_minutes = endTime[i]%100;
         //フラグの挿入　2019 02 12 12:40 修正
         imos[S_hour][S_minutes] ++;    //始点
         imos[E_hour][E_minutes+1] --;     //終点の一つ先
     }
 
-    // imos の表示
-    printf("imos1\n");
-    for ( i = 0; i < 24; i++) {
-        for ( j = 0; j < 12; j++) {
-            printf("%2d", imos[i][j] );
-        }
-        printf("\n");
-    }
-    //和の計算
-    for ( i = 0; i < 24; i++) {
-        for ( j = 0; j < 12; j++) {
+    //フラグの和の計算 OK
+    for ( i = 0; i < H; i++) {
+        for ( j = 0; j < M; j++) {
             if ( (i==0) && (j==0) ) {
                 imos[0][1] += imos[0][0];
                 j++;
@@ -69,33 +63,39 @@ void Imos(int N, int startTime[], int endTime[]) {
         }
     }
 
-    // imos の表示
-    printf("imos2\n");
-    for ( i = 0; i < 24; i++) {
-        for ( j = 0; j < 12; j++) {
-            printf("%2d", imos[i][j] );
-        }
-        printf("\n");
-    }
-
     // 降り始めと雨上がりを時刻に換算
     int count = 0;
-    for ( i = 0; i < 24; i++) {
-        for ( j = 0; j < 12; j++) {
-            count ++;
-            if ( (imos[i][j]==1) && (imos[i][j+1]>=1) ) {
-                start[count] = i*100 + j*11;
+    for ( i = 0; i < H; i++) {
+        for ( j = 0; j < M; j++) {
+            // imos[0][0]の処理
+            if (imos[0][0] == 1) {
+                count ++;
+                start[count] = 0;
+                // imos[0][0]は飛ぶ
+                j++;
+                continue;
+            }
+            //降り始めの時刻
+            if ( (imos[i][j-1]==0) && (imos[i][j]>=1)  ) {
+                count ++;
+                start[count] = i*100 + j;
                 period[count] ++;
+            //雨上がりの時刻
             } else if ( (imos[i][j]==1) && (imos[i][j+1]==0) ) {
-                end[count] = i*100 + j*11;
+                end[count] = i*100 + j;
+            // 雨
+            } else if ( (imos[i][j]>=1) && (imos[i][j+1]>=1) ) {
+                period[count] ++;
             } else {
-                //period[count] ++;
+                // 何もしない
             }
         }
     }
-    /* for ( i = 0; i < N; i++) {
-        printf("%d %d %d\n", period[i], start[i], end[i] );
-    } */
+
+    //時刻の表示
+    for ( i = 0; i < N; i++) {
+        printf("%04d %04d\n", start[i], end[i] );
+    }
 
 }
 
@@ -105,6 +105,7 @@ int merge(int N, int period[300]) {
     for (size_t i = 0; i < N; i++) {
         for (size_t j = N-1; j > i; j--) {
             if (period[i] < period[j]) {
+                //交換
                 stmp = start[i]; start[i] = start[j]; start[i] = stmp;
                 etmp = end[i]; end[i] = end[j]; end[i] = etmp;
             }
