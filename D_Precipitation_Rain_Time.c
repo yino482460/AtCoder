@@ -4,14 +4,20 @@
 #define N_max 30001
 
 //時刻の切り下げ
-int Time_to_minutes_Round_dowm (int Time) {
-    Time = ((Time/100)*60 + Time%100)/5*5;
-    return Time;
+int Time_to_minutes_Round_dowm (int startTime) {
+    int minutes;
+    minutes = ((startTime/100)*60 + startTime%100)/5*5;
+    return minutes;
 }
 //時刻の切り上げ
-int Time_to_minutes_Round_up (int Time) {
-    Time = ((Time/100)*60 + Time%100 + 4)/5*5;;
-    return Time;
+int Time_to_minutes_Round_up (int endTime) {
+    int minutes;
+    minutes = ((endTime/100)*60 + endTime%100 + 4)/5*5;
+    int limit = 24*60;
+    if (minutes >= limit) {
+        minutes = limit;
+    }
+    return minutes;
 }
 //経過分を時刻に変換する関数
 int minutes_to_Time (int minutes) {
@@ -33,12 +39,13 @@ int imos[H][M] = {0};
 //雨が降っている期間
 int period[300] = {0};  //時間
 int start[300] = {0}, end[300] = {0};
+
 // imos法 実装 Nはデータの数
 void Imos(int N, int startTime[], int endTime[]) {
     int S_hour, S_minutes;
     int E_hour, E_minutes;
     int i, j;
-    // 符号化処理 OK
+    // 符号化処理
     for ( i = 0; i < N; i++) {
         // 開始
         S_hour = startTime[i]/100;
@@ -51,7 +58,7 @@ void Imos(int N, int startTime[], int endTime[]) {
         imos[E_hour][E_minutes+1] --;     //終点の一つ先
     }
 
-    //フラグの和の計算 OK
+    //フラグの和の計算
     for ( i = 0; i < H; i++) {
         for ( j = 0; j < M; j++) {
             if ( (i==0) && (j==0) ) {
@@ -65,11 +72,11 @@ void Imos(int N, int startTime[], int endTime[]) {
     }
 
     // 降り始めと雨上がりを時刻に換算
-    int count = 0;
+    int count = -1;
     for ( i = 0; i < H; i++) {
         for ( j = 0; j < M; j++) {
             // imos[0][0]の処理
-            if (imos[0][0] >= 1) {
+            if (imos[0][0] >= 1 ) {
                 count ++;
                 start[count] = 0;
                 // imos[0][0]は次に飛ぶ
@@ -94,11 +101,11 @@ void Imos(int N, int startTime[], int endTime[]) {
     }
 }
 
-// 感雨時間をマージする関数
+// 感雨時間をマージ
 int merge(int N, int period[300]) {
     int stmp, etmp;
-    for (size_t i = 0; i < N; i++) {
-        for (size_t j = N-1; j > i; j--) {
+    for (int i = 0; i < N; i++) {
+        for (int j = N-1; j > i; j--) {
             if (period[i] < period[j]) {
                 //交換
                 stmp = start[i]; start[i] = start[j]; start[i] = stmp;
@@ -110,7 +117,7 @@ int merge(int N, int period[300]) {
 }
 
 
-
+// メイン
 int main(int argc, char const *argv[]) {
     //入力
     int N, i;
@@ -130,7 +137,9 @@ int main(int argc, char const *argv[]) {
     merge(N, period);
     // 出力
     for ( i = 0; i < N; i++) {
-        printf("%04d-%04d\n", start[i], end[i] );
+        if (end[i] > 0) {
+            printf("%04d-%04d\n", start[i], end[i] );
+        }
     }
     return 0;
 }
