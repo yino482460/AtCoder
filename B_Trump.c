@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #define String_max 10
 char keyword[7] = {'a', 't', 'c', 'o', 'd', 'e', 'r'};
 
@@ -23,12 +24,7 @@ int is_keyword (char string) {
 int is_Match(char S[], char N[]) {
     int S_length = 0;
     // 文字列の長さを計算
-    for (size_t i = 0; i < String_max; i++) {
-        if (S[i] == '\0') {
-            break;
-        }
-        S_length ++;
-    }
+    S_length = strlen(S);
     // @の現れ方によって判定
     for (size_t i = 0; i < S_length; i++) {
         int check = 0;
