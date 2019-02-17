@@ -1,31 +1,33 @@
 #include <stdio.h>
 #define String_max 10
-char AtCoder[8] = {'a', 't', 'c', 'o', 'd', 'e', 'r', '\0'};
+char keyword[7] = {'a', 't', 'c', 'o', 'd', 'e', 'r'};
 
 int is_keyword (char string) {
-    int hash = 0;
-    int key_length = sizeof(AtCoder) / sizeof(AtCoder[0]);
+    int score = 0;
+    int key_length = sizeof(keyword) / sizeof(keyword[0]);
     // @の場合は10点
     if (string == '@') {
-        hash = 10;
+        score = 10;
+        return score;
     }
     // キーワードと一致すれば 1点
     for (size_t i = 0; i < key_length; i++) {
-        if (string == AtCoder[i]) {
-            hash = 1;
+        if (string == keyword[i]) {
+            score = 1;
             break;
         }
     }
-    return hash;
+    return score;
 }
 
 int is_Match(char S[], char N[]) {
     int S_length = 0;
     // 文字列の長さを計算
     for (size_t i = 0; i < String_max; i++) {
-        if (S[i] != '\0') {
-            S_length ++;
+        if (S[i] == '\0') {
+            break;
         }
+        S_length ++;
     }
     // @の現れ方によって判定
     for (size_t i = 0; i < S_length; i++) {
@@ -37,25 +39,24 @@ int is_Match(char S[], char N[]) {
             if ( check >= 11 ) {    // 11点以上であれば置換可能
                 continue;
             } else {
-                return -1;
+                return -1;  // 置換不可
             }
-            return -1;
+            return -1;  // 不一致
         }
     }
     return 1;   // 一致
 }
 
 int main(int argc, char const *argv[]) {
-    // 変数
+    // 文字列
     char S[String_max+1], N[String_max+1];
     // 入力
-    scanf("%s", S );
-    scanf("%s", N );
+    scanf("%s%s", S, N );
     // 判定
-    if (  is_Match(S, N) == -1 ) {
-        printf("You will lose\n");
-    } else {
+    if ( is_Match(S, N) == 1 ) {
         printf("You can win\n");
+    } else {
+        printf("You will lose\n");
     }
     return 0;
 }
