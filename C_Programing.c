@@ -41,11 +41,14 @@ int main(int argc, char const *argv[]) {
     }
     // ソート
     QuickSort( Rate, 0, N-1 );
-    for (size_t i = 0; i < N; i++) {
-        printf("%d ", Rate[i] );
+    // 計算
+    double ans = 0;
+    int No = K-1;
+    while (No >= 0) {
+        ans = (ans+Rate[No])/2;
+        No --;
     }
-    printf("\n");
-
-
+    // 出力
+    printf("%lf\n", ans );
     return 0;
 }
