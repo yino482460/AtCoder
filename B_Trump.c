@@ -1,33 +1,47 @@
 #include <stdio.h>
 #define String_max 10
-char Trump[7] = {'a', 't', 'c', 'o', 'd', 'e', 'r'};
+char AtCoder[8] = {'a', 't', 'c', 'o', 'd', 'e', 'r', '\0'};
+
+int is_keyword (char string) {
+    int hash = 0;
+    int key_length = sizeof(AtCoder) / sizeof(AtCoder[0]);
+    // @の場合は10点
+    if (string == '@') {
+        hash = 10;
+    }
+    // キーワードと一致すれば 1点
+    for (size_t i = 0; i < key_length; i++) {
+        if (string == AtCoder[i]) {
+            hash = 1;
+            break;
+        }
+    }
+    return hash;
+}
 
 int is_Match(char S[], char N[]) {
-    int length = sizeof(Trump);
-    int count = 0;
-    // 文字列の数を計算
+    int S_length = 0;
+    // 文字列の長さを計算
     for (size_t i = 0; i < String_max; i++) {
-        if (N[i] != '\0') {
-            count++;
+        if (S[i] != '\0') {
+            S_length ++;
         }
     }
-
-    for (size_t i = 0; i < count; i++) {
-        int j = 0;
-        // 第 i文字が一致するか
-        while ( j <= length ) {
-            S[i] = Trump[j];
-            if (S[i] == Trump[j]) {
-                i ++;
-            } else if ( j == length ) {
-                return -1;  // 候補と不一致
+    // @の現れ方によって判定
+    for (size_t i = 0; i < S_length; i++) {
+        int check = 0;
+        if (S[i] == N[i]) {
+            continue;
+        } else {
+            check = is_keyword(S[i]) + is_keyword(N[i]);
+            if ( check >= 11 ) {    // 11点以上であれば置換可能
+                continue;
             } else {
-                j ++;   // 次の候補に移動
+                return -1;
             }
+            return -1;
         }
     }
-
-
     return 1;   // 一致
 }
 
@@ -38,7 +52,10 @@ int main(int argc, char const *argv[]) {
     scanf("%s", S );
     scanf("%s", N );
     // 判定
-
-
+    if (  is_Match(S, N) == -1 ) {
+        printf("You will lose\n");
+    } else {
+        printf("You can win\n");
+    }
     return 0;
 }
