@@ -37,6 +37,7 @@ long long mod_nCr (int n, int r, long Mod) {
     }
     return tPascal[n][r];
 }
+
 // BitCount
 int BitCount(int bits) {
     bits = (bits & 0x55555555) + (bits >> 1 & 0x55555555);
@@ -50,32 +51,33 @@ int BitCount(int bits) {
 long long Inclusion_exclusion_principle (int R, int C, int X, int Y, int D, int L) {
     long long all = 0;
     long long Mod = nPow(10, 9) + 7;
-    int combiXY;
     // X x Yスペースの配置の仕方
+    int combiXY;
     combiXY = calc_combi_XY(R, C, X, Y);
-    all = mod_nCr(X*Y, D+L, Mod)*mod_nCr(D+L, D, Mod);
     // 包除原理の本体
     if (D+L != X*Y) {
-        for (size_t i = 0; i < 16; i++) {   // i=0は全体集合
+        for (int i = 0; i < 1<<4; i++) {   // i=0は全体集合
             int sX = X;
             int sY = Y;
             // bit演算で場合分け
-            if ( ((i >> 0)&1) == 1) {sY--;}
-            if ( ((i >> 1)&1) == 1) {sY--;}
-            if ( ((i >> 2)&1) == 1) {sX--;}
-            if ( ((i >> 3)&1) == 1) {sX--;}
+            if ( (i >> 0&1) == 1) {sY--;}
+            if ( (i >> 1&1) == 1) {sY--;}
+            if ( (i >> 2&1) == 1) {sX--;}
+            if ( (i >> 3&1) == 1) {sX--;}
             // sX x sYの領域を検証
             if (sX<0 || sY<0) {continue;}
             // 包除原理の計算
-            if ( (BitCount(i))%2 == 1) {    // 奇数個の集合
-                all -= (mod_nCr(sX*sY, D+L, Mod)*mod_nCr(D+L, D, Mod))%Mod;
-            } else {    // 偶数個の集合
-                all += (mod_nCr(sX*sY, D+L, Mod)*mod_nCr(D+L, D, Mod))%Mod;
+            if ( (BitCount(i))%2 == 0) {    // 偶数個の集合
+                all += mod_nCr(sX*sY, D+L, Mod)*mod_nCr(D+L, D, Mod);
+            } else {    // 奇数個の集合
+                all -= ( mod_nCr(sX*sY, D+L, Mod)*mod_nCr(D+L, D, Mod) )%Mod;
             }
         }
+        all = (all + Mod)%Mod;
         all = (all*combiXY)%Mod;
     // D+L = X*Yのとき
     } else {
+        all = mod_nCr(X*Y, D+L, Mod)*mod_nCr(D+L, D, Mod);
         all = (all*combiXY)%Mod;
     }
     return all;
