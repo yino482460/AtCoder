@@ -1,7 +1,8 @@
 #include <stdio.h>
+#include <math.h>
 #define R_max 30
 #define C_max 30
-long tPascal[R_max+1][R_max+1] ;
+long tPascal[R_max*R_max+1][R_max*R_max+1] ;
 
 int calc_combi_XY ( int R, int C, int X, int Y ) {
     int combiXY = 0;
@@ -34,10 +35,11 @@ int main(int argc, char const *argv[]) {
     // X x Yスペースの配置の仕方
     long ans;
     int combiXY = calc_combi_XY(R, C, X, Y);
-    printf("combiXY %d\n", combiXY );
     // 机とサーバーラックの組み合わせを計算
     calc_nCr(X*Y, L);
+    printf("tPascal %ld\n", tPascal[X*Y][D] );
     ans = combiXY*tPascal[X*Y][D];
+    ans = ans%( (long)pow(10,9)+7 );
     // 出力
     printf("%ld\n", ans );
     return 0;
