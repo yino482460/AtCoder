@@ -38,8 +38,7 @@ long long mod_nCr (int n, int r, long Mod) {
     return tPascal[n][r];
 }
 // BitCount
-int BitCount(int bits)
-{
+int BitCount(int bits) {
     bits = (bits & 0x55555555) + (bits >> 1 & 0x55555555);
     bits = (bits & 0x33333333) + (bits >> 2 & 0x33333333);
     bits = (bits & 0x0f0f0f0f) + (bits >> 4 & 0x0f0f0f0f);
@@ -48,15 +47,16 @@ int BitCount(int bits)
 }
 
 // 包除原理から解に適さないものを除外
-long long Inclusion_exclusion_principle (int X, int Y, int D, int L) {
+long long Inclusion_exclusion_principle (int R, int C, int X, int Y, int D, int L) {
     long long all = 0;
     long long Mod = nPow(10, 9) + 7;
     int combiXY;
     // X x Yスペースの配置の仕方
     combiXY = calc_combi_XY(R, C, X, Y);
+    all = mod_nCr(X*Y, D+L, Mod)*mod_nCr(D+L, D, Mod);
     // 包除原理の本体
     if (D+L != X*Y) {
-        for (size_t i = 0; i < 16; i++) {
+        for (size_t i = 0; i < 16; i++) {   // i=0は全体集合
             int sX = X;
             int sY = Y;
             // bit演算で場合分け
@@ -67,21 +67,17 @@ long long Inclusion_exclusion_principle (int X, int Y, int D, int L) {
             // sX x sYの領域を検証
             if (sX<0 || sY<0) {continue;}
             // 包除原理の計算
-            if ( (BitCount(i))%2 == 1) {    // 偶数個の集合
-                all += mod_nCr(sX*sY, D+L, Mod)*mod_nCr(D+L, D, Mod);
-            } else {    // 奇数個の集合
-                all -= mod_nCr(sX*sY, D+L, Mod)*mod_nCr(D+L, D, Mod);
+            if ( (BitCount(i))%2 == 1) {    // 奇数個の集合
+                all -= (mod_nCr(sX*sY, D+L, Mod)*mod_nCr(D+L, D, Mod))%Mod;
+            } else {    // 偶数個の集合
+                all += (mod_nCr(sX*sY, D+L, Mod)*mod_nCr(D+L, D, Mod))%Mod;
             }
-
-
         }
-
-
+        all = (all*combiXY)%Mod;
     // D+L = X*Yのとき
     } else {
-        all = all%Mod;
+        all = (all*combiXY)%Mod;
     }
-
     return all;
 }
 
@@ -90,8 +86,9 @@ int main(int argc, char const *argv[]) {
     scanf("%d %d", &R, &C );
     scanf("%d %d", &X, &Y );
     scanf("%d %d", &D, &L );
-
+    // 計算
     long long ans = 0;
+    ans = Inclusion_exclusion_principle(R, C, X, Y, D, L);
     // 出力
     printf("%lld\n", ans );
     return 0;
