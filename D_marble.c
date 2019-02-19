@@ -3,7 +3,7 @@
 #include <string.h>
 #define Max_Box 2001
 #define Marbles 901
-#define Infinity 1 << 30
+#define Infinity 100000000
 // 変数
 long dp[Max_Box][Marbles];
 int R, G, B;
@@ -22,17 +22,13 @@ int calc_Move (int look, int marbles) {
 }
 // 最小移動数を計算する
 long DFS (int look, int marbles) {
-    printf("%d %d\n", look, marbles );
-    printf("look+1000 %d\n", look+1000 );
     if (dp[look+1000][marbles] != -1) { return dp[look+1000][marbles];}
     if (look > 999) { return Infinity;}
     if (marbles == sum) {return 0;}
-    int calc1, calc2;
+    long calc1, calc2;
     calc1 = DFS(look+1, marbles+1) + calc_Move(look, marbles);
-    calc2 = DFS(look+1, marbles+1);
-    if (calc1 > calc2) {
-        dp[look+1000][marbles] = calc2;
-    }
+    calc2 = DFS(look+1, marbles);
+    dp[look+1000][marbles]=(calc1 > calc2 ? calc2 : calc1);
     return dp[look+1000][marbles];
 }
 
