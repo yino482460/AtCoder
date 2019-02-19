@@ -1,9 +1,8 @@
 #include <stdio.h>
-#include <math.h>
-#define R_max 30
-#define C_max 30
+#define R_max 31
+#define C_max 31
 #define P_max R_max*R_max
-long long tPascal[P_max+1][P_max+1] ;
+long long int tPascal[P_max+1][P_max+1] ;
 // 変数
 int R, C, X, Y, D, L;
 // 机とサーバーラックの配置の組み合わせ
@@ -13,7 +12,7 @@ int calc_combi_XY ( int R, int C, int X, int Y ) {
     return combiXY;
 }
 // 繰り返し2乗法
-long long nPow(int x, int y) {
+long long int nPow(int x, int y) {
     if (y == 0) {
         return 1;
     } else if (y == 1) {
@@ -25,13 +24,13 @@ long long nPow(int x, int y) {
     }
 }
 // Pascalの三角形と余りの性質を利用してnCrの余りを計算
-long long mod_nCr (int n, int r, long Mod) {
+long long int mod_nCr (int n, int r, long Mod) {
     tPascal[0][0] = 1;
     // 初期設定
     for (size_t i = 1; i <= n; i++) { tPascal[i][0] = 1; tPascal[i][i] = 1; }
     // 組み合わせの計算
     for (size_t i = 1; i <= n; i++) {
-        for (size_t j = 1; j <= n; j++) {
+        for (size_t j = 1; j < n; j++) {
             tPascal[i][j] = (tPascal[i-1][j-1] + tPascal[i-1][j])%Mod;
         }
     }
@@ -49,9 +48,9 @@ int BitCount(int bits) {
 
 // 包除原理から解に適さないものを除外
 long long Inclusion_exclusion_principle (int R, int C, int X, int Y, int D, int L) {
-    long long all = 0;
-    long long Mod = nPow(10, 9) + 7;
-    // X x Yスペースの配置の仕方
+    long long int all = 0;
+    long Mod = nPow(10, 9) + 7;
+    // X x Yスペースの配置の計算
     int combiXY;
     combiXY = calc_combi_XY(R, C, X, Y);
     // 包除原理の本体
@@ -67,19 +66,18 @@ long long Inclusion_exclusion_principle (int R, int C, int X, int Y, int D, int 
             // sX x sYの領域を検証
             if (sX<0 || sY<0) {continue;}
             // 包除原理の計算
-            if ( (BitCount(i))%2 == 0) {    // 偶数個の集合
+            if ( (BitCount(i))%2 == 0) {    // 偶数個と全体の集合
                 all += mod_nCr(sX*sY, D+L, Mod)*mod_nCr(D+L, D, Mod);
             } else {    // 奇数個の集合
-                all -= ( mod_nCr(sX*sY, D+L, Mod)*mod_nCr(D+L, D, Mod) )%Mod;
+                all -= mod_nCr(sX*sY, D+L, Mod)*mod_nCr(D+L, D, Mod);
             }
         }
         all = (all + Mod)%Mod;
-        all = (all*combiXY)%Mod;
     // D+L = X*Yのとき
     } else {
         all = mod_nCr(X*Y, D+L, Mod)*mod_nCr(D+L, D, Mod);
-        all = (all*combiXY)%Mod;
     }
+    all = (combiXY*all)%Mod;
     return all;
 }
 
@@ -89,7 +87,7 @@ int main(int argc, char const *argv[]) {
     scanf("%d %d", &X, &Y );
     scanf("%d %d", &D, &L );
     // 計算
-    long long ans = 0;
+    long long int ans = 0;
     ans = Inclusion_exclusion_principle(R, C, X, Y, D, L);
     // 出力
     printf("%lld\n", ans );
