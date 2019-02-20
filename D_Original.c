@@ -24,7 +24,7 @@ long min_Move_Cost (int R, int G, int B) {
     long min_cost = Infinity;
     // 各石の開始位置
     int R_right = Base[0] + R/2;
-    int R_left, G_left;
+    int  G_left;
     int B_left = Base[2] - B/2;
     // 各石の配置コスト
     long R_cost, G_cost, B_cost, sum_cost;
@@ -32,12 +32,11 @@ long min_Move_Cost (int R, int G, int B) {
     int r, g, b;
     for (G_left = Left_min; G_left < Right_max; G_left++) {
         // Rの開始位置
-        r = min(R_right, G_left);
-        R_left = r - R;
+        r = min(R_right-R+1, G_left);
         // Gの開始位置
         g = G_left;
         // Bの開始位置
-        b = max(g+G, B_left);
+        b = max(g+G+1, B_left);
         // 各コストの計算
         R_cost = Move_Cost(r, Base[0], R);
         G_cost = Move_Cost(g, Base[1], G);
