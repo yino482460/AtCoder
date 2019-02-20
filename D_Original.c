@@ -32,7 +32,8 @@ long min_Move_Cost (int R, int G, int B) {
     int r, g, b;
     for (G_left = Left_min; G_left < Right_max; G_left++) {
         // Rの開始位置
-        r = min(R_right-R+1, G_left);
+        r = min(R_right, G_left);   // Rの右端を計算
+        r = r - R +1 ;  // Rの左端を計算
         // Gの開始位置
         g = G_left;
         // Bの開始位置
