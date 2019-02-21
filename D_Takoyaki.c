@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <string.h>
-#define max(a,b) (a>=b ? a:b)
+#define max(a,b) (a>b ? a:b)
 #define N_max 51
 #define Q_max (N_max*N_max)
 int Taste[N_max][N_max];
 int Taste_right[N_max][N_max];
 int Taste_any[N_max][N_max][N_max][N_max];
-int Area_max[Q_max];
+int Area_max[Q_max*Q_max] = {0};
 // 変数
 int N;
 int Q, P[Q_max];    // 店員の人数
@@ -28,7 +28,7 @@ int sum_right (int i, int j) {
     return Taste_right[i][j];
 }
 // 右下までの各大きさの長方形を計算
-void calc_all_sum (int N) {
+void calc_all_rightRectanle (int N) {
     for (size_t i = 1; i <= N; i++) {
         for (size_t j = 1; j <= N; j++) {
             sum_right(i, j);
@@ -45,7 +45,9 @@ int calc_any_Rectangle (int i, int j, int v, int h) {
 }
 // 全ての任意の長方形での美味しさの合計を計算
 void calc_all_Rectangle (int N) {
+    calc_all_rightRectanle(N);
     int area = 0;
+    // ループ本体
     for (int i = 1; i <= N; i++) {
         for (size_t j = 1; j <= N; j++) {
             for (size_t v = 1; v <= N-i; v++) {
@@ -59,7 +61,7 @@ void calc_all_Rectangle (int N) {
 
 }
 // 全ての面積で最大値を再計算
-void calc_total_Taste (int all_rectangle) {
+void recalc_total_Taste (long all_rectangle) {
     for (size_t i = 1; i <= all_rectangle; i++) {
         Area_max[i] = max(Area_max[i-1], Area_max[i]);
     }
@@ -82,15 +84,17 @@ int main(int argc, char const *argv[]) {
     }
     // Taste_sumを0で初期化
     memset(Taste_right, 0, sizeof(Taste_right));
-    calc_all_sum(N);
-    // 右下までの和
-    for (size_t i = 0; i <= N; i++) {
-        for (size_t j = 0; j <= N; j++) {
-            printf("%2d ", Taste_right[i][j]);
-        }
-        printf("\n");
+    // 計算
+    calc_all_Rectangle(N);
+    // 順位の計算
+    long all_rectangle = N*N;
+    recalc_total_Taste(all_rectangle);
+    // 出力
+    printf("\n");
+    printf("P[3] %d\n", P[3] );
+    for (size_t i = 1; i <= Q; i++) {
+        printf("%d\n", Area_max[P[i]] );
     }
-
 
     return 0;
 }
