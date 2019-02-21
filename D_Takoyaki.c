@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #define max(a,b) (a>b ? a:b)
-#define N_max 51
+#define N_max 52
 #define Q_max (N_max*N_max)
 int Taste[N_max][N_max];
 int Taste_right[N_max][N_max];
@@ -89,12 +89,6 @@ int main(int argc, char const *argv[]) {
     // 順位の計算
     long all_rectangle = N*N;
     recalc_total_Taste(all_rectangle);
-    // 確認
-    printf("Taste_right[1,1] %d\n", Taste_right[1][1]);
-    for (int i = 1; i <= N*N; i++) {
-        printf("No%d, %d ", i, Area_max[i] );
-    }
-    printf("\n");
     // 出力
     for (size_t i = 1; i <= Q; i++) {
         printf("%d\n", Area_max[P[i]] );
