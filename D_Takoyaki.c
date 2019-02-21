@@ -6,7 +6,7 @@
 int Taste[N_max][N_max];
 int Taste_right[N_max][N_max];
 int Taste_any[N_max][N_max][N_max][N_max];
-int Area_max[Q_max*Q_max] = {0};
+int Area_max[Q_max] = {0};
 // 変数
 int N;
 int Q, P[Q_max];    // 店員の人数
@@ -50,8 +50,8 @@ void calc_all_Rectangle (int N) {
     // ループ本体
     for (int i = 1; i <= N; i++) {
         for (size_t j = 1; j <= N; j++) {
-            for (size_t v = 1; v <= N-i; v++) {
-                for (size_t h = 1; h <= N-j; h++) {
+            for (size_t v = 1; v <= N-i+1; v++) {
+                for (size_t h = 1; h <= N-j+1; h++) {
                     area = v*h;
                     Area_max[area] = max(Area_max[area], calc_any_Rectangle(i, j, v, h));
                 }
@@ -82,19 +82,22 @@ int main(int argc, char const *argv[]) {
     for (size_t i = 1; i <= Q; i++) {
         scanf("%d", &P[i] );
     }
-    // Taste_sumを0で初期化
+    // Taste_rightを0で初期化
     memset(Taste_right, 0, sizeof(Taste_right));
     // 計算
     calc_all_Rectangle(N);
     // 順位の計算
     long all_rectangle = N*N;
     recalc_total_Taste(all_rectangle);
-    // 出力
+    // 確認
+    printf("Taste_right[1,1] %d\n", Taste_right[1][1]);
+    for (int i = 1; i <= N*N; i++) {
+        printf("No%d, %d ", i, Area_max[i] );
+    }
     printf("\n");
-    printf("P[3] %d\n", P[3] );
+    // 出力
     for (size_t i = 1; i <= Q; i++) {
         printf("%d\n", Area_max[P[i]] );
     }
-
     return 0;
 }
