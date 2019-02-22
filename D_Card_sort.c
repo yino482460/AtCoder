@@ -13,18 +13,6 @@ int calc_LIS (int N, long C[]) {
     int length = 0; // 数列の長さ
     int left, right, mid;
 
-
-    for (int i = 1; i <= N; i++) {
-        if (C[i] > DP[length]) {
-            DP[length+1] = C[i];
-            length ++;  // 数列の長さの更新
-            printf("length : %d DP[%d]:%ld\n", length, length, DP[length]);
-        } else {
-            printf("NO\n");
-        }
-    }
-
-
     for (int i = 1; i <= N; i++) {
         if (C[i] > DP[length]) {
             DP[length+1] = C[i];
@@ -58,9 +46,9 @@ int main(int argc, char const *argv[]) {
     calc_LIS(N, C);
     // 確認
     printf("\n");
-    printf("C[0] %ld\n", C[0] );
+    printf("DP[0] %ld\n", DP[0] );
     for (size_t i = 1; i <= N; i++) {
-        printf("%2ld", C[i] );
+        printf("%2ld", DP[i] );
     }
     printf("\n");
     // 計算
