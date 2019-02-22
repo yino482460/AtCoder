@@ -1,20 +1,37 @@
 #include <stdio.h>
 #include <string.h>
 #define N_max 30002
-#define Infinity 10000000
-int C[N_max];
+#define Infinity 100000
+long C[N_max];
 long DP[N_max];
 // 最長増加数列の長さを計算
-int calc_LIS (int N, int C[]) {
+int calc_LIS (int N, long C[]) {
     DP[0] = -Infinity;
+    // 配列の初期化
+    for (size_t i = 1; i <= N; i++) {DP[i] = Infinity;}
+    // 最長増加数列
     int length = 0; // 数列の長さ
-    for (size_t i = 1; i <= N; i++) {
+    int left, right, mid;
+
+
+    for (int i = 1; i <= N; i++) {
+        if (C[i] > DP[length]) {
+            DP[length+1] = C[i];
+            length ++;  // 数列の長さの更新
+            printf("length : %d DP[%d]:%ld\n", length, length, DP[length]);
+        } else {
+            printf("NO\n");
+        }
+    }
+
+
+    for (int i = 1; i <= N; i++) {
         if (C[i] > DP[length]) {
             DP[length+1] = C[i];
             length ++;  // 数列の長さの更新
         } else {    // 二分検索
-            int left = 0, right = length, mid = (left+right)/2;
-            while (left <= right) {
+            left = 1; right = length; mid = (left+right)/2;
+            while (left < right-1) {
                 if (C[i] < DP[mid]) {
                     right = mid;
                 } else {
@@ -25,6 +42,7 @@ int calc_LIS (int N, int C[]) {
             DP[right] = C[i];
         }
     }
+
     return length;
 }
 
@@ -34,9 +52,23 @@ int main(int argc, char const *argv[]) {
     scanf("%d", &N );
     // 入力
     for (size_t i = 1; i <= N; i++) {
-        scanf("%d", &C[i] );
+        scanf("%ld", &C[i] );
     }
-    memset(DP, Infinity, sizeof(DP));
+
+    calc_LIS(N, C);
+    // 確認
+    printf("\n");
+    printf("C[0] %ld\n", C[0] );
+    for (size_t i = 1; i <= N; i++) {
+        printf("%2ld", C[i] );
+    }
+    printf("\n");
     // 計算
+    /*
+    int ans;
+    ans = N-calc_LIS(N, C);
+    // 出力
+    printf("%d\n", ans );
+    */
     return 0;
 }
