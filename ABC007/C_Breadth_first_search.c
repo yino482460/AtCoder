@@ -2,68 +2,21 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #define SIZE 52
-#define Wall -10
-// 迷路
-typedef struct Cell {
-    int x, y;
-    int step;
-} Cell;
-// キュー
+#define Wall -100
+#define Aisle -1
+// キューの構造体
 typedef struct Queue {
-    int front, rear, count, size;
-    Cell *cell;
+    int x, y;
 } Queue;
 // キューの作成
-Queue *make_queue (int n) {
-    Queue *que = malloc(sizeof(Queue));
-    if (que != NULL) {
-    que->front = 0;    que->rear = 0;
-    que->count = 0;    que->size = n;
-    que->cell = malloc(sizeof(Cell) * n);
-    if (que->cell == NULL) {
-      free(que);
-      return NULL;
-    }
-  }
-  return que;
-}
-// キューは満杯か
-bool is_full(Queue *que){
-  return que->count == que->size;
-}
-// データの挿入
-bool enqueue(Queue *que, Cell grid) {
-    if (is_full(que)) return false;
-    que->cell[que->rear++] = grid;
-    que->count++;
-    if (que->rear == que->size)
-        que->rear = 0;
-    return true;
-}
-// キューは空か
-bool is_empty(Queue *que) {
-  return que->count == 0;
-}
-
-// データを取り出す
-double dequeue(Queue *que, bool *err){
-  if (is_empty(que)) {
-    *err = false;
-    return 0;
-  }
-  Cell grid = que->cell[que->front++];
-  que->count--;
-  *err = true;
-  if (que->front == que->size)
-    que->front = 0;
-  return grid;
-}
-
-
-
+Queue que[SIZE*SIZE];
+// 盤面の状態
 int Board[SIZE][SIZE];
 int vx[4] = {0, 1, 0, -1};
 int vy[4] = {1, 0, -1, 0};
+// 変数
+int R, C;
+int sy, sx, gy, gx;
 
 // 盤面を数字に変換
 void  trans_to_num (int R, int C) {
@@ -72,39 +25,47 @@ void  trans_to_num (int R, int C) {
             if (getchar() == '#') {
                 Board[i][j] = Wall;
             } else {
-                Board[i][j] = 0;
+                Board[i][j] = Aisle;
             }
         }
     }
 }
 // 迷路を攻略
-int maze_solve (int startx, int starty) {
-    for (size_t i = 0; i < 4; i++) {
-        int nx = startx + vx[i];
-        int ny = starty + vy[i];
-        if (Board[nx][ny]!=Wall || Board[nx][ny]==0) {
-            Board[nx][ny] = Board[startx][starty] + 1;
-            maze_solve (nx, ny);
+void solve_maze (int startx, int starty, int goalx, int goaly) {
+    // que[0]はスタート位置
+    que[0].x = startx; que[0].y = starty;
+    Board[starty][startx] = 0;
+    // キューを見ている位置
+    int head = 0, tail = 1;
+    // 探索
+    while (head != tail) {
+        int x, y;
+        x = que[head].x;
+        y = que[head].y;
+        head = head + 1;
+        for (size_t i = 0; i < 4; i++) {
+            int nx = x + vx[i];
+            int ny = y + vy[i];
+            if ((nx>1 && nx<=C) && (ny>1 && ny<=R) && Board[ny][nx]==Aisle && Board[ny][nx]!=Wall) {
+                Board[ny][nx] = Board[y][x] + 1;
+                que[tail].x = nx;
+                que[tail].y = ny;
+                tail = tail + 1;
+            }
         }
+
     }
-    return -1;  // 行き止まり
+    printf("%d\n", Board[goaly][goalx] );
 }
 
 
 int main(int argc, char const *argv[]) {
-    // 変数
-    int R, C;
-    int sy, sx, gy, gx;
     // 入力
     scanf("%d%d", &R, &C );
     scanf("%d%d%d%d", &sy, &sx, &gy, &gx);
     // 文字列を数字に変換
     trans_to_num(R, C);
     // 迷路の計算
-    maze_solve(sx, sy);
-    // 出力
-    printf("%d\n", Board[gx][gy] );
-
-
+    solve_maze(sx, sy, gx, gy);
     return 0;
 }
