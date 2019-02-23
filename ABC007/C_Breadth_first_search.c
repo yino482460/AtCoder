@@ -1,6 +1,66 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
 #define SIZE 52
-#define Wall 10000
+#define Wall -10
+// 迷路
+typedef struct Cell {
+    int x, y;
+    int step;
+} Cell;
+// キュー
+typedef struct Queue {
+    int front, rear, count, size;
+    Cell *cell;
+} Queue;
+// キューの作成
+Queue *make_queue (int n) {
+    Queue *que = malloc(sizeof(Queue));
+    if (que != NULL) {
+    que->front = 0;    que->rear = 0;
+    que->count = 0;    que->size = n;
+    que->cell = malloc(sizeof(Cell) * n);
+    if (que->cell == NULL) {
+      free(que);
+      return NULL;
+    }
+  }
+  return que;
+}
+// キューは満杯か
+bool is_full(Queue *que){
+  return que->count == que->size;
+}
+// データの挿入
+bool enqueue(Queue *que, Cell grid) {
+    if (is_full(que)) return false;
+    que->cell[que->rear++] = grid;
+    que->count++;
+    if (que->rear == que->size)
+        que->rear = 0;
+    return true;
+}
+// キューは空か
+bool is_empty(Queue *que) {
+  return que->count == 0;
+}
+
+// データを取り出す
+double dequeue(Queue *que, bool *err){
+  if (is_empty(que)) {
+    *err = false;
+    return 0;
+  }
+  Cell grid = que->cell[que->front++];
+  que->count--;
+  *err = true;
+  if (que->front == que->size)
+    que->front = 0;
+  return grid;
+}
+
+
+
 int Board[SIZE][SIZE];
 int vx[4] = {0, 1, 0, -1};
 int vy[4] = {1, 0, -1, 0};
