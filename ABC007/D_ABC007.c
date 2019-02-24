@@ -1,33 +1,39 @@
 #include <stdio.h>
 #include <string.h>
-#include <stdbool.h>
+#include <stdlib.h>
 #define Max_digit 18
+// DPの初期化
+long dp[Max_digit][2][2];  // dp[][0]は制限あり, dp[][1]は制限無し
 // 桁DP
-long Rec (char num[], int k, bool tight) {
-    // 答え
-    if (k == strlen(num)) { // 終了条件
-        return 1;
+long digitDP (char A[]) {
+    // 始まり
+    dp[0][0][0] = 1;
+    int N = strlen(A); // 桁数
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < 2; j++) {
+            for (int k = 0; k < 2; k++) {
+                int x = j ? (A[i] - '0'):9; // 1のとき9
+                for (int d = 0; d <= x; d++) {
+                    dp[i + 1][j || d < x][k || d == 4 || d == 9] += dp[i][j][k];
+                }
+            }
+        }
     }
-    // k桁目の数字を取り出す
-    int x = num[k] - '0';
-    // 上位の桁が tightなら x までしか動けない
-    int r = (tight ? x:9);
-    // 答え
-    long response = 0;
-    // tight = Trueなら0~xまで、Falseなら0~9まで遷移できる
-    for (size_t i = 0; i <= r; i++) {
-        response += Rec(num, k+1, (tight && i==r) );
-    }
-    return response;
+    return dp[N][1][1] + dp[N][0][1];
 }
+
 
 int main(int argc, char const *argv[]) {
     // 変数
+    long a,b;
     char A[Max_digit+1], B[Max_digit+1];
-    // 入力
-    scanf("%s %s", A, B );
-    // 確認
-    printf("A, %s res(A):%ld\n", A, Rec(A, 0, true) );
-    printf("B, %s res(B):%ld\n", B, Rec(B, 0, true) );
+    scanf("%ld %ld", &a, &b);
+    // 文字列に変換
+    a = a-1;
+    snprintf(A, Max_digit+1, "%ld", a);
+    snprintf(B, Max_digit+1, "%ld", b);
+    // 出力
+    long ans = digitDP(B) - digitDP(A);
+    printf("%ld\n", ans );
     return 0;
 }
