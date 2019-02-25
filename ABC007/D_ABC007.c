@@ -18,7 +18,7 @@ long digitDP (char num[]) {
                 int x = j ? 9:(num[i] - '0'); // 1のとき9
                 //printf("i, %d, j, %d, k %d, x %d\n", i,  j, k, x );
                 for (int d = 0; d <= x; d++) {
-                    dp[i+1][j || d<x][k || d==4 || d==9] += dp[i][j][k];
+                    dp[i+1][j || d<x][k || d==4 || d==9] += dp[i][j][k];    //それぞれの数字に対して足し合わせる
                     //printf("dp[1][1][1] %ld\n", dp[1][1][1] );
                 }
             }
