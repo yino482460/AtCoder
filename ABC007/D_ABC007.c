@@ -1,25 +1,32 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#define Max_digit 18
+#define Max_digit 20
 // DPの初期化
 long dp[Max_digit][2][2];  // dp[][0]は制限あり, dp[][1]は制限無し
 // 桁DP
-long digitDP (char A[]) {
+long digitDP (char num[]) {
+    // 初期化
+    memset(dp, 0, sizeof(dp));
     // 始まり
-    dp[0][0][0] = 1;
-    int N = strlen(A); // 桁数
+    dp[0][0][0] = 1; dp[0][0][1] = 0;
+    dp[0][1][0] = 0; dp[0][1][1] = 0;
+    int N = strlen(num); // 桁数
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < 2; j++) {
             for (int k = 0; k < 2; k++) {
-                int x = j ? (A[i] - '0'):9; // 1のとき9
+                int x = j ? 9:(num[i] - '0'); // 1のとき9
+                //printf("i, %d, j, %d, k %d, x %d\n", i,  j, k, x );
                 for (int d = 0; d <= x; d++) {
-                    dp[i + 1][j || d < x][k || d == 4 || d == 9] += dp[i][j][k];
+                    dp[i+1][j || d<x][k || d==4 || d==9] += dp[i][j][k];
+                    //printf("dp[1][1][1] %ld\n", dp[1][1][1] );
                 }
             }
         }
     }
-    return dp[N][1][1] + dp[N][0][1];
+    long ans = dp[N][1][1] + dp[N][0][1];;
+    //printf("dp[N][1][1] + dp[N][0][1] %ld\n", ans );
+    return ans;
 }
 
 
