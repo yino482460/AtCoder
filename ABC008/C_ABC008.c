@@ -5,7 +5,7 @@ int turnOver (int a) {
     if (a==0) { // 表のとき
         return 1;
     } else {    // 裏のとき
-        return 1;
+        return 0;
     }
 }
 // 期待値の計算
@@ -27,7 +27,12 @@ double all_Search (int N, int num[]) {
             look++;
         }
     }
-    int count = 0;  // 条件を満たす個数
+
+    // 条件を満たす個数
+    int count = 0;
+    for (size_t i = 0; i < N; i++) {
+        if (sides[i] == 0) { count++; }
+    }
     // 期待値
     double expected_value = 0;
     expected_value = count/factorial;
