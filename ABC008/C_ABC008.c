@@ -1,5 +1,13 @@
 #include <stdio.h>
 #define N_max 100
+// 裏表の更新をする関数
+int turnOver (int a) {
+    if (a==0) { // 表のとき
+        return 1;
+    } else {    // 裏のとき
+        return 1;
+    }
+}
 // 期待値の計算
 double all_Search (int N, int num[]) {
     // 階乗の計算
@@ -8,16 +16,19 @@ double all_Search (int N, int num[]) {
         factorial = factorial*i;
     }
     // 総当たり
-    int here = 0;
-    int count = 0;  // 条件を満たす個数
-    int look = here+1;
-    while (look == N) {
-        if (num[look]%num[here] == 0) {
-            count++;
+    int sides[N];   // 面が 0, 裏が1
+    for (int here = 0; here <= N-1; here++) {
+        int look = here+1;
+        while (look == N) {
+            if (num[look]%num[here] == 0) {
+                // 裏表の更新
+                sides[look] = turnOver(sides[look]);
+            }
+            look++;
         }
-        look++;
     }
-
+    int count = 0;  // 条件を満たす個数
+    // 期待値
     double expected_value = 0;
     expected_value = count/factorial;
     return expected_value;
