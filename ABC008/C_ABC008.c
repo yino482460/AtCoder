@@ -1,41 +1,22 @@
 #include <stdio.h>
 #define N_max 100
-// 裏表の更新をする関数
-int turnOver (int a) {
-    if (a==0) { // 表のとき
-        return 1;
-    } else {    // 裏のとき
-        return 0;
+// あるコインが表になる確率
+double calc_probability (int num) {
+    double probability = 0;
+    if (num%2 == 1) {
+        probability = 0.5;
+    } else {
+        probability = (num+2)/(2*num+2);
     }
+    return probability;
 }
 // 期待値の計算
-double all_Search (int N, int num[]) {
-    // 階乗の計算
-    long factorial = 1;
-    for (int i = 1; i <= N; i++) {
-        factorial = factorial*i;
-    }
-    // 総当たり
-    int sides[N];   // 面が 0, 裏が1
-    for (int here = 0; here <= N-1; here++) {
-        int look = here+1;
-        while (look == N) {
-            if (num[look]%num[here] == 0) {
-                // 裏表の更新
-                sides[look] = turnOver(sides[look]);
-            }
-            look++;
-        }
-    }
-
-    // 条件を満たす個数
-    int count = 0;
-    for (size_t i = 0; i < N; i++) {
-        if (sides[i] == 0) { count++; }
-    }
+double calc_expected_value (int N, int num[]) {
     // 期待値
     double expected_value = 0;
-    expected_value = count/factorial;
+    for (size_t i = 0; i < N; i++) {
+        expected_value += calc_probability(num[i]);
+    }
     return expected_value;
 }
 
@@ -48,5 +29,7 @@ int main(int argc, char const *argv[]) {
     for (size_t i = 0; i < N; i++) {
         scanf("%d", &C[i] );
     }
+    // 出力
+    printf("%lf\n", calc_expected_value(N, C) );
     return 0;
 }
