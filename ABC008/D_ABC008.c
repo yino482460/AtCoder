@@ -25,21 +25,16 @@ void setGolds (int W, int H, int N, int location[][2]) {
 // 金塊の回収
 int solve (int x, int y) {
     int ans = 0;
-    for (size_t i = 0; i < 3; i++) {
+    for (size_t i = 0; i < 4; i++) {
         int ny = y+vy[i];
         int nx = x+vx[i];
         while (Board[ny][nx] != 0) {
             Board[ny][nx] = 0;  // 金塊を回収
             ans ++;
-            if (ny > y) {
-                ny++;
-            } else if (ny < y) {
-                ny--;
-            } else if (nx > x) {
-                nx++;
-            } else if (nx < x) {
-                nx--;
-            }
+            if (nx > x) { nx++; }
+            if (nx < x) { nx--; }
+            if (ny > y) { ny++; }
+            if (ny < y) { ny--; }
         }
     }
 
