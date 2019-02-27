@@ -4,6 +4,8 @@
 #define Max 1000001
 #define max(a, b) (a>b ? a:b)
 int Board[Max][Max];
+int vx[4] = {0, 0, 1, -1};
+int vy[4] = {1, -1, 0, 0};
 // 金塊と装置を盤面に配置
 void setGolds (int W, int H, int N, int location[][2]) {
     // 金塊の配置
@@ -23,12 +25,23 @@ void setGolds (int W, int H, int N, int location[][2]) {
 // 金塊の回収
 int solve (int x, int y) {
     int ans = 0;
-    while (Board[y+1][x] !=0) {
-        Board[y+1][x] = 0;
-        y++;
-        ans++;
+    for (size_t i = 0; i < 3; i++) {
+        int ny = y+vy[i];
+        int nx = x+vx[i];
+        while (Board[ny][nx] != 0) {
+            Board[ny][nx] = 0;  // 金塊を回収
+            ans ++;
+            if (ny > y) {
+                ny++;
+            } else if (ny < y) {
+                ny--;
+            } else if (nx > x) {
+                nx++;
+            } else if (nx < x) {
+                nx--;
+            }
+        }
     }
-
 
     return ans;
 }
