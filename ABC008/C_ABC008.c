@@ -6,10 +6,11 @@ double calc_probability (int num) {
     if (num%2 == 1) {
         probability = 0.5;
     } else {
-        probability = (num+2)/(2*num+2);
+        probability = (double)(num+2)/(2*num+2);
     }
     return probability;
 }
+
 // 期待値の計算
 double calc_expected_value (int N, int num[]) {
     // 期待値
@@ -22,8 +23,8 @@ double calc_expected_value (int N, int num[]) {
 
 int main(int argc, char const *argv[]) {
     // 変数
-    int C[N_max];
     int N;
+    int C[N_max];
     // 入力
     scanf("%d", &N );
     for (size_t i = 0; i < N; i++) {
