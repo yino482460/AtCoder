@@ -31,7 +31,6 @@ void sort_String (int N, int K, char str[]) {
             different += number;
             if (different <= K) {
                 T[i] = ('a'+index);
-                printf("%c\n", T[i] );
                 break;
             }
             count_s[str[i]-'a'] ++;
