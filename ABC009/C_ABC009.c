@@ -26,18 +26,23 @@ void sort_String (int N, int K, char str[]) {
             count_t[index] --;
             int number = (N-1)-i;   // 残りの文字数
             for (size_t j = 0; j < 26; j++) {
-                number-=min(count_s[j],count_t[j]);
+                number -= min(count_s[j], count_t[j]);
             }
             different += number;
             if (different <= K) {
-                T[i] += ('a'+index);
+                T[i] = ('a'+index);
+                printf("%c\n", T[i] );
                 break;
             }
-            ++count_s[str[i]-'a'];
-			++count_t[index];
+            count_s[str[i]-'a'] ++;
+			count_t[index] ++;
         }
     }
-    printf("%s\n", T );
+
+    for (size_t i = 0; i < N; i++) {
+        printf("%c", T[i] );
+    }
+    printf("\n");
 }
 
 int main(int argc, char const *argv[]) {
