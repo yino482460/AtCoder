@@ -42,24 +42,29 @@ unsigned int powMatrix (unsigned int Matrix[][], int factorial) {
     }
 }
 // 漸化式の計算
-unsigned int Solve () {
+void Solve () {
     int factorial = M-K;
     // 初項の設定
     unsigned int Matrix[K_max][K_max];
     setMatrix(C, Matrix);    // 漸化式の行列を設定
-
+    powMatrix(Matrix, factorial);   // 行列の階乗
+    mulMatrix(Matrix, C);
+    // 答え
+    unsigned int ans = 0;
+    ans = C[0];
+    printf("%u\n", ans );
 }
 
 int main(int argc, char const *argv[]) {
     // 入力
     scanf("%d %ld", &K, &M );
     for (size_t i = 0; i < K; i++) {
-        scanf("%d", &A[K-i-1] );
+        scanf("%u", &A[K-i-1] );
     }
     for (size_t i = 0; i < K; i++) {
-        scanf("%d", &C[i] );
+        scanf("%u", &C[i] );
     }
-    // 計算
-
+    // 出力
+    Solve();
     return 0;
 }
