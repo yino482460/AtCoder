@@ -3,9 +3,9 @@
 #include <stdlib.h>
 #include <string.h>
 #define n_MAX 1000
-#define eps -0.0001
+#define eps -0.00001
 // 三平方の定理
-double Distance (int xa, int ya, int xb, int yb) {
+double Distance (int xa, int xb, int ya, int yb) {
     double distance;
     int x = abs(xa-xb);
     int y = abs(ya-yb);
@@ -16,9 +16,10 @@ double Distance (int xa, int ya, int xb, int yb) {
 int Check (int n, int txa, int tya, int txb, int tyb, int X[], int Y[], int T, int V) {
     // 判定
     for (size_t i = 0; i < n; i++) {
-        int distance1 = Distance(txa, X[i], tya, Y[i]);
-        int distance2 = Distance(X[i], txb, Y[i], tyb);
-        if (T*V+eps >= distance1+distance2) {
+        double distance1 = Distance(txa, X[i], tya, Y[i]);
+        double distance2 = Distance(X[i], txb, Y[i], tyb);
+        double lim = T*V;
+        if (lim >= distance1+distance2) {
             printf("YES\n");
             return 0;
         }
