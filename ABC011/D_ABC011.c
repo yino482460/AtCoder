@@ -18,12 +18,12 @@ double Combi (long n, long r) {
 }
 
 // 各場合の確率
-double getNumOfCombination (long N, long X, long Y, long horizon) {
+double getNumOfCombination (long N, long nx, long ny, long horizon) {
     long vertical = N-horizon;
-    if ((horizon-X)%2 != 0) { return 0;}
-    if ((vertical-Y)%2 != 0) { return 0;}
-    long right = X+(horizon-X)/2;
-    long up = Y+(vertical-Y)/2;
+    if ((horizon-nx)%2 != 0) { return 0;}
+    if ((vertical-ny)%2 != 0) { return 0;}
+    long right = nx+(horizon-nx)/2;
+    long up = ny+(vertical-ny)/2;
     if (right<0 || up<0) { return 0;}
     // 確率
     double p = 1;
@@ -47,9 +47,10 @@ double Jump (long N, long D, long X, long Y) {
         return probability;
     }
     for (long horizon = 0; horizon <= N; horizon++) {
-        probability += getNumOfCombination(N, X, Y, horizon);
+        probability += getNumOfCombination(N, nx, ny, horizon);
+        printf("probability %lf\n", probability);
     }
-    return probability;
+    return 2*probability;
 }
 
 int main(int argc, char const *argv[]) {
