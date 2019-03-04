@@ -6,7 +6,9 @@
 void Judge (int N, int NG[]) {
     int DP[310];
     // DPの設定
-    memset(DP, INF, sizeof(DP));
+    for (size_t i = 0; i < N; i++) {
+        DP[i] = INF;
+    }
     DP[N] = 0;
     // 判定
     for (int i = N; i >= 0; i--) {
