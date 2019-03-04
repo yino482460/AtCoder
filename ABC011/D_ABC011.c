@@ -2,6 +2,17 @@
 // 確率版コンビネーションを計算
 double Combi (int n, int r) {
     double ans = 0;
+    double combi[n+5][n+5];
+    combi[1][1] = 1;
+    for (size_t i = 2; i <= n; i++) {
+        combi[i][1] = combi[i-1][1]/2;
+        combi[i][i] = combi[i-1][1-1]/2;
+    }
+    for (size_t i = 1; i <= n; i++) {
+        for (size_t j = 1; j <= n; j++) {
+            combi[i][j] = (combi[i-1][j-1]+combi[i-1][j])/2;
+        }
+    }
 
     return ans;
 }
