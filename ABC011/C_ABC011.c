@@ -20,7 +20,7 @@ void Judge (int N, int NG[]) {
     if (DP[0] <= 100) {
         printf("YES\n");   // 成功
     } else {
-        printf("NP\n");
+        printf("NO\n");
     }
 }
 
