@@ -13,6 +13,7 @@ double Combi (long n, long r) {
         }
     }
     // 確認
+    /*
     for (size_t i = 0; i <= n; i++) {
         for (size_t j = 0; j <= n; j++) {
             printf("%lf ", combi[i][j]);
@@ -20,6 +21,7 @@ double Combi (long n, long r) {
         printf("\n");
     }
     printf("\n");
+    */
     double ans = combi[n][r];
     printf("n %ld, r %ld, ans %lf\n", n, r, ans );
     return ans;
@@ -28,16 +30,15 @@ double Combi (long n, long r) {
 // 各場合の確率
 double getNumOfCombination (long N, long nx, long ny, long horizon) {
     long vertical = N-horizon;
-    if ((horizon+nx)%2 != 0) { return 0;}
-    if ((vertical+ny)%2 != 0) { return 0;}
+    //if ((horizon-nx)%2 != 0) { return 0;}
+    //if ((vertical-ny)%2 != 0) { return 0;}
     long right = nx+(horizon-nx)/2;
     long up = ny+(vertical-ny)/2;
     if (right<0 || up<0) { return 0;}
     // 確率
-    double p = 1;
-    p *= Combi(N, horizon);
-    p *= Combi(horizon, right);
-    p *= Combi(vertical, up);
+    double p;
+    p = Combi(N, horizon)*Combi(horizon, right)*Combi(vertical, up);
+    printf("p %lf\n", p );
     return p;
 }
 
@@ -50,12 +51,9 @@ double Jump (long N, long D, long X, long Y) {
     }
     long nx = X/D;
     long ny = Y/D;
-    if (nx+ny > N) {
-        probability = 0;
-        return probability;
-    }
     for (long horizon = 0; horizon <= N; horizon++) {
         probability += getNumOfCombination(N, nx, ny, horizon);
+        printf("probability %lf\n", probability );
     }
     return probability;
 }
