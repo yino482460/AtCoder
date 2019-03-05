@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+double combi[1001][1001];
 // 確率版コンビネーションを計算
-double Combi (int n, int r) {
-    double combi[n+1][n+1];
+void Combi (int n) {
     memset(combi, 0, sizeof(combi));
     // 初期設定
     combi[0][0] = 1;
@@ -17,17 +17,6 @@ double Combi (int n, int r) {
             }
         }
     }
-    // 確認
-    for (size_t i = 0; i <= n; i++) {
-        for (size_t j = 0; j <= n; j++) {
-            printf("%lf ", combi[i][j] );
-        }
-        printf("\n");
-    }
-    //
-    double ans = combi[n][r];
-    printf("p %lf \n", ans );
-    return ans;
 }
 
 // 各場合の確率
@@ -39,8 +28,9 @@ double getNumOfCombination (int N, int nx, int ny, int horizon) {
     int up = (vertical+ny)/2;
     if (right<0 || up<0) { return 0;}
     // 確率
+    Combi(N);
     double p = 0;
-    p = Combi(N, horizon)*Combi(horizon, right)*Combi(vertical, up);
+    p = combi[N][horizon]*combi[horizon][right]*combi[vertical][up];
     return p;
 }
 
