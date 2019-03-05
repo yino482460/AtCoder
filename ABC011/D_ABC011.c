@@ -1,6 +1,4 @@
 #include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
 double combi[1001][1001];
 // 確率版コンビネーションを計算
 void Combi (int n) {
