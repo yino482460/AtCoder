@@ -7,12 +7,12 @@ double Combi (long n, long r) {
     // 初期設定
     combi[0][0] = 1;
     // 組み合わせの計算
-    for (long i = 1; i <= n; i++) {
+    for (long i = 1; i <= n+1; i++) {
         for (long j = 1; j <= i; j++) {
             combi[i][j] = (combi[i-1][j-1]+combi[i-1][j])/2;
         }
     }
-    double ans = combi[n][r];
+    double ans = combi[n+1][r+1];
     printf("n %ld, r %ld, ans %lf\n", n, r, ans );
     return ans;
 }
@@ -20,17 +20,19 @@ double Combi (long n, long r) {
 // 各場合の確率
 double getNumOfCombination (long N, long nx, long ny, long horizon) {
     long vertical = N-horizon;
+    if ((horizon+nx)%2 != 0) { return 0; }
+    if ((vertical+ny)%2 != 0) { return 0; }
     long right = (horizon+nx)/2;
     long up = (vertical+ny)/2;
     if (right<0 || up<0) { return 0;}
     // 確率
-    double p;
+    double p = 0;
     p = Combi(N, horizon)*Combi(horizon, right)*Combi(vertical, up);
     printf("p %lf\n", p );
     return p;
 }
 
-// 判定
+// 全確率の計算
 double Jump (long N, long D, long X, long Y) {
     double probability = 0;
     if (X%D!=0 || Y%D!=0) {
