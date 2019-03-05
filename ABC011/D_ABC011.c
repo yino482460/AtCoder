@@ -4,7 +4,6 @@
 double combi[1001][1001];
 // 確率版コンビネーションを計算
 void Combi (int n) {
-    memset(combi, 0, sizeof(combi));
     // 初期設定
     combi[0][0] = 1;
     // 組み合わせの計算
