@@ -5,23 +5,13 @@ double Combi (long n, long r) {
     double combi[n+1][n+1];
     memset(combi, 0, sizeof(combi));
     // 初期設定
-    combi[0][0] = 2;
+    combi[0][0] = 1;
     // 組み合わせの計算
     for (long i = 1; i <= n; i++) {
         for (long j = 1; j <= i; j++) {
             combi[i][j] = (combi[i-1][j-1]+combi[i-1][j])/2;
         }
     }
-    // 確認
-    /*
-    for (size_t i = 0; i <= n; i++) {
-        for (size_t j = 0; j <= n; j++) {
-            printf("%lf ", combi[i][j]);
-        }
-        printf("\n");
-    }
-    printf("\n");
-    */
     double ans = combi[n][r];
     printf("n %ld, r %ld, ans %lf\n", n, r, ans );
     return ans;
@@ -30,10 +20,8 @@ double Combi (long n, long r) {
 // 各場合の確率
 double getNumOfCombination (long N, long nx, long ny, long horizon) {
     long vertical = N-horizon;
-    //if ((horizon-nx)%2 != 0) { return 0;}
-    //if ((vertical-ny)%2 != 0) { return 0;}
-    long right = nx+(horizon-nx)/2;
-    long up = ny+(vertical-ny)/2;
+    long right = (horizon+nx)/2;
+    long up = (vertical+ny)/2;
     if (right<0 || up<0) { return 0;}
     // 確率
     double p;
