@@ -8,11 +8,15 @@ double Combi (long n, long r) {
     combi[0][0] = 1;
     // 組み合わせの計算
     for (long i = 1; i <= n+1; i++) {
-        for (long j = 1; j <= i; j++) {
-            combi[i][j] = (combi[i-1][j-1]+combi[i-1][j])/2;
+        for (long j = 0; j <= i; j++) {
+            if (j-1 >= 0) {
+                combi[i][j] = (combi[i-1][j-1]+combi[i-1][j])/2;
+            } else {
+                combi[i][j] = combi[i-1][j]/2;
+            }
         }
     }
-    double ans = combi[n+1][r+1];
+    double ans = combi[n][r];
     printf("n %ld, r %ld, ans %lf\n", n, r, ans );
     return ans;
 }
