@@ -7,7 +7,7 @@ double Combi (long n, long r) {
     // 初期設定
     combi[0][0] = 1;
     // 組み合わせの計算
-    for (long i = 1; i <= n+1; i++) {
+    for (long i = 1; i <= n; i++) {
         for (long j = 0; j <= i; j++) {
             if (j-1 >= 0) {
                 combi[i][j] = (combi[i-1][j-1]+combi[i-1][j])/2;
@@ -61,6 +61,6 @@ int main(int argc, char const *argv[]) {
     scanf("%ld %ld", &X, &Y );
     // 出力
     double ans = Jump(N, D, X, Y);
-    printf("%lf\n", ans);
+    printf("%.15lf\n", ans);
     return 0;
 }
