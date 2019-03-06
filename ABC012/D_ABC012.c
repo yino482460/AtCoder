@@ -26,7 +26,7 @@ int WarshallFloyd (int N, int M, int a[], int b[], int t[]) {
        printf("\n");
    }
    printf("\n");
-    // 最短経路の探索
+    // 各最短経路の探索
     for (size_t k = 1; k <= N; k++) {
         for (size_t i = 1; i <= N; i++) {
             for (size_t j = 1; j <= N; j++) {
@@ -55,6 +55,7 @@ int WarshallFloyd (int N, int M, int a[], int b[], int t[]) {
             row_min = row_sum;
             row ++;
         }
+        row_sum = 0;
     }
     // 最短の中の最悪
     for (size_t i = 1; i <= N; i++) {
