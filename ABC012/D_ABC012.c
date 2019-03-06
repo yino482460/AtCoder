@@ -18,6 +18,13 @@ int WarshallFloyd (int N, int M, int a[], int b[], int t[]) {
         distanse[a[i]][b[i]] = t[i];
         distanse[b[i]][a[i]] = t[i];
     }
+    // 確認
+    for (size_t i = 0; i <= N; i++) {
+        for (size_t j = 0; j <= N; j++) {
+            printf("%05d ", distanse[i][j] );
+        }
+        printf("\n");
+    }
     // 最短経路の探索
     for (size_t k = 1; k <= N; k++) {
         for (size_t i = 1; i <= N; i++) {
@@ -26,11 +33,17 @@ int WarshallFloyd (int N, int M, int a[], int b[], int t[]) {
             }
         }
     }
+    printf("\n");
+    // 確認
+    for (size_t i = 0; i <= N; i++) {
+        for (size_t j = 0; j <= N; j++) {
+            printf("%05d ", distanse[i][j] );
+        }
+        printf("\n");
+    }
     // 最悪の探索
     for (size_t i = 1; i <= N; i++) {
-        for (size_t j = 1; j <= N; j++) {
-            maxTime = max(maxTime, distanse[i][j]);
-        }
+        maxTime = max(maxTime, distanse[a[i]][b[i]]);
     }
     return maxTime;
 }
