@@ -13,18 +13,19 @@ int WarshallFloyd (int N, int M, int a[], int b[], int t[]) {
             distanse[i][j] = INF;
         }
     }
-    // 距離行列の設定
-    for (size_t i = 0; i < N; i++) {
+    // 距離行列の設定 M=路線の数
+    for (size_t i = 0; i < M; i++) {
         distanse[a[i]][b[i]] = t[i];
         distanse[b[i]][a[i]] = t[i];
     }
     // 確認
-    for (size_t i = 0; i <= N; i++) {
-        for (size_t j = 0; j <= N; j++) {
-            printf("%05d ", distanse[i][j] );
-        }
-        printf("\n");
-    }
+   for (size_t i = 0; i <= N; i++) {
+       for (size_t j = 0; j <= N; j++) {
+           printf("%05d ", distanse[i][j] );
+       }
+       printf("\n");
+   }
+   printf("\n");
     // 最短経路の探索
     for (size_t k = 1; k <= N; k++) {
         for (size_t i = 1; i <= N; i++) {
@@ -33,17 +34,31 @@ int WarshallFloyd (int N, int M, int a[], int b[], int t[]) {
             }
         }
     }
-    printf("\n");
     // 確認
-    for (size_t i = 0; i <= N; i++) {
-        for (size_t j = 0; j <= N; j++) {
-            printf("%05d ", distanse[i][j] );
-        }
-        printf("\n");
-    }
-    // 最悪の探索
+   for (size_t i = 0; i <= N; i++) {
+       for (size_t j = 0; j <= N; j++) {
+           printf("%05d ", distanse[i][j] );
+       }
+       printf("\n");
+   }
+    // 最短の経路の探索
+    int row_min = 1001*N;
+    int row_sum = 0;
+    int row = 0;
     for (size_t i = 1; i <= N; i++) {
-        maxTime = max(maxTime, distanse[a[i]][b[i]]);
+        for (size_t j = 1; j <= N; j++) {
+            if (i != j) {
+                row_sum += distanse[i][j];
+            }
+        }
+        if (row_min > row_sum) {    // 合計が最短を調べる
+            row_min = row_sum;
+            row ++;
+        }
+    }
+    // 最短の中の最悪
+    for (size_t i = 1; i <= N; i++) {
+        maxTime = max(maxTime, distanse[row][i]);
     }
     return maxTime;
 }
