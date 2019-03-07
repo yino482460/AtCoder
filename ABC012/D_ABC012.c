@@ -8,8 +8,8 @@ int WarshallFloyd (int N, int M, int a[], int b[], int t[]) {
     int maxTime = 0;
     int distanse[N+2][N+2]; // 距離行列 !要修正
     // 距離行列の初期設定
-    for (size_t i = 0; i < N+2; i++) {
-        for (size_t j = 0; j < N+2; j++) {
+    for (size_t i = 0; i <= N+1; i++) {
+        for (size_t j = 0; j <= N+1; j++) {
             distanse[i][j] = INF;
         }
     }
@@ -27,8 +27,8 @@ int WarshallFloyd (int N, int M, int a[], int b[], int t[]) {
         }
     }
     // 確認
-  for (size_t i = 0; i <= N; i++) {
-      for (size_t j = 0; j <= N; j++) {
+  for (size_t i = 0; i <= N+1; i++) {
+      for (size_t j = 0; j <= N+1; j++) {
           printf("%05d ", distanse[i][j] );
       }
       printf("\n");
@@ -44,6 +44,7 @@ int WarshallFloyd (int N, int M, int a[], int b[], int t[]) {
                 row_sum += distanse[i][j];
             }
         }
+        printf("row_sum %d\n", row_sum );
         if (row_min > row_sum) {    // 合計が最短かを調べる
             row_min = row_sum;
             row ++;
@@ -52,7 +53,9 @@ int WarshallFloyd (int N, int M, int a[], int b[], int t[]) {
     }
     // 最短の中の最悪を探索
     for (size_t i = 1; i <= N; i++) {
-        maxTime = max(maxTime, distanse[row][i]);
+        if (row != i) {
+            maxTime = max(maxTime, distanse[row][i]);
+        }
     }
     return maxTime;
 }
