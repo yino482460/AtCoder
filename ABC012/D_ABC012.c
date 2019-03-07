@@ -5,12 +5,16 @@
 #define max(a, b) (a>b ? a:b)
 // ワーシャルフロイド法
 int WarshallFloyd (int N, int M, int a[], int b[], int t[]) {
-    int maxTime = 0;
-    int distanse[N+2][N+2]; // 距離行列 !要修正
+    int maxTime = INF;    // 最善の経路の中の最大
+    int distanse[N+5][N+5]; // 距離行列 !要修正
     // 距離行列の初期設定
     for (size_t i = 0; i <= N+1; i++) {
         for (size_t j = 0; j <= N+1; j++) {
-            distanse[i][j] = INF;
+            if (i == j) {
+                distanse[i][j] = 0;
+            } else {
+                distanse[i][j] = INF;
+            }
         }
     }
     // 距離行列の設定 M=路線の数
@@ -18,7 +22,7 @@ int WarshallFloyd (int N, int M, int a[], int b[], int t[]) {
         distanse[a[i]][b[i]] = t[i];
         distanse[b[i]][a[i]] = t[i];
     }
-    // 各最短経路の探索
+    // 各最短経路の計算
     for (size_t k = 1; k <= N; k++) {
         for (size_t i = 1; i <= N; i++) {
             for (size_t j = 1; j <= N; j++) {
@@ -27,35 +31,21 @@ int WarshallFloyd (int N, int M, int a[], int b[], int t[]) {
         }
     }
     // 確認
-  for (size_t i = 0; i <= N+1; i++) {
-      for (size_t j = 0; j <= N+1; j++) {
-          printf("%05d ", distanse[i][j] );
-      }
-      printf("\n");
-  }
-  printf("\n");
-    // 合計時間が最短の経路の探索
-    int row_min = 1001*N;
-    int row_sum = 0;
-    int row = 0;
-    for (size_t i = 1; i <= N; i++) {
-        for (size_t j = 1; j <= N; j++) {
-            if (i != j) {
-                row_sum += distanse[i][j];
-            }
+    for (size_t i = 0; i <= N+1; i++) {
+        for (size_t j = 0; j <= N+1; j++) {
+            printf("%05d ", distanse[i][j] );
         }
-        printf("row_sum %d\n", row_sum );
-        if (row_min > row_sum) {    // 合計が最短かを調べる
-            row_min = row_sum;
-            row ++;
-        }
-        row_sum = 0;
+        printf("\n");
     }
+    printf("\n");
     // 最短の中の最悪を探索
     for (size_t i = 1; i <= N; i++) {
-        if (row != i) {
-            maxTime = max(maxTime, distanse[row][i]);
+        int row_max = 0;
+        for (size_t j = 1; j <= N; j++) {
+            // ある経路の最大値を探索
+            row_max = max(row_max, distanse[i][j]);
         }
+        maxTime = min(maxTime, row_max);
     }
     return maxTime;
 }
