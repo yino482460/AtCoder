@@ -37,6 +37,7 @@ int WarshallFloyd (int N, int M, int a[], int b[], int t[]) {
             // ある経路の最大値を探索
             row_max = max(row_max, distanse[i][j]);
         }
+        // 各最大値の中の最短を計算
         maxTime = min(maxTime, row_max);
     }
     return maxTime;
