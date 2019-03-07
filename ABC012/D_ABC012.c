@@ -1,12 +1,12 @@
 #include <stdio.h>
 #define size_M 44850
-#define INF 10000
+#define INF 1000000
 #define min(a, b) (a<b ? a:b)
 #define max(a, b) (a>b ? a:b)
 // ワーシャルフロイド法
 int WarshallFloyd (int N, int M, int a[], int b[], int t[]) {
     int maxTime = INF;    // 最善の経路の中の最大
-    int distanse[N+5][N+5]; // 距離行列 !要修正
+    int distanse[N+2][N+2]; // 距離行列
     // 距離行列の初期設定
     for (size_t i = 0; i <= N+1; i++) {
         for (size_t j = 0; j <= N+1; j++) {
@@ -30,15 +30,7 @@ int WarshallFloyd (int N, int M, int a[], int b[], int t[]) {
             }
         }
     }
-    // 確認
-    for (size_t i = 0; i <= N+1; i++) {
-        for (size_t j = 0; j <= N+1; j++) {
-            printf("%05d ", distanse[i][j] );
-        }
-        printf("\n");
-    }
-    printf("\n");
-    // 最短の中の最悪を探索
+    // 最善の中の最悪を探索
     for (size_t i = 1; i <= N; i++) {
         int row_max = 0;
         for (size_t j = 1; j <= N; j++) {
