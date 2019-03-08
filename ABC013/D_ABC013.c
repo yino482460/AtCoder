@@ -1,9 +1,23 @@
 #include <stdio.h>
+#define sizeN 100002
 #define sizeA 200001
-// 横に移動(本質的にはSwap)
-void Move(int a[], int b[]) {
-    int tmp;
-    tmp = *a; *a = *b; *b = tmp;
+#define Swap(a, b) (a+=b, b=a-b, a=a-b)
+// 阿弥陀の到達位置を調べる
+int Amida (long N, long M, long D, int A[]) {
+    int Amida[sizeN];
+    // 初期配置
+    for (int i = 1; i <= N; i++) {
+        Amida[i] = i;
+    }
+    // 阿弥陀の答えを計算 D=1
+    for (int i = 0; i < M; i++) {
+        Swap(Amida[A[i]], Amida[A[i]+1]);
+    }
+    for (size_t i = 0; i <= N; i++) {
+        printf("%d ", Amida[i] );
+    }
+    printf("\n");
+    return 0;
 }
 
 int main(int argc, char const *argv[]) {
@@ -12,7 +26,7 @@ int main(int argc, char const *argv[]) {
     int A[sizeA];
     // 入力
     scanf("%ld %ld %ld", &N, &M, &D);
-    for (size_t i = 0; i < M; i++) {
+    for (int i = 0; i < M; i++) {
         scanf("%d", &A[i]);
     }
     return 0;

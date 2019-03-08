@@ -25,6 +25,16 @@ Amida :: Amida () {
         A.push_back(tmp);
     }
 }
+Amida :: ~Amida() {};
+
+// 阿弥陀を移動する関数
+void Amida :: move() {
+    std::vector<int> ans;
+    for (size_t i = 0; i < N; i++) {
+        ans.push_back(i);
+    }
+    
+}
 
 int main(int argc, char const *argv[]) {
     // 変数
