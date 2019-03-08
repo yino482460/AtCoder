@@ -9,6 +9,10 @@ int Amida (long N, long M, long D, int A[]) {
     for (int i = 1; i <= N; i++) {
         Amida[i] = i;
     }
+    for (size_t i = 0; i <= N; i++) {
+        printf("%d ", Amida[i] );
+    }
+    printf("\n");
     // 阿弥陀の答えを計算 D=1
     for (int i = 0; i < M; i++) {
         Swap(Amida[A[i]], Amida[A[i]+1]);
@@ -29,5 +33,6 @@ int main(int argc, char const *argv[]) {
     for (int i = 0; i < M; i++) {
         scanf("%d", &A[i]);
     }
+    Amida(N, M, D, A);
     return 0;
 }
