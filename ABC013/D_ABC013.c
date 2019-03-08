@@ -5,22 +5,25 @@
 // 阿弥陀の到達位置を調べる
 int Amida (long N, long M, long D, int A[]) {
     int Amida[sizeN];
+    int toA[sizeN];
     // 初期配置
     for (int i = 1; i <= N; i++) {
         Amida[i] = i;
     }
-    for (size_t i = 0; i <= N; i++) {
-        printf("%d ", Amida[i] );
-    }
-    printf("\n");
     // 阿弥陀の答えを計算 D=1
-    for (int i = 0; i < M; i++) {
-        Swap(Amida[A[i]], Amida[A[i]+1]);
+    for (long d = 0; d < D; d++) {
+        for (long i = 0; i < M; i++) {
+            Swap(Amida[A[i]], Amida[A[i]+1]);
+        }
     }
-    for (size_t i = 0; i <= N; i++) {
-        printf("%d ", Amida[i] );
+    // 追跡
+    for (size_t i = 1; i <= N; i++) {
+        toA[Amida[i]] = i;
     }
-    printf("\n");
+    // 出力
+    for (size_t i = 1; i <= N; i++) {
+        printf("%d\n", toA[i] );
+    }
     return 0;
 }
 
