@@ -11,14 +11,12 @@ int Amida (long N, long M, long D, int A[]) {
         Amida[i] = i;
     }
     // 阿弥陀の答えを計算 D=1
-    /*
     for (long i = 0; i < M; i++) {
         Swap(Amida[A[i]], Amida[A[i]+1]);
     }
-    */
-    // D>1のとき
-    if (D > M) {
-        long modD = D%M;
+    // D>1のとき余りが 0 の時に不具合
+    if (D > N) {
+        long modD = D%N;
         for (long d = 0; d < modD; d++) {
             for (long i = 0; i < M; i++) {
                 Swap(Amida[A[i]], Amida[A[i]+1]);
