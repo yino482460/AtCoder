@@ -1,5 +1,5 @@
 #include <stdio.h>
-#define size 1000
+#define size 1000005
 #define max(a, b) (a>b ? a:b)
 // Imos法
 int retCostmer(int n, int a[], int b[]) {
@@ -10,12 +10,8 @@ int retCostmer(int n, int a[], int b[]) {
         Imos[a[i]] ++;
         Imos[b[i]+1] --;
     }
-    // 確認
-    for (size_t i = 0; i < 10; i++) {
-        printf("%d ", Imos[i]);
-    }
-    printf("\n");
     // 被覆
+    costmers = Imos[0];
     for (int i = 1; i < size; i++) {
         Imos[i] += Imos[i-1];
         costmers = max(costmers, Imos[i]);
