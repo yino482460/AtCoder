@@ -6,42 +6,25 @@ class LCA {
 private:
     /* data */
 public:
-    int N, Q, root;
+    int N, Q;
     // 辺の構造体
     typedef struct edge_t {
         int node1, node2;
     } edge_t;
     std::vector<edge_t> edge;   // ノード同士の連結状態を記憶
-    std::vector<int> a, b;
-    std::vector<int> parent, depth; //親のノード番号, ルートからの深さ
-    std::vector<std::vector<int>> tree;
+    std::vector<int> parent;
+    std::vector<int> depth; //親のノード番号, ルートからの深さ
+    std::vector< std::vector<int> > tree;
     // 関数
     LCA (); // 入力
     virtual ~LCA ();
-    void MakeTree();
-    void DFS(int v, int p, int d);
-    int CalcLCA(int u, int v);
-    void Init();
+    void MakeTree();    // 木構造を構築
+    void DFS(int v, int p, int d);  // 深さ優先探索
+    void Init();    //DFSの初期設定
+    int CalcLCA(int u, int v);  // LCAの計算
+    void Exec();
 };
-// 入力
-LCA :: LCA() {
-    std::cin >> N;
-    for (int i = 0; i < N-1; ++i) {
-        int x, y;
-        std::cin >> x >> y;
-        x = x-1; y = y-1;
-        // ノード同士の連結状態を記憶
-        edge.push_back({x, y});
-    }
-    // 追加する辺の取得
-    std::cin >> Q;
-    for (int i = 0; i < Q; ++i) {
-        int a_i, b_i;
-        std::cin >> a_i >> b_i;
-        a_i = a_i - 1; b_i = b_i - 1;
-        a.push_back(a_i);  b.push_back(b_i);
-    }
-}
+
 // 木構造を構築
 void LCA :: MakeTree() {
     for (int i = 0; i < N-1; ++i) {
@@ -66,7 +49,7 @@ void LCA :: DFS(int v, int p, int d) {
 }
 // 初期化
 void LCA :: Init() {
-    DFS(root, -1, 0);
+    DFS(0, -1, 0);  // rootは0
 }
 // u と vのLCAを求める
 int LCA :: CalcLCA(int u, int v) {
@@ -80,9 +63,35 @@ int LCA :: CalcLCA(int u, int v) {
     }
     return u;
 }
-
+LCA :: ~LCA() {}
+LCA :: LCA() {
+    std::cin >> N;
+    for (int i = 0; i < N-1; ++i) {
+        int x, y;
+        std::cin >> x >> y;
+        x = x-1; y = y-1;
+        edge_t a = {x, y};
+        // ノード同士の連結状態を記憶
+        edge.push_back(a);
+    }
+    // 関数
+    MakeTree();
+    Init(); // DFS開始
+}
+void LCA :: Exec() {
+    // 追加する辺の取得
+    std::cin >> Q;
+    for (int i = 0; i < Q; ++i) {
+        int a_i, b_i;
+        std::cin >> a_i >> b_i;
+        a_i = a_i - 1; b_i = b_i - 1;
+        int p = CalcLCA(a_i, b_i);  //   最小共通祖先
+        int ans = depth[a_i] - depth[p] + depth[b_i] - depth[p] + 1;
+        std::cout << ans  << "\n";
+    }
+}
 int main(int argc, char* argv[]) {
-
-
+    LCA lca = LCA();
+    lca.Exec();
     return 0;
 }
