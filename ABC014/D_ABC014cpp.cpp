@@ -16,15 +16,15 @@ public:
     std::vector<int> parent, depth; //親のノード番号, ルートからの深さ
     std::vector<std::vector<int>> tree;
     // 関数
-    void Input();
+    LCA (); // 入力
+    virtual ~LCA ();
     void MakeTree();
     void DFS(int v, int p, int d);
+    int CalcLCA(int u, int v);
     void Init();
-    LCA (int u, int v);
-    virtual ~LCA ();
 };
 // 入力
-void LCA :: Input() {
+LCA :: LCA() {
     std::cin >> N;
     for (int i = 0; i < N-1; ++i) {
         int x, y;
@@ -69,7 +69,7 @@ void LCA :: Init() {
     DFS(root, -1, 0);
 }
 // u と vのLCAを求める
-LCA :: LCA(int u, int v) {
+int LCA :: CalcLCA(int u, int v) {
     //uとvそれぞれのrootからの深さを揃える
     while (depth[u] > depth[v]) { u = parent[u]; }
     while (depth[v] > depth[u]) { v = parent[v]; }
@@ -78,6 +78,7 @@ LCA :: LCA(int u, int v) {
         u = parent[u];
         v = parent[v];
     }
+    return u;
 }
 
 int main(int argc, char* argv[]) {
