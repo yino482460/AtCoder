@@ -39,8 +39,6 @@ int InPut (void) {
     for (size_t i = 0; i < N-1; i++) {
         tree[Edge[i].x][i] = Edge[i].y; // バグ
     }
-
-
     // 追加する辺
     scanf("%d", &Q);
     a = (int*)malloc(sizeof(int)*Q);
