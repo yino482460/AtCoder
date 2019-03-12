@@ -7,6 +7,7 @@ private:
     /* data */
 public:
     int N, Q, root;
+    // 辺の構造体
     typedef struct edge_t {
         int node1, node2;
     } edge_t;
@@ -18,7 +19,8 @@ public:
     void Input();
     void MakeTree();
     void DFS(int v, int p, int d);
-    LCA ();
+    void Init();
+    LCA (int u, int v);
     virtual ~LCA ();
 };
 // 入力
@@ -61,4 +63,25 @@ void LCA :: DFS(int v, int p, int d) {
             DFS(tree[v][i], v, d+1);
         }
     }
+}
+// 初期化
+void LCA :: Init() {
+    DFS(root, -1, 0);
+}
+// u と vのLCAを求める
+LCA :: LCA(int u, int v) {
+    //uとvそれぞれのrootからの深さを揃える
+    while (depth[u] > depth[v]) { u = parent[u]; }
+    while (depth[v] > depth[u]) { v = parent[v]; }
+    //最小祖先ノードで合流するまで１つ１つ向かっていく
+    while (u != v) {
+        u = parent[u];
+        v = parent[v];
+    }
+}
+
+int main(int argc, char* argv[]) {
+
+
+    return 0;
 }
