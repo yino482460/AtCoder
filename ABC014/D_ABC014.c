@@ -1,7 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-// 辺を表す構造体
+// 可変長ノード構造体
+typedef struct vector {
+    int size;
+
+
+} vec_t;
+// ノードを表す構造体
 typedef struct node_t {
     struct node_t *parent;  // 親ノード, 根 = NULL
     int value;  // ノード自身の値
@@ -29,15 +35,24 @@ void addNode (node_t *parent, node_t *newnode, int nodeValue) {
     }
 }
 // 木構造を構築する関数
-void  MakeTree (int node1, int node2, node_t tree[]) {
-    /* code */
+void  MakeTree (int node1, int node2, node_t node[]) {
+    node[node1].value = node1;
+    node[node2].value = node2;
+    // vector的なので最後に値を追加
+
 }
 
 
 int main(int argc, char const *argv[]) {
     int N;
     scanf("%d", &N);
-    node_t *nodes = (node_t*)malloc(sizeof(node_t)*N);
+    node_t *node = (node_t*)malloc(sizeof(node_t)*N);
+    for (size_t i = 0; i < N-1; i++) {
+        int node1, node2;
+        scanf("%d %d", &node1, &node2);
+        node1 = node1-1; node2 = node2-1;
+        MakeTree(node1, node2, node);
+    }
 
 
 
