@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <list>
 #include <algorithm>
 
 class LCA {
@@ -12,9 +13,9 @@ public:
         int node1, node2;
     } edge_t;
     std::vector<edge_t> edge;   // ノード同士の連結状態を記憶
-    std::vector<int> parent;
-    std::vector<int> depth; //親のノード番号, ルートからの深さ
-    std::vector< std::vector<int> > tree;
+    std::vector<int> parent; //親のノード番号
+    std::vector<int> depth; // ルートからの深さ
+    std::vector< std::vector<int> > tree;   // 木
     // 関数
     LCA (); // 入力
     virtual ~LCA ();
@@ -22,7 +23,7 @@ public:
     void DFS(int v, int p, int d);  // 深さ優先探索
     void Init();    //DFSの初期設定
     int CalcLCA(int u, int v);  // LCAの計算
-    void Exec();
+    void Exec();    // 実行本体
 };
 
 // 木構造を構築
@@ -30,12 +31,14 @@ void LCA :: MakeTree() {
     for (int i = 0; i < N-1; ++i) {
         int x = edge[i].node1;
         int y = edge[i].node2;
+        std::cout << "x" << x << "y" << y << "\n";
         // 連結状態を表現
         tree[x].push_back(y);
         tree[y].push_back(x);
+        std::cout << tree[x][i]  << "\n";
     }
 }
-// 深さ優先探索  親:p, 深さ:d
+// 深さ優先探索  ノード: v 親:p, 深さ:d
 void LCA :: DFS(int v, int p, int d) {
     // ノード vの親 = p
     parent[v] = p;
@@ -49,7 +52,7 @@ void LCA :: DFS(int v, int p, int d) {
 }
 // 初期化
 void LCA :: Init() {
-    DFS(0, -1, 0);  // rootは0
+    DFS(0, -1, 0);  // rootは 0
 }
 // u と vのLCAを求める
 int LCA :: CalcLCA(int u, int v) {
@@ -64,8 +67,10 @@ int LCA :: CalcLCA(int u, int v) {
     return u;
 }
 LCA :: ~LCA() {}
+// LCA
 LCA :: LCA() {
     std::cin >> N;
+    std::cout << "Loo" << "\n";
     for (int i = 0; i < N-1; ++i) {
         int x, y;
         std::cin >> x >> y;
@@ -78,6 +83,7 @@ LCA :: LCA() {
     MakeTree();
     Init(); // DFS開始
 }
+// 実行本体
 void LCA :: Exec() {
     // 追加する辺の取得
     std::cin >> Q;
