@@ -36,7 +36,7 @@ void ConectNode (int node1, int node2, list_t node[]) {
         new->size = node[node1].size +1 ;
         new->node = node2;
         new->previous = &node[node1];
-
+        new = &node[node1];
     }
 }
 
