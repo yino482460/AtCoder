@@ -26,6 +26,20 @@ void InitEdge (int N, list_t node[]) {
 }
 // ノード同士の連結状態を構築する
 // 入力順と逆順に追加
+void conectNode (int i, int newnode, list_t node[]) {
+    list_t *new;
+    if (node[i].size == 0) {
+        node[i].size ++;
+        node[i].node = newnode;
+    } else {
+        new = (list_t*)malloc(sizeof(list_t));  // 新規メモリの確保
+        new->size = node[i].size +1 ;
+        new->node = i;
+        new->previous = &node[i];
+        new = &node[i];
+    }
+}
+
 void ConectNode (int node1, int node2, list_t node[]) {
     list_t *new;
     if (node[node1].size == 0) {
