@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#define NotConect -10
 // list
 typedef struct list_t {
     int size;   // 繋がっているノードの数
@@ -21,12 +22,13 @@ typedef struct tree_t {
 void InitNode (int N, list_t node[]) {
     for (size_t i = 0; i < N; i++) {
         node[i].size = 0;
+        node[i].node = NotConect;
         node[i].previous = NULL;
         node[i].head = &node[i];
     }
 }
 // ノード同士の連結状態を構築する
-// 入力順と逆順に追加
+// 入力順と逆順に追加 ここが肝
 void conectNode (int i, int newnode, list_t node[]) {
     list_t *new;
     if (node[i].size == 0) {
@@ -55,7 +57,7 @@ void MakeTree (int v, int p ,int d, list_t node[], tree_t tree[]) {
     int size = node[v].size;
     for (size_t i = 0; i < size; i++) {
         list_t *a = &node[v];
-        while ( a->previous == '\0' ) {
+        while ( a->node == NotConect ) { // これはマズイ?
             if (a->node != p) {
                 int newv = a->node;
                 MakeTree(newv, v, d+1, node, tree);
@@ -103,6 +105,7 @@ int main(int argc, char const *argv[]) {
     }
     // 木を保存する構造体
     tree_t *tree = (tree_t*)malloc(sizeof(tree_t)*N);
+    MakeTree(0, -1, 0, node, tree);
 
 
     int Q;
