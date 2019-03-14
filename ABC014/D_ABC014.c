@@ -20,7 +20,6 @@ typedef struct node_t {
 void InitEdge (int N, list_t node[]) {
     for (size_t i = 0; i < N; i++) {
         node[i].size = 0;
-        //node[i].head = &node[i];
         node[i].previous = NULL;
     }
 }
@@ -39,21 +38,12 @@ void conectNode (int i, int newnode, list_t node[]) {
         new = &node[i];
     }
 }
-
-void ConectNode (int node1, int node2, list_t node[]) {
-    list_t *new;
-    if (node[node1].size == 0) {
-        node[node1].size ++;
-        node[node1].node = node2;
-    } else {
-        new = (list_t*)malloc(sizeof(list_t));  // 新規メモリの確保
-        new->size = node[node1].size +1 ;
-        new->node = node2;
-        new->previous = &node[node1];
-        new = &node[node1];
-    }
+// ノード同士の繋がりを記憶する関数
+void  strructEdge (int node1, int node2, list_t node[]) {
+    // vector的なので最後に値を追加
+    conectNode(node1, node2, node);
+    conectNode(node2, node1, node);
 }
-
 
 // ノードを追加する関数
 void addNode (node_t *parent, node_t *newnode, int nodeValue) {
@@ -75,13 +65,7 @@ void addNode (node_t *parent, node_t *newnode, int nodeValue) {
     }
 }
 
-// 木構造を構築する関数
-void  MakeTree (int node1, int node2, node_t node[]) {
-    node[node1].value = node1;
-    node[node2].value = node2;
-    // vector的なので最後に値を追加
 
-}
 
 int main(int argc, char const *argv[]) {
     int N;
@@ -92,7 +76,7 @@ int main(int argc, char const *argv[]) {
         int node1, node2;
         scanf("%d %d", &node1, &node2);
         node1 = node1-1; node2 = node2-1;
-        ConectNode(node1, node2, node);
+        strructEdge(node1, node2, node);
     }
 
 
