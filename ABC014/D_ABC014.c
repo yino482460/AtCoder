@@ -5,11 +5,12 @@
 typedef struct list_t {
     int size;   // 繋がっているノードの数
     int node;   // 連結しているノードの値
-    struct list_t *previous;    // 1つ前のノード
+    struct list_t *previous;    // 1つ前に繋げたノード
+    struct list_t *head;
 } list_t;
 // 木を表す構造体
 typedef struct tree_t {
-    struct tree_t *parent;  // 親ノード, 根 = NULL
+    int parent;  // 親ノード, 根 = NULL
     int value;  // ノード自身の値
     int depth;  // ルートからの深さ
     struct tree_t *child;   // 最初に連結する子ノード
@@ -21,6 +22,7 @@ void InitNode (int N, list_t node[]) {
     for (size_t i = 0; i < N; i++) {
         node[i].size = 0;
         node[i].previous = NULL;
+        node[i].head = &node[i];
     }
 }
 // ノード同士の連結状態を構築する
@@ -32,21 +34,35 @@ void conectNode (int i, int newnode, list_t node[]) {
         node[i].node = newnode;
     } else {
         new = (list_t*)malloc(sizeof(list_t));  // 新規メモリの確保
-        new->size = node[i].size +1 ;
-        new->node = i;
+        new->size = node[i].size + 1 ;
+        new->node = newnode;
         new->previous = &node[i];
-        new = &node[i];
+        node[i].head = new;
     }
 }
-// ノード同士の繋がりを記憶する関数
+// ノード同士の繋がりを構築する関数
 void  strructEdge (int node1, int node2, list_t node[]) {
     // vector的なので最後に値を追加
     conectNode(node1, node2, node);
     conectNode(node2, node1, node);
 }
 // 木構造を構築する関数
-void MakeTree (int v, int p ,int d) {
-    /* code */
+void MakeTree (int v, int p ,int d, list_t node[], tree_t tree[]) {
+    //ノードvの親 = p
+    tree[v].parent = p;
+    //ルートからノードvまでの深さ = d
+    tree[v].depth = d;
+    int size = node[v].size;
+    for (size_t i = 0; i < size; i++) {
+        list_t *a = &node[v];
+        while ( a->previous == '\0' ) {
+            if (a->node != p) {
+                int newv = a->node;
+                MakeTree(newv, v, d+1, node, tree);
+            }
+            a = a->previous;
+        }
+    }
 }
 
 
