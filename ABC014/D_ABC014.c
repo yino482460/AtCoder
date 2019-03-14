@@ -5,7 +5,7 @@
 typedef struct list_t {
     int size;   // 繋がっているノードの数
     int node;   // 連結しているノードの値
-    struct list_t *next;
+    struct list_t *previous;    // 1つ前のノード
 } list_t;
 // ノードを表す構造体
 typedef struct node_t {
@@ -20,21 +20,23 @@ typedef struct node_t {
 void InitEdge (int N, list_t node[]) {
     for (size_t i = 0; i < N; i++) {
         node[i].size = 0;
-        node[i].next = NULL;
+        //node[i].head = &node[i];
+        node[i].previous = NULL;
     }
 }
 // ノード同士の連結状態を構築する
+// 入力順と逆順に追加
 void ConectNode (int node1, int node2, list_t node[]) {
-    list_t *previous, *new;
+    list_t *new;
     if (node[node1].size == 0) {
         node[node1].size ++;
         node[node1].node = node2;
     } else {
         new = (list_t*)malloc(sizeof(list_t));  // 新規メモリの確保
-        while (node[node1].next == '\0') {
+        new->size = node[node1].size +1 ;
+        new->node = node2;
+        new->previous = &node[node1];
 
-        }
-        node[node1].next = new;
     }
 }
 
