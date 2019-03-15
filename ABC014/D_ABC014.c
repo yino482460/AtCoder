@@ -13,8 +13,8 @@ typedef struct tree_t {
     int parent;  // 親ノード, 根 = NULL
     int value;  // ノード自身の値
     int depth;  // ルートからの深さ
-    struct tree_t *child;   // 最初に連結する子ノード
-    struct tree_t *next;   // 自分の隣のノード 単独ならNULL
+    //struct tree_t *child;   // 最初に連結する子ノード
+    //struct tree_t *next;   // 自分の隣のノード 単独ならNULL
 } tree_t;
 
 // ノードの初期化
@@ -59,7 +59,16 @@ void MakeTree (int v, int p ,int d, list_t node[], tree_t tree[]) {
         }
     }
 }
+//uとvのLCAを求める
+int LCA (int u, int v, tree_t tree[]) {
+    //uとvそれぞれのrootからの深さを揃える
+    int depthu, depthv;
+    depthu = tree[u].depth;
+    depthv = tree[v].depth;
 
+
+    return u;
+}
 
 // ノードを追加する関数
 /*
@@ -96,7 +105,7 @@ int main(int argc, char const *argv[]) {
         node1 = node1-1; node2 = node2-1;
         strructEdge(node1, node2, node);
     }
-    // 木を保存する構造体
+    // 木を構築
     tree_t *tree = (tree_t*)malloc(sizeof(tree_t)*N);
     MakeTree(0, -1, 0, node, tree);
 
