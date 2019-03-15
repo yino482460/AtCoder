@@ -28,11 +28,17 @@ void InitNode (int N, list_t node[]) {
 // 入力順と逆順に追加 ここが肝
 void conectNode (int i, int newnode, list_t node[]) {
     list_t *new;
-    new = (list_t*)malloc(sizeof(list_t));  // 新規メモリの確保
-    new->size = node[i].size + 1 ;
-    new->node = newnode;
-    new->previous = node[i].latest;
-    node[i].latest = new;
+    if (node[i].size == 0) {
+        node[i].size = 1;
+        node[i].node = newnode;
+        node[i].latest = &node[i];
+    } else {
+        new = (list_t*)malloc(sizeof(list_t));  // 新規メモリの確保
+        new->size = node[i].size + 1 ;
+        new->node = newnode;
+        new->previous = node[i].latest;
+        node[i].latest = new;
+    }
     printf("call conectNode\n");
 }
 // ノード同士の繋がりを構築する関数
@@ -48,7 +54,7 @@ void MakeTree (int v, int p ,int d, list_t node[], tree_t tree[]) {
     tree[v].parent = p;
     //ルートからノードvまでの深さ = d
     tree[v].depth = d;
-    list_t *nodev = node[v].latest;
+    list_t *nodev = node[v].latest; // 最も最近追加されたノードに移動
     int size = nodev->size;
     for (size_t i = 0; i < size; i++) {
         while ( nodev->previous != '\0' ) {
