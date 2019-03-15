@@ -22,6 +22,7 @@ void InitNode (int N, list_t node[]) {
         node[i].previous = NULL;
         node[i].latest = NULL;
     }
+    printf("call InitNode\n");
 }
 // ノード同士の連結状態を構築する
 // 入力順と逆順に追加 ここが肝
@@ -32,6 +33,7 @@ void conectNode (int i, int newnode, list_t node[]) {
     new->node = newnode;
     new->previous = node[i].latest;
     node[i].latest = new;
+    printf("call conectNode\n");
 }
 // ノード同士の繋がりを構築する関数
 void  strructEdge (int node1, int node2, list_t node[]) {
@@ -56,6 +58,7 @@ void MakeTree (int v, int p ,int d, list_t node[], tree_t tree[]) {
             nodev = nodev->previous;
         }
     }
+    printf("call MakeTree\n");
 }
 //uとvのLCAを求める
 int LCA (int u, int v, tree_t tree[]) {
@@ -70,11 +73,10 @@ int LCA (int u, int v, tree_t tree[]) {
         u = tree[u].parent;
         v = tree[v].parent;
     }
+    printf("call LCA\n");
     return u;
 }
-
-
-
+// Main
 int main(int argc, char const *argv[]) {
     int N;
     scanf("%d", &N);
@@ -96,9 +98,13 @@ int main(int argc, char const *argv[]) {
         int a, b;
         scanf("%d %d", &a, &b);
         a = a-1; b = b-1;
-        int lca = LCA(a, b, tree);
+        int lca = LCA(a, b, tree);  // LCAから動かない
+        printf("Q3\n"); // デバッグ用
         int ans = tree[a].depth + tree[b].depth - 2*tree[lca].depth +1;
         printf("%d\n", ans);
     }
+    // メモリの解放
+    free(node);
+    free(tree);
     return 0;
 }
