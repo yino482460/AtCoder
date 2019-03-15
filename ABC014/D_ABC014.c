@@ -64,6 +64,8 @@ int LCA (int u, int v, tree_t tree[]) {
     int depthu, depthv;
     depthu = tree[u].depth;
     depthv = tree[v].depth;
+    printf("u%d,du:%d v%d, dv%d\n", u, depthu, v, depthv);
+    /*
     //uとvそれぞれのrootからの深さを揃える
     while (depthu > depthv) { u = tree[u].parent; } // uを一つ上に
     while (depthv > depthu) { v = tree[v].parent; }
@@ -73,6 +75,7 @@ int LCA (int u, int v, tree_t tree[]) {
         v = tree[v].parent;
     }
     printf("call LCA\n");
+    */
     return u;
 }
 // Debug
@@ -97,7 +100,6 @@ int main(int argc, char const *argv[]) {
         int node1, node2;
         scanf("%d %d", &node1, &node2);
         node1--; node2--;
-        printf("node1:%2d, node2:%2d\n", node1, node2);
         strructEdge(node1, node2, node);
     }
     // 木を構築
@@ -109,13 +111,11 @@ int main(int argc, char const *argv[]) {
         int a, b;
         scanf("%d %d", &a, &b);
         a --; b --;
-        printf("a:%d b:%d\n", a, b);
-        /*
+        //printf("a:%d b:%d\n", a, b);
         int lca = LCA(a, b, tree);  // LCAから動かない
         printf("Q3\n"); // デバッグ用
-        int ans = tree[a].depth + tree[b].depth - 2*tree[lca].depth +1;
-        printf("%d\n", ans);
-        */
+        //int ans = tree[a].depth + tree[b].depth - 2*tree[lca].depth +1;
+        //printf("%d\n", ans);
     }
     Debug(N, tree);
     // メモリの解放
