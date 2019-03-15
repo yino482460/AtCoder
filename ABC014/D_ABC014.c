@@ -1,13 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#define NotConect -10
 // list
 typedef struct list_t {
     int size;   // 繋がっているノードの数
     int node;   // 連結しているノードの値
     struct list_t *previous;    // 1つ前に繋げたノード
-    struct list_t *head;
+    struct list_t *latest;
 } list_t;
 // 木を表す構造体
 typedef struct tree_t {
@@ -22,25 +21,19 @@ typedef struct tree_t {
 void InitNode (int N, list_t node[]) {
     for (size_t i = 0; i < N; i++) {
         node[i].size = 0;
-        node[i].node = NotConect;
         node[i].previous = NULL;
-        node[i].head = &node[i];
+        node[i].latest = NULL;
     }
 }
 // ノード同士の連結状態を構築する
 // 入力順と逆順に追加 ここが肝
 void conectNode (int i, int newnode, list_t node[]) {
     list_t *new;
-    if (node[i].size == 0) {
-        node[i].size ++;
-        node[i].node = newnode;
-    } else {
-        new = (list_t*)malloc(sizeof(list_t));  // 新規メモリの確保
-        new->size = node[i].size + 1 ;
-        new->node = newnode;
-        new->previous = &node[i];
-        node[i].head = new;
-    }
+    new = (list_t*)malloc(sizeof(list_t));  // 新規メモリの確保
+    new->size = node[i].size + 1 ;
+    new->node = newnode;
+    new->previous = &node[i];
+    node[i].latest = new;
 }
 // ノード同士の繋がりを構築する関数
 void  strructEdge (int node1, int node2, list_t node[]) {
@@ -57,7 +50,7 @@ void MakeTree (int v, int p ,int d, list_t node[], tree_t tree[]) {
     int size = node[v].size;
     for (size_t i = 0; i < size; i++) {
         list_t *a = &node[v];
-        while ( a->node == NotConect ) { // これはマズイ?
+        while ( a->previous != '\0' ) {
             if (a->node != p) {
                 int newv = a->node;
                 MakeTree(newv, v, d+1, node, tree);
