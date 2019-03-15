@@ -13,8 +13,6 @@ typedef struct tree_t {
     int parent;  // 親ノード, 根 = NULL
     int value;  // ノード自身の値
     int depth;  // ルートからの深さ
-    //struct tree_t *child;   // 最初に連結する子ノード
-    //struct tree_t *next;   // 自分の隣のノード 単独ならNULL
 } tree_t;
 
 // ノードの初期化
@@ -61,36 +59,20 @@ void MakeTree (int v, int p ,int d, list_t node[], tree_t tree[]) {
 }
 //uとvのLCAを求める
 int LCA (int u, int v, tree_t tree[]) {
-    //uとvそれぞれのrootからの深さを揃える
     int depthu, depthv;
     depthu = tree[u].depth;
     depthv = tree[v].depth;
-
-
+    //uとvそれぞれのrootからの深さを揃える
+    while (depthu > depthv) { u = tree[u].parent; } // uを一つ上に
+    while (depthv > depthu) { v = tree[v].parent; }
+    //最小祖先ノードで合流するまで１つ１つ向かっていく
+    while (u != v) {
+        u = tree[u].parent;
+        v = tree[v].parent;
+    }
     return u;
 }
 
-// ノードを追加する関数
-/*
-void addNode (tree_t *parent, tree_t *newnode, int nodeValue) {
-    // 新規ノードのメモリを確保
-    newnode -> value = nodeValue;
-    newnode -> depth = (parent -> depth) +1;
-    newnode -> parent = parent;    // 新規追加ノードの親ノード
-    newnode -> next = NULL;    // 追加直後は右隣は無し
-    newnode -> child = NULL;
-    // 親ノードから見た新規ノードとの関係
-    if (parent -> child == '\0') {
-        parent -> child = newnode;
-    } else {
-        tree_t *last = parent -> child;
-        while (last -> next == '\0') {
-            last = last -> next;    // 隣に移動
-        }
-        last -> next = newnode;
-    }
-}
-*/
 
 
 int main(int argc, char const *argv[]) {
@@ -108,15 +90,15 @@ int main(int argc, char const *argv[]) {
     // 木を構築
     tree_t *tree = (tree_t*)malloc(sizeof(tree_t)*N);
     MakeTree(0, -1, 0, node, tree);
-
-
     int Q;
     scanf("%d", &Q);
     for (size_t i = 0; i < Q; i++) {
-        /* code */
+        int a, b;
+        scanf("%d %d", &a, &b);
+        a = a-1; b = b-1;
+        int lca = LCA(a, b, tree);
+        int ans = tree[a].depth + tree[b].depth - 2*tree[lca].depth +1;
+        printf("%d\n", ans);
     }
-
-
-
     return 0;
 }
