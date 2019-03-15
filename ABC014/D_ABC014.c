@@ -20,7 +20,7 @@ void InitNode (int N, list_t node[]) {
     for (size_t i = 0; i < N; i++) {
         node[i].size = 0;
         node[i].previous = NULL;
-        node[i].latest = NULL;
+        node[i].latest = &node[i];
     }
     printf("call InitNode\n");
 }
@@ -28,17 +28,11 @@ void InitNode (int N, list_t node[]) {
 // 入力順と逆順に追加 ここが肝
 void conectNode (int i, int newnode, list_t node[]) {
     list_t *new;
-    if (node[i].size == 0) {
-        node[i].size = 1;
-        node[i].node = newnode;
-        node[i].latest = &node[i];
-    } else {
-        new = (list_t*)malloc(sizeof(list_t));  // 新規メモリの確保
-        new->size = node[i].size + 1 ;
-        new->node = newnode;
-        new->previous = node[i].latest;
-        node[i].latest = new;
-    }
+    new = (list_t*)malloc(sizeof(list_t));  // 新規メモリの確保
+    new->size = (node[i].latest) -> size + 1 ;
+    new->node = newnode;
+    new->previous = node[i].latest;
+    node[i].latest = new;
     printf("call conectNode\n");
 }
 // ノード同士の繋がりを構築する関数
@@ -57,7 +51,7 @@ void MakeTree (int v, int p ,int d, list_t node[], tree_t tree[]) {
     list_t *nodev = node[v].latest; // 最も最近追加されたノードに移動
     int size = nodev->size;
     for (size_t i = 0; i < size; i++) {
-        while ( nodev->previous != '\0' ) {
+        while (nodev->previous != '\0' ) {
             if (nodev->node != p) {
                 int newv = nodev->node;
                 MakeTree(newv, v, d+1, node, tree);
@@ -102,8 +96,8 @@ int main(int argc, char const *argv[]) {
     for (size_t i = 0; i < N-1; i++) {
         int node1, node2;
         scanf("%d %d", &node1, &node2);
-        node1 = node1-1; node2 = node2-1;
-        printf("%2d %2d\n", node1, node2);
+        node1--; node2--;
+        printf("node1:%2d, node2:%2d\n", node1, node2);
         strructEdge(node1, node2, node);
     }
     // 木を構築
@@ -114,7 +108,7 @@ int main(int argc, char const *argv[]) {
     for (size_t i = 0; i < Q; i++) {
         int a, b;
         scanf("%d %d", &a, &b);
-        a = a-1; b = b-1;
+        a --; b --;
         /*
         int lca = LCA(a, b, tree);  // LCAから動かない
         printf("Q3\n"); // デバッグ用
