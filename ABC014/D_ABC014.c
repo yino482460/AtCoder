@@ -43,6 +43,7 @@ void  strructEdge (int node1, int node2, list_t node[]) {
 }
 // 木構造を構築する関数 深さ優先探索
 void MakeTree (int v, int p ,int d, list_t node[], tree_t tree[]) {
+    tree[v].value = v;
     //ノードvの親 = p
     tree[v].parent = p;
     //ルートからノードvまでの深さ = d
@@ -76,6 +77,15 @@ int LCA (int u, int v, tree_t tree[]) {
     printf("call LCA\n");
     return u;
 }
+// Debug
+void Debug (int N,tree_t tree[]) {
+    for (size_t i = 0; i < N; i++) {
+        int p = tree[i].parent;
+        int v = tree[i].value;
+        int d = tree[i].depth;
+        printf("%2d %2d %2d \n", p, v, d);
+    }
+}
 // Main
 int main(int argc, char const *argv[]) {
     int N;
@@ -87,6 +97,7 @@ int main(int argc, char const *argv[]) {
         int node1, node2;
         scanf("%d %d", &node1, &node2);
         node1 = node1-1; node2 = node2-1;
+        printf("%2d %2d\n", node1, node2);
         strructEdge(node1, node2, node);
     }
     // 木を構築
@@ -98,11 +109,14 @@ int main(int argc, char const *argv[]) {
         int a, b;
         scanf("%d %d", &a, &b);
         a = a-1; b = b-1;
+        /*
         int lca = LCA(a, b, tree);  // LCAから動かない
         printf("Q3\n"); // デバッグ用
         int ans = tree[a].depth + tree[b].depth - 2*tree[lca].depth +1;
         printf("%d\n", ans);
+        */
     }
+    Debug(N, tree);
     // メモリの解放
     free(node);
     free(tree);
