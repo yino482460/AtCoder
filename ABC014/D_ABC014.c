@@ -22,7 +22,6 @@ void InitNode (int N, list_t node[]) {
         node[i].previous = NULL;
         node[i].latest = &node[i];
     }
-    printf("call InitNode\n");
 }
 // ノード同士の連結状態を構築する
 // 入力順と逆順に追加 ここが肝
@@ -33,7 +32,6 @@ void conectNode (int i, int newnode, list_t node[]) {
     new->node = newnode;
     new->previous = node[i].latest;
     node[i].latest = new;
-    printf("call conectNode\n");
 }
 // ノード同士の繋がりを構築する関数
 void  strructEdge (int node1, int node2, list_t node[]) {
@@ -59,8 +57,8 @@ void MakeTree (int v, int p ,int d, list_t node[], tree_t tree[]) {
             nodev = nodev->previous;
         }
     }
-    printf("call MakeTree\n");
 }
+
 //uとvのLCAを求める
 int LCA (int u, int v, tree_t tree[]) {
     int depthu, depthv;
@@ -79,13 +77,15 @@ int LCA (int u, int v, tree_t tree[]) {
 }
 // Debug
 void Debug (int N,tree_t tree[]) {
+    printf("call debug\n");
     for (size_t i = 0; i < N; i++) {
         int p = tree[i].parent;
         int v = tree[i].value;
         int d = tree[i].depth;
-        printf("%2d %2d %2d \n", p, v, d);
+        printf("p;%2d v:%2d d:%2d \n", p, v, d);
     }
 }
+
 // Main
 int main(int argc, char const *argv[]) {
     int N;
@@ -109,6 +109,7 @@ int main(int argc, char const *argv[]) {
         int a, b;
         scanf("%d %d", &a, &b);
         a --; b --;
+        printf("a:%d b:%d\n", a, b);
         /*
         int lca = LCA(a, b, tree);  // LCAから動かない
         printf("Q3\n"); // デバッグ用
