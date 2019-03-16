@@ -26,12 +26,12 @@ void InitNode (int N, list_t node[]) {
 // ノード同士の連結状態を構築する
 // 入力順と逆順に追加 ここが肝
 void conectNode (int i, int newnode, list_t node[]) {
-    list_t *new;
-    new = (list_t*)malloc(sizeof(list_t));  // 新規メモリの確保
-    new->size = (node[i].latest) -> size + 1 ;
-    new->node = newnode;
-    new->previous = node[i].latest;
-    node[i].latest = new;
+    list_t *nnew;
+    nnew = (list_t*)malloc(sizeof(list_t));  // 新規メモリの確保
+    nnew->size = (node[i].latest) -> size + 1 ;
+    nnew->node = newnode;
+    nnew->previous = node[i].latest;
+    node[i].latest = nnew;
 }
 // ノード同士の繋がりを構築する関数
 void  strructEdge (int node1, int node2, list_t node[]) {
@@ -61,17 +61,17 @@ void MakeTree (int v, int p ,int d, list_t node[], tree_t tree[]) {
 
 //uとvのLCAを求める
 int LCA (int u, int v, tree_t tree[]) {
-    printf("call LCA\n");
+    //printf("call LCA\n");
     //uとvそれぞれのrootからの深さを揃える
     while (tree[u].depth > tree[v].depth) { u = tree[u].parent; } // uを一つ上に
     while (tree[v].depth > tree[u].depth) { v = tree[v].parent; }
-    printf("up:%d vp:%d\n", tree[u].parent, tree[v].parent);
+    //printf("up:%d vp:%d\n", tree[u].parent, tree[v].parent);
     //最小祖先ノードで合流するまで１つ１つ向かっていく
     while (u != v) {
         u = tree[u].parent;
         v = tree[v].parent;
     }
-    int lca = u;
+    int lca = u;    // 最小共通祖先
     return lca;
 }
 // Debug
@@ -81,7 +81,7 @@ void Debug (int N,tree_t tree[]) {
         int p = tree[i].parent;
         int v = tree[i].value;
         int d = tree[i].depth;
-        printf("p;%2d v:%2d d:%2d \n", p, v, d);
+        printf("v;%2d p:%2d d:%2d \n", v, p, d);
     }
 }
 
@@ -111,7 +111,7 @@ int main(int argc, char const *argv[]) {
         int ans = tree[a].depth + tree[b].depth - 2*tree[lca].depth +1;
         printf("%d\n", ans);
     }
-    Debug(N, tree);
+    //Debug(N, tree);
     // メモリの解放
     free(node);
     free(tree);
