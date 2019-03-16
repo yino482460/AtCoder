@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#define Log 17
-#define swap(a, b) (a+=b, b=a-b, b=a-b)
+#define Log 18
+#define swap(a, b) (a+=b, b=a-b, a-=b)
 // list
 typedef struct list_t {
     int size;   // 繋がっているノードの数
@@ -12,7 +12,7 @@ typedef struct list_t {
 } list_t;
 // 木を表す構造体
 typedef struct tree_t {
-    int parent[Log];  // 親ノード, 根 = NULL
+    int parent[Log];  // 親ノード, 根 = 0
     int value;  // ノード自身の値
     int depth;  // ルートからの深さ
 } tree_t;
@@ -62,24 +62,28 @@ void DFS (int v, int p ,int d, list_t node[], tree_t tree[]) {
     }
 }
 // 木構造を高速で構築するO(log n) ver
-void MakeTree (int v, int p ,int d, list_t node[], tree_t tree[]) {
-    DFS(0, -1, 0, node, tree);
-    for (size_t i = 0; i+1 < Log; i++) {
-        // ダブリング
-        if (tree[v].parent[i] < 0) {
-            //ノードvの2^iの親が存在しない場合いくら辿っても存在しない
-            tree[v].parent[i+1] = -1;
-        } else {
+void MakeTree (int N, int log, int v, int p ,int d, list_t node[], tree_t tree[]) {
+    DFS(0, -1, 0, node, tree);  // root = 0
+    for (size_t i = 0; i < log; i++) {
+        for (size_t v = 0; v < N; v++) {
             // ダブリング
-            tree[v].parent[i+1] = tree[tree[v].parent[i]].parent[i];
+            if (tree[v].parent[i] < 0) {
+                //ノードvの2^iの親が存在しない場合いくら辿っても存在しない
+                tree[v].parent[i+1] = -1;
+            } else {
+                // ダブリング
+                tree[v].parent[i+1] = tree[tree[v].parent[i]].parent[i];
+            }
         }
     }
 }
 
 //uとvのLCAを求める
 int LCA (int log, int u, int v, tree_t tree[]) {
+    //printf("u:%d v:%d \n", u, v);
     if (tree[u].depth > tree[v].depth) { swap(u, v); }
     //この時点ではdepth[v] >= depth[u]が成り立つ
+    //printf("u:%d v:%d \n", u, v);
 
     //uとvが同じ深さになるまで親ノードを上る
     for(int i = 0;i < log; i++){
@@ -100,16 +104,6 @@ int LCA (int log, int u, int v, tree_t tree[]) {
     }
     int lca = tree[u].parent[0];    // 最小共通祖先
     return lca;
-}
-// Debug
-void Debug (int N,tree_t tree[]) {
-    printf("call debug\n");
-    for (size_t i = 0; i < N; i++) {
-        int p = tree[i].parent[0];
-        int v = tree[i].value;
-        int d = tree[i].depth;
-        printf("v;%2d p:%2d d:%2d \n", v, p, d);
-    }
 }
 
 // Main
@@ -132,7 +126,7 @@ int main(int argc, char const *argv[]) {
     }
     // 木を構築
     tree_t *tree = (tree_t*)malloc(sizeof(tree_t)*N);
-    MakeTree(0, -1, 0, node, tree);
+    MakeTree(N, log, 0, -1, 0, node, tree);
     int Q;
     scanf("%d", &Q);
     for (size_t i = 0; i < Q; i++) {
@@ -143,7 +137,6 @@ int main(int argc, char const *argv[]) {
         int ans = tree[a].depth + tree[b].depth - 2*tree[lca].depth +1;
         printf("%d\n", ans);
     }
-    //Debug(N, tree);
     // メモリの解放
     free(node);
     free(tree);
