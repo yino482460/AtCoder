@@ -3,14 +3,21 @@
 #define False 0
 #define True 1
 int T[size][size];
+int cnt = 0;
 int flag;
 // 深さ優先探索 numQ 今の質問数
 void DFS (int N, int K, int numQ, int value) {
+    cnt ++;
+    printf("numQ %d\n", numQ);
     if (numQ == N) {
         if (value == 0) {
-            flag = True;    // バグ有り
+            flag += True;    // バグ有り
+            printf("cnt:%d flag:%d\n",cnt, flag);
+            return;
         } else {
-            flag = False;
+            flag += False;
+            printf("cnt:%d flag:%d\n",cnt, flag);
+            return;
         }
     }
     // 再帰
@@ -33,10 +40,10 @@ int main(int argc, char const *argv[]) {
     // 深さ優先探索
     DFS(N, K, 0, 0);
     // 出力
-    if (flag == True) {
-        printf("Found\n");
-    } else {
+    if (flag == False) {
         printf("Nothing\n");
+    } else {
+        printf("Found\n");
     }
     return 0;
 }
