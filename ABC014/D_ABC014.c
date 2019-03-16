@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#define Log 17
 // list
 typedef struct list_t {
     int size;   // 繋がっているノードの数
@@ -10,7 +11,7 @@ typedef struct list_t {
 } list_t;
 // 木を表す構造体
 typedef struct tree_t {
-    int parent;  // 親ノード, 根 = NULL
+    int parent[Log];  // 親ノード, 根 = NULL
     int value;  // ノード自身の値
     int depth;  // ルートからの深さ
 } tree_t;
@@ -39,11 +40,14 @@ void  strructEdge (int node1, int node2, list_t node[]) {
     conectNode(node1, node2, node);
     conectNode(node2, node1, node);
 }
-// 木構造を構築する関数 深さ優先探索
-void MakeTree (int v, int p ,int d, list_t node[], tree_t tree[]) {
+
+// 木構造を構築する関数 深さ優先探索 lognバージョンの肝
+void DFS (int v, int p ,int d, list_t node[], tree_t tree[]) {
     tree[v].value = v;
-    //ノードvの親 = p
-    tree[v].parent = p;
+    // 2^i回上回った時のノードの初期化
+    for (size_t i = 0; i < Log; i++) { tree[v].parent[i] = -1; }
+    //ノードvの親 = p 2^i回上回った時のノード
+    tree[v].parent[0] = p;  // 一つ上の親
     //ルートからノードvまでの深さ = d
     tree[v].depth = d;
     list_t *nodev = node[v].latest; // 最も最近追加されたノードに移動
@@ -52,20 +56,32 @@ void MakeTree (int v, int p ,int d, list_t node[], tree_t tree[]) {
         while (nodev->previous != '\0' ) {
             if (nodev->node != p) {
                 int newv = nodev->node;
-                MakeTree(newv, v, d+1, node, tree);
+                DFS(newv, v, d+1, node, tree);
             }
             nodev = nodev->previous;
         }
     }
 }
+// 木構造を高速で構築するO(log n) ver
+void MakeTree (int v, int p ,int d, list_t node[], tree_t tree[]) {
+    DFS(0, -1, 0, node, tree);
+    for (size_t i = 0; i+1 < Log; i++) {
+        // ダブリング
+        if (tree[v].parent[i] < 0) {
+            //ノードvの親が存在しない場合いくら辿っても存在しない
+            /* code */
+        } else {
+            /* code */
+        }
+    }
+
+}
 
 //uとvのLCAを求める
 int LCA (int u, int v, tree_t tree[]) {
-    //printf("call LCA\n");
     //uとvそれぞれのrootからの深さを揃える
     while (tree[u].depth > tree[v].depth) { u = tree[u].parent; } // uを一つ上に
     while (tree[v].depth > tree[u].depth) { v = tree[v].parent; }
-    //printf("up:%d vp:%d\n", tree[u].parent, tree[v].parent);
     //最小祖先ノードで合流するまで１つ１つ向かっていく
     while (u != v) {
         u = tree[u].parent;

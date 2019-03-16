@@ -28,9 +28,9 @@ public class MainLogn {
 			}
 		}
 	}
+
     public void init(){
     		dfs(root,-1,0);
-
     		for(int i = 0;i + 1 < log;i++){
     			for(int v = 0;v < N;v++){
     				if(parent[i][v] < 0){
@@ -43,6 +43,7 @@ public class MainLogn {
     			}
     		}
     	}
+
         //uとvのLCAを求める
         	public int LCA(int u,int v){
 
@@ -76,6 +77,7 @@ public class MainLogn {
 
         		return parent[0][u];
         	}
+
             public void solve() {
 		N = nextInt();
 		graph = new ArrayList[N];
