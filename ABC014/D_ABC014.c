@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #define Log 17
+#define swap(a, b) (a+=b, b=a-b, b=a-b)
 // list
 typedef struct list_t {
     int size;   // 繋がっているノードの数
@@ -77,6 +78,11 @@ void MakeTree (int v, int p ,int d, list_t node[], tree_t tree[]) {
 
 //uとvのLCAを求める
 int LCA (int u, int v, tree_t tree[]) {
+    if (tree[u].depth > tree[v].depth) {
+        swap(u, v);
+    }
+
+    /*
     //uとvそれぞれのrootからの深さを揃える
     while (tree[u].depth > tree[v].depth) { u = tree[u].parent; } // uを一つ上に
     while (tree[v].depth > tree[u].depth) { v = tree[v].parent; }
@@ -87,12 +93,13 @@ int LCA (int u, int v, tree_t tree[]) {
     }
     int lca = u;    // 最小共通祖先
     return lca;
+    */
 }
 // Debug
 void Debug (int N,tree_t tree[]) {
     printf("call debug\n");
     for (size_t i = 0; i < N; i++) {
-        int p = tree[i].parent;
+        int p = tree[i].parent[0];
         int v = tree[i].value;
         int d = tree[i].depth;
         printf("v;%2d p:%2d d:%2d \n", v, p, d);
