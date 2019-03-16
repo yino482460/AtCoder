@@ -44,8 +44,6 @@ void  strructEdge (int node1, int node2, list_t node[]) {
 // 木構造を構築する関数 深さ優先探索 lognバージョンの肝
 void DFS (int v, int p ,int d, list_t node[], tree_t tree[]) {
     tree[v].value = v;
-    // 2^i回上回った時のノードの初期化
-    for (size_t i = 0; i < Log; i++) { tree[v].parent[i] = -1; }
     //ノードvの親 = p 2^i回上回った時のノード
     tree[v].parent[0] = p;  // 一つ上の親
     //ルートからノードvまでの深さ = d
@@ -68,13 +66,13 @@ void MakeTree (int v, int p ,int d, list_t node[], tree_t tree[]) {
     for (size_t i = 0; i+1 < Log; i++) {
         // ダブリング
         if (tree[v].parent[i] < 0) {
-            //ノードvの親が存在しない場合いくら辿っても存在しない
-            /* code */
+            //ノードvの2^iの親が存在しない場合いくら辿っても存在しない
+            tree[v].parent[i+1] = -1;
         } else {
-            /* code */
+            // ダブリング
+            tree[v].parent[i+1] = tree[tree[v].parent[i]].parent[i];
         }
     }
-
 }
 
 //uとvのLCAを求める

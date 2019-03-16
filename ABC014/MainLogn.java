@@ -46,7 +46,6 @@ public class MainLogn {
 
         //uとvのLCAを求める
         	public int LCA(int u,int v){
-
         		if(depth[u] > depth[v]){
         			int tmp = u;
         			u = v;
