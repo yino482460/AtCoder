@@ -77,23 +77,29 @@ void MakeTree (int v, int p ,int d, list_t node[], tree_t tree[]) {
 }
 
 //uとvのLCAを求める
-int LCA (int u, int v, tree_t tree[]) {
-    if (tree[u].depth > tree[v].depth) {
-        swap(u, v);
-    }
+int LCA (int log, int u, int v, tree_t tree[]) {
+    if (tree[u].depth > tree[v].depth) { swap(u, v); }
+    //この時点ではdepth[v] >= depth[u]が成り立つ
 
-    /*
-    //uとvそれぞれのrootからの深さを揃える
-    while (tree[u].depth > tree[v].depth) { u = tree[u].parent; } // uを一つ上に
-    while (tree[v].depth > tree[u].depth) { v = tree[v].parent; }
-    //最小祖先ノードで合流するまで１つ１つ向かっていく
-    while (u != v) {
-        u = tree[u].parent;
-        v = tree[v].parent;
+    //uとvが同じ深さになるまで親ノードを上る
+    for(int i = 0;i < log; i++){
+        if( ((tree[v].depth - tree[u].depth) >> i & 1) == 1){
+            v = tree[v].parent[i];
+        }
     }
-    int lca = u;    // 最小共通祖先
+    // uが最小祖先の場合
+    if (u == v) {
+        return u;
+    }
+    //uとvをそれぞれ親方向に上る
+    for(int i = log - 1;i >= 0;i--){
+        if(tree[u].parent[i] != tree[v].parent[i]){
+            u = tree[u].parent[i];
+            v = tree[v].parent[i];
+        }
+    }
+    int lca = tree[u].parent[0];    // 最小共通祖先
     return lca;
-    */
 }
 // Debug
 void Debug (int N,tree_t tree[]) {
@@ -109,7 +115,12 @@ void Debug (int N,tree_t tree[]) {
 // Main
 int main(int argc, char const *argv[]) {
     int N;
+    int log = 0;
     scanf("%d", &N);
+    // 前処理
+    while((1 << log) < N){
+        log++;
+    }
     // ノードとその連結状態を構築
     list_t *node = (list_t*)malloc(sizeof(list_t)*N);
     InitNode(N, node);
@@ -128,7 +139,7 @@ int main(int argc, char const *argv[]) {
         int a, b;
         scanf("%d %d", &a, &b);
         a --; b --;
-        int lca = LCA(a, b, tree);  // LCA
+        int lca = LCA(log, a, b, tree);  // LCA
         int ans = tree[a].depth + tree[b].depth - 2*tree[lca].depth +1;
         printf("%d\n", ans);
     }
