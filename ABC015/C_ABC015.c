@@ -8,16 +8,13 @@ void DFS (int N, int K, int numQ, int value) {
     if (numQ == N) {
         if (value == 0) {
             flag = True;    // バグ有り
-            printf("True flag:%d\n", flag);
         } else {
-            printf("False flag:%d\n", flag);
         }
         return;
     }
     // 再帰
     for (size_t k = 0; k < K; k++) {
-        value ^= T[numQ][k];
-        DFS(N, K, numQ+1, value);
+        DFS(N, K, numQ+1, value^T[numQ][k]);
     }
 }
 
