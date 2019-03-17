@@ -25,9 +25,11 @@ void DP () {
             for (int n = 1; n <= N; n++) {
                 int next;
                 if (w-width[n-1] >= 0) {
+                    printf("w:%d k:%d n:%d\n", w, k, n);
                     next = dp[w-width[n-1]][k-1][n-1] + importance[n-1];
-                    dp[w][n][k] = max(dp[w][n][k], next);
-                    maxValue = max(dp[w][n][k], maxValue);
+                    dp[w][k][n] = max(dp[w][k][n], next);
+                    maxValue = max(dp[w][k][n], maxValue);
+                    printf("dp[w][k][n]:%d maxValue %d\n", dp[w][k][n], maxValue);
                 }
             }
         }
@@ -37,7 +39,8 @@ void DP () {
 
 int main(int argc, char const *argv[]) {
     // 入力
-    scanf("%d %d %d", &W, &N, &K);
+    scanf("%d", &W);
+    scanf("%d %d", &N, &K);
     for (int i = 0; i < N; i++) {
         scanf("%d %d", &width[i], &importance[i]);
     }
