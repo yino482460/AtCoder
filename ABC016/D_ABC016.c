@@ -22,15 +22,17 @@ int isCross (point_t point[]) {
     // 交差の判定
     for (size_t i = 0; i < N; i++) {
         vec1.vecx = point[i].x-Ax; vec1.vecy = point[i].y - Ay;
-        vec2.vecx = point[i+1].x-Ax; vec2.vecy = point[i+1].y - Ay;
+        vec2.vecx = point[(i+1)%N].x-Ax; vec2.vecy = point[(i+1)%N].y - Ay;
         S1 = 0.5*(Main.vecx*vec1.vecy-vec1.vecx*Main.vecy);
         S2 = 0.5*(Main.vecx*vec2.vecy-vec2.vecx*Main.vecy);
         if (S1*S2 < 0) {
             cross ++;
         }
     }
-
-    return cross;
+    // printf("cross %d\n", cross);
+    int ans = cross/2 +1;
+    printf("%d\n", ans);
+    return 0;
 }
 
 int main(int argc, char const *argv[]) {
@@ -43,7 +45,8 @@ int main(int argc, char const *argv[]) {
     for (size_t i = 0; i < N; i++) {
         scanf("%d %d", &point[i].x, &point[i].y);
     }
-
+    // 出力
+    isCross(point);
     free(point);
     return 0;
 }
