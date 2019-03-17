@@ -8,9 +8,27 @@ typedef struct point {
     int x;
     int y;
 } point_t;
+typedef struct vec {
+    int vecx;
+    int vecy;
+} vec_t;
 // 線分が交差しているか判定
 int isCross (point_t point[]) {
     int cross = 0;
+    double S1, S2;
+    // ベクトル
+    vec_t Main, vec1, vec2;
+    Main.vecx = Bx-Ax; Main.vecy = By-Ay;
+    // 交差の判定
+    for (size_t i = 0; i < N; i++) {
+        vec1.vecx = point[i].x-Ax; vec1.vecy = point[i].y - Ay;
+        vec2.vecx = point[i+1].x-Ax; vec2.vecy = point[i+1].y - Ay;
+        S1 = 0.5*(Main.vecx*vec1.vecy-vec1.vecx*Main.vecy);
+        S2 = 0.5*(Main.vecx*vec2.vecy-vec2.vecx*Main.vecy);
+        if (S1*S2 < 0) {
+            cross ++;
+        }
+    }
 
     return cross;
 }
