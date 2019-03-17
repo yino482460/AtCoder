@@ -28,12 +28,13 @@ int isCross (vec_t start, vec_t end, vec_t p[]) {
     vec_t base, vec1, vec2;
     // 交差の判定
     for (size_t i = 0; i < N; i++) {
+        // 二重チェック
         base = directionVec(start, end);
         vec1 = directionVec(start, p[i]);
         vec2 = directionVec(start, p[(i+1)%N]);
         S1 = 0.5*crossProduct(base, vec1);
         S2 = 0.5*crossProduct(base, vec2);
-        if (S1*S2 < 0) {    // 二重チェック
+        if (S1*S2 < 0) {
             base = directionVec(p[i], p[(i+1)%N]);
             vec1 = directionVec(p[i], start);
             vec2 = directionVec(p[i], end);
