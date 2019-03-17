@@ -1,6 +1,7 @@
 #include <stdio.h>
 #define sizeN 11
 #define INF 10000
+#define min(a, b) (a<b ? a:b)
 int Friend[sizeN][sizeN];
 // 初期化
 void InitFriend() {
@@ -19,11 +20,7 @@ void WFmethod (int N) {
     for (size_t i = 0; i < N; i++) {
         for (size_t j = 0; j < N; j++) {
             for (size_t k = 0; k < N; k++) {
-                if (i == j) {
-                    Friend[i][j] = 0;
-                } else {
-                    Friend[i][j] = Friend[i][k]+Friend[k][j];
-                }
+                Friend[i][j] = min(Friend[i][j], Friend[i][k]+Friend[k][j]);
             }
         }
     }
