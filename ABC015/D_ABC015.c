@@ -27,9 +27,10 @@ void DP () {
                 if (i-width[k-1] >= 0) {
                     printf("call DPif\n");
                     printf("i-width[k-1] %d\n", i-width[k-1]);
-                    printf("i:%d j:%d k:%d\n", i, j, k);
-                    int previous = dp[i-width[k-1]][j-1][k-1] + importance[k-1];
-                    maxValue = max(previous, next);
+                    printf("i:%d j:%d k:%d\n", i, j, k-1);
+                    int previous = dp[i-width[k-1]][j-1][k-1] + importance[j-1];
+                    next = max(previous, next);
+                    maxValue = max(next, maxValue);
                     printf("maxValue %d\n",maxValue);
                 }
             }
