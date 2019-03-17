@@ -19,6 +19,16 @@ int DP (int useW, int useN, int now) {
     int maxValue = 0;
     // 配列の初期化
     InitDp();
+    // dp[0][0][0] ={{{0}}};
+    for (size_t i = 0; i < W; i++) {
+        for (size_t j = 1; j < N; j++) {
+            for (size_t k = 1; k < K; k++) {
+                int next = dp[i][j][k];
+                int previous = dp[i-weight[i]][j-1][k-1] + importance[k-1];
+                maxValue = max(previous, next);
+            }
+        }
+    }
 
     return maxValue;
 }
