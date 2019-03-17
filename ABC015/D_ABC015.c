@@ -23,14 +23,11 @@ void DP () {
     for (int w = 0; w <= W; w++) {
         for (int k = 1; k <= K; k++) {
             for (int n = 1; n <= N; n++) {
-                int next = dp[w][k][n];
+                int next;
                 if (w-width[n-1] >= 0) {
-                    printf("w:%d k:%d n:%d\n", w, k, n);
-                    int previous = dp[w-width[n-1]][k-1][n-1] + importance[n-1];
-                    next = max(previous, next);
-                    maxValue = max(next, maxValue);
-                    dp[w][n][k] = next;
-                    printf("next:%d previous:%d maxValue %d\n",next, previous, maxValue);
+                    next = dp[w-width[n-1]][k-1][n-1] + importance[n-1];
+                    dp[w][n][k] = max(dp[w][n][k], next);
+                    maxValue = max(dp[w][n][k], maxValue);
                 }
             }
         }
