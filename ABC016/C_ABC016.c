@@ -24,13 +24,6 @@ void WFmethod (int N) {
             }
         }
     }
-    // 確認
-    for (size_t i = 0; i < N; i++) {
-        for (size_t j = 0; j < N; j++) {
-            printf("%2d ", Friend[i][j]);
-        }
-        printf("\n");
-    }
     // 出力
     for (size_t i = 0; i < N; i++) {
         int cnt = 0;
