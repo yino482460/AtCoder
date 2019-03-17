@@ -1,6 +1,19 @@
 #include <stdio.h>
 #define sizeN 11
+#define INF 10000
 int Friend[sizeN][sizeN];
+// 初期化
+void InitFriend() {
+    for (size_t i = 0; i < sizeN; i++) {
+        for (size_t j = 0; j < sizeN; j++) {
+            if (i == j) {
+                Friend[i][j] = 0;
+            } else {
+                Friend[i][j] = INF;
+            }
+        }
+    }
+}
 // ワーシャルフロイド法
 void WFmethod (int N) {
     for (size_t i = 0; i < N; i++) {
@@ -39,6 +52,7 @@ int main(int argc, char const *argv[]) {
     // 入力
     scanf("%d %d", &N, &M);
     int a, b;
+    InitFriend();
     for (size_t i = 0; i < M; i++) {
         scanf("%d %d", &a, &b);
         a--; b--;
