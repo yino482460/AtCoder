@@ -7,6 +7,13 @@ int N; // 多角形の頂点数
 typedef struct vec {
     int vecx, vecy;
 } vec_t;
+// 方向ベクトルを計算
+vec_t directionVec (vec_t a, vec_t b) {
+    vec_t direction;
+    direction.vecx = b.vecx - a.vecx;
+    direction.vecy = b.vecy - a.vecy;
+    return direction;
+}
 // 外積の計算
 int crossProduct(vec_t a, vec_t b) {
     int product;
@@ -16,20 +23,27 @@ int crossProduct(vec_t a, vec_t b) {
 // 線分が交差しているか判定
 int isCross (vec_t start, vec_t end, vec_t p[]) {
     int cross = 0;  // 交差数
-    double S1, S2;
+    double S1, S2;  //符号付面積
     // ベクトル
     vec_t base, vec1, vec2;
-    base.vecx = Bx-Ax; base.vecy = By-Ay;
     // 交差の判定
     for (size_t i = 0; i < N; i++) {
-        vec1.vecx = p[i].vecx-Ax;
-        vec1.vecy = p[i].vecy - Ay;
-        vec2.vecx = p[(i+1)%N].vecx-Ax;
-        vec2.vecy = p[(i+1)%N].vecy - Ay;
-        S1 = 0.5*(base.vecx*vec1.vecy-vec1.vecx*base.vecy);
-        S2 = 0.5*(base.vecx*vec2.vecy-vec2.vecx*base.vecy);
-        if (S1*S2 < 0) {
-            cross ++;
+        base = directionVec(start, end);
+        vec1 = directionVec(start, p[i]);
+        vec2 = directionVec(start, p[(i+1)%N]);
+        S1 = 0.5*crossProduct(base, vec1);
+        S2 = 0.5*crossProduct(base, vec2);
+        if (S1*S2 < 0) {    // 二重チェック
+            base = directionVec(p[i], p[(i+1)%N]);
+            vec1 = directionVec(p[i], start);
+            vec2 = directionVec(p[i], end);
+            S1 = 0.5*crossProduct(base, vec1);
+            S2 = 0.5*crossProduct(base, vec2);
+            if (S1*S2 < 0) {
+                cross ++;
+            }
+        } else {
+            continue;
         }
     }
     // printf("cross %d\n", cross);
