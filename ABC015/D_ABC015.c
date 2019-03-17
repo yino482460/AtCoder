@@ -27,7 +27,7 @@ void DP () {
                 if (w-width[n-1] >= 0) {
                     printf("w:%d k:%d n:%d\n", w, k, n);
                     next = dp[w-width[n-1]][k-1][n-1] + importance[n-1];
-                    dp[w][k][n] = max(dp[w][k][n], next);
+                    dp[w][k][n] = max(dp[w][k][n-1], next);
                     maxValue = max(dp[w][k][n], maxValue);
                     printf("dp[w][k][n]:%d maxValue %d\n", dp[w][k][n], maxValue);
                 }
