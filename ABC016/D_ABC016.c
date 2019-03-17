@@ -13,18 +13,20 @@ typedef struct vec {
     int vecy;
 } vec_t;
 // 線分が交差しているか判定
-int isCross (point_t point[]) {
-    int cross = 0;
+int isCross (point_t p[]) {
+    int cross = 0;  // 交差数
     double S1, S2;
     // ベクトル
-    vec_t Main, vec1, vec2;
-    Main.vecx = Bx-Ax; Main.vecy = By-Ay;
+    vec_t base, vec1, vec2;
+    base.vecx = Bx-Ax; base.vecy = By-Ay;
     // 交差の判定
     for (size_t i = 0; i < N; i++) {
-        vec1.vecx = point[i].x-Ax; vec1.vecy = point[i].y - Ay;
-        vec2.vecx = point[(i+1)%N].x-Ax; vec2.vecy = point[(i+1)%N].y - Ay;
-        S1 = 0.5*(Main.vecx*vec1.vecy-vec1.vecx*Main.vecy);
-        S2 = 0.5*(Main.vecx*vec2.vecy-vec2.vecx*Main.vecy);
+        vec1.vecx = p[i].x-Ax;
+        vec1.vecy = p[i].y - Ay;
+        vec2.vecx = p[(i+1)%N].x-Ax;
+        vec2.vecy = p[(i+1)%N].y - Ay;
+        S1 = 0.5*(base.vecx*vec1.vecy-vec1.vecx*base.vecy);
+        S2 = 0.5*(base.vecx*vec2.vecy-vec2.vecx*base.vecy);
         if (S1*S2 < 0) {
             cross ++;
         }
@@ -41,7 +43,7 @@ int main(int argc, char const *argv[]) {
     // 入力
     scanf("%d %d %d %d", &Ax, &Ay, &Bx, &By);
     scanf("%d", &N);
-    point = (point_t *)malloc(sizeof(point_t)*N);
+    point = (point_t *)malloc(sizeof(point_t)*(N+1));
     for (size_t i = 0; i < N; i++) {
         scanf("%d %d", &point[i].x, &point[i].y);
     }
