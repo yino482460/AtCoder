@@ -1,6 +1,6 @@
 #include <stdio.h>
 #define sizeN 100001
-#define min(a, b) (a<b ? a:b)
+#define max(a, b) (a>b ? a:b)
 // 変数
 int N, M;
 // Imos法
@@ -22,17 +22,13 @@ void Imos(int l[], int r[], int s[], int score[]) {
     }
     printf("\n");
     // 最大値の計算
-    int min = 1000000;
-    for (size_t i = 0; i <= sizeN; i++) {
-        if (score[i] > 0) {
-            min = min(min, score[i]);
-        } else if (score[i]==0 && score[i+1]>0) {
-            min = min(min, score[i]);
-        }
+    int minScore = 0;
+    for (size_t i = 1; i <= sizeN; i++) {
+        minScore = max(minScore, totalScore-score[i]);
     }
-    int ans = totalScore - min;
+    //int ans = totalScore - minScore;
     // 出力
-    printf("%d\n", ans);
+    printf("%d\n", minScore);
 }
 // メイン
 int main(int argc, char const *argv[]) {
