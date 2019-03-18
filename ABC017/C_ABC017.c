@@ -1,9 +1,10 @@
 #include <stdio.h>
-#define sizeM 100002
+#include <limits.h>
+#define sizeM 111111
 #define min(a, b) (a<b ? a:b)
 // 変数
 int N, M;
-int totalScore = 0;
+long totalScore = 0;
 // Imos法
 void Imos(int score[]) {
     // 被覆
@@ -11,13 +12,13 @@ void Imos(int score[]) {
         score[i+1] += score[i];
     }
     // 最大値の計算
-    int min = totalScore+1;
+    long min = LONG_MAX;
     for (size_t i = 0; i < M; i++) {
         min = min(min, score[i]);
     }
     // 出力
-    int ans = totalScore - min;
-    printf("%d\n", ans);
+    long ans = totalScore - min;
+    printf("%ld\n", ans);
 }
 
 // メイン
