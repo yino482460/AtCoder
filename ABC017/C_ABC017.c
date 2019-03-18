@@ -1,44 +1,39 @@
 #include <stdio.h>
-#define sizeN 100001
-#define max(a, b) (a>b ? a:b)
+#define sizeM 100002
+#define min(a, b) (a<b ? a:b)
 // 変数
 int N, M;
+int totalScore = 0;
 // Imos法
-void Imos(int l[], int r[], int s[], int score[]) {
-    int totalScore = 0;
-    // 始点と終点の設定
-    for (size_t i = 0; i < N; i++) {
-        score[l[i]] += s[i];
-        score[r[i]+1] -= s[i];
-        totalScore += s[i];
-    }
+void Imos(int score[]) {
     // 被覆
     for (size_t i = 0; i < M; i++) {
         score[i+1] += score[i];
     }
-    // 確認
-    for (size_t i = 0; i <= 20; i++) {
-        printf("%3d ", score[i]);
-    }
-    printf("\n");
     // 最大値の計算
-    int ans = 0;
+    int min = totalScore+1;
     for (size_t i = 0; i < M; i++) {
-        ans = max(ans, totalScore-score[i]);
+        min = min(min, score[i]);
     }
     // 出力
+    int ans = totalScore - min;
     printf("%d\n", ans);
 }
+
 // メイン
 int main(int argc, char const *argv[]) {
-    int l[sizeN], r[sizeN], s[sizeN], score[sizeN];
+    int l, r, s, score[sizeM];
     // 入力
     scanf("%d %d", &N, &M);
     for (size_t i = 0; i < N; i++) {
-        scanf("%d %d %d", &l[i], &r[i], &s[i]);
-        l[i]--; r[i]--;
+        scanf("%d %d %d", &l, &r, &s);
+        l --; r--;
+        // 始点と終点の設定
+        score[l] += s;
+        score[r+1] -= s;
+        totalScore += s;
     }
     // 出力
-    Imos(l, r, s, score);
+    Imos(score);
     return 0;
 }
