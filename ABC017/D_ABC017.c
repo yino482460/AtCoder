@@ -25,12 +25,18 @@ void syakutoriDP (int N, int M, int flaver[]) {
         }
         range[right+1] = left;
     }
-
+    // 累積和で高速化
     int dp[sizeF], sum[sizeF];
     long Mod = lPow(10, 8) + 7; // Mod
-
-
+    dp[0] = 1;
+    sum[0] = 0; sum[1] = 1;
+    for (int i = 1; i <= N; ++i) {
+        dp[i] = (sum[i] - sum[range[i]] + Mod) % Mod; // DP
+        sum[i+1] = (sum[i] + dp[i]) % Mod; // 累積
+    }
+    printf("%d\n", dp[N]);
 }
+
 // メイン
 int main(int argc, char const *argv[]) {
     // N:サプリの数 M:味の数
@@ -42,5 +48,7 @@ int main(int argc, char const *argv[]) {
         scanf("%d", &flaver[i]);
         flaver[i]--;    // いる?
     }
+    // 出力
+    syakutoriDP(N, M, flaver);
     return 0;
 }
