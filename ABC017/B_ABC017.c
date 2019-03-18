@@ -8,7 +8,7 @@ void JudgeChoku (char str[]) {
         if (str[i]!='c' && str[i]!='h' && str[i]!='o' && str[i]!='k' && str[i]!='u') {
             printf("NO\n");
             return;
-        } else if ((str[i]=='c' && str[i+1]!='h') || (str[i-1]=='c' && str[i]=='h')) {
+        } else if ((str[i]=='c' && str[i+1]!='h') || (str[i-1]!='c' && str[i]=='h')) {
             printf("NO\n");
             return;
         } else if (i == len-1) {
