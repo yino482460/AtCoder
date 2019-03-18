@@ -1,4 +1,5 @@
 #include <stdio.h>
+#define sizeF 100001
 // 二分累乗
 long lPow(int n, int m) {
     if (m == 0) {
@@ -12,8 +13,12 @@ long lPow(int n, int m) {
 
 int main(int argc, char const *argv[]) {
     // 変数
-    long Mod;
-    Mod = lPow(10, 8)+7;
-    printf("%ld \n", Mod);
+    int N, M;
+    int flaver[sizeF];
+    // 入力
+    scanf("%d %d", &N, &M);
+    for (size_t i = 0; i < N; i++) {
+        scanf("%d", &flaver[i]);
+    }
     return 0;
 }
