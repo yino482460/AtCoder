@@ -10,11 +10,26 @@ long lPow(int n, int m) {
         return n*lPow(n, m-1);
     }
 }
-// 動的計画法
-void sapliDP (int N, int M, int flaver[]) {
-    int dp[sizeF], sum[sizeF];
-    long Mod = lPow(10, 8) + 7; // 割り算
+// 尺取り動的計画法
+// dp[i] = 区間 [j, i) が「複数種類のサプリがない」という条件を満たすような j についての dp[j] の総和
+void syakutoriDP (int N, int M, int flaver[]) {
+    // 味の重複が無いような区間を尺取り法で探索
+    int Fvari[M]; // ある区間に種類 i が何個あるか
+    int range[N+1];   // 各 i に対する尺取り区間
     int  left = 0;
+    for (size_t right = 0; right < N; right++) {
+        Fvari[flaver[right]] ++;
+        while (left < right && Fvari[right] > 1) {
+            Fvari[flaver[left]] --;
+            left ++;
+        }
+        range[right+1] = left;
+    }
+
+    int dp[sizeF], sum[sizeF];
+    long Mod = lPow(10, 8) + 7; // Mod
+
+
 }
 // メイン
 int main(int argc, char const *argv[]) {
