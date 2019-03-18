@@ -19,12 +19,10 @@ void syakutoriDP (int N, int M, int taste[]) {
     int  left = 0;
     for (int right = 0; right < N; right++) {
         Fvari[taste[right]] ++;
-        printf("Fvari %d\n", Fvari[taste[right]]);
         while (left < right && Fvari[taste[right]] > 1) {
             Fvari[taste[left]] --;
             left ++;
         }
-        printf("left %d right %d\n", left, right);
         range[right+1] = left;
     }
     // 累積和で高速化
