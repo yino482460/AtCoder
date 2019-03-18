@@ -16,10 +16,17 @@ void Imos(int l[], int r[], int s[], int score[]) {
     for (size_t i = 0; i <= sizeN; i++) {
         score[i+1] += score[i];
     }
+    // 確認
+    for (size_t i = 0; i <= 20; i++) {
+        printf("%3d ", score[i]);
+    }
+    printf("\n");
     // 最大値の計算
     int min = 1000000;
     for (size_t i = 0; i <= sizeN; i++) {
         if (score[i] > 0) {
+            min = min(min, score[i]);
+        } else if (score[i]==0 && score[i+1]>0) {
             min = min(min, score[i]);
         }
     }
