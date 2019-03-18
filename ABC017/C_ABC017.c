@@ -13,7 +13,7 @@ void Imos(int l[], int r[], int s[], int score[]) {
         totalScore += s[i];
     }
     // 被覆
-    for (size_t i = 0; i <= sizeN; i++) {
+    for (size_t i = 0; i < M; i++) {
         score[i+1] += score[i];
     }
     // 確認
@@ -22,13 +22,12 @@ void Imos(int l[], int r[], int s[], int score[]) {
     }
     printf("\n");
     // 最大値の計算
-    int minScore = 0;
-    for (size_t i = 1; i <= sizeN; i++) {
-        minScore = max(minScore, totalScore-score[i]);
+    int ans = 0;
+    for (size_t i = 0; i < M; i++) {
+        ans = max(ans, totalScore-score[i]);
     }
-    //int ans = totalScore - minScore;
     // 出力
-    printf("%d\n", minScore);
+    printf("%d\n", ans);
 }
 // メイン
 int main(int argc, char const *argv[]) {
@@ -37,6 +36,7 @@ int main(int argc, char const *argv[]) {
     scanf("%d %d", &N, &M);
     for (size_t i = 0; i < N; i++) {
         scanf("%d %d %d", &l[i], &r[i], &s[i]);
+        l[i]--; r[i]--;
     }
     // 出力
     Imos(l, r, s, score);
