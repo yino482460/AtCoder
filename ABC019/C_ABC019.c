@@ -37,13 +37,6 @@ void countUnipue (int N, int a[]) {
     }
     // 数列を昇順にソート
     quicksort(0, N-1, a);
-    // デバッグ
-    /*
-    for (size_t i = 0; i < N; i++) {
-        printf("%2d", a[i]);
-    }
-    printf("\n");
-    */
     // 重複していない数をカウント
     int cnt = 1;
     int now = a[0];
