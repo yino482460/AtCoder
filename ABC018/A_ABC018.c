@@ -2,7 +2,7 @@
 // メイン
 int main(int argc, char const *argv[]) {
     // 変数
-    int num[3], No[3];
+    int num[3], No[3] = {0};
     // 入力
     for (size_t i = 0; i < 3; i++) {
         scanf("%d", &num[i]);
