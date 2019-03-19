@@ -32,11 +32,11 @@ int divToOdd (int num) {
 }
 // 重複しない数をカウント
 void countUnipue (int N, int a[]) {
-    // 数列を昇順にソート
-    quicksort(0, N-1, a);
     for (size_t i = 0; i < N; i++) {
         a[i] = divToOdd(a[i]);
     }
+    // 数列を昇順にソート
+    quicksort(0, N-1, a);
     // デバッグ
     /*
     for (size_t i = 0; i < N; i++) {
@@ -46,10 +46,12 @@ void countUnipue (int N, int a[]) {
     */
     // 重複していない数をカウント
     int cnt = 1;
-    for (size_t i = 0; i < N-1; i++) {
-        if (a[i] != a[i+1]) {
+    int now = a[0];
+    for (size_t i = 1; i < N; i++) {
+        if (now != a[i]) {
             cnt++;
         }
+        now = a[i];
     }
     printf("%d\n", cnt);
 }
