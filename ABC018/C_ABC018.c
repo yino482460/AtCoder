@@ -21,13 +21,13 @@ void structBord (char **s, int **board) {
             } else if (s[i][j] == 'x') {    // 黒いマス
                 board[i][j] = black;
             }
-            printf("%2d", board[i][j]);
+            //printf("%2d", board[i][j]);
         }
-        printf("\n");
+        //printf("\n");
     }
 }
-// 累積和を計算
-void  calcSumBoard (int **board) {
+// 縦方向の累積和を計算
+void  calcBoardSum (int **board) {
     for (size_t i = 1; i < R; i++) {
         for (size_t j = 0; j < C; j++) {
             if (board[i][j] != black) {
@@ -65,9 +65,9 @@ int check (int x, int y) {
     return 1;   // 菱形を作れる
 }
 // 菱形の数を計算する
-void countDiamonds (int R, int C, int K, char **s, int **board) {
+void countDiamonds (int R, int C, int K, int **board) {
     structBord(s, board);
-    calcSumBoard(board);
+    calcBoardSum(board);
     int cnt = 0;
     for (size_t i = 0; i < R; i++) {
         for (size_t j = 0; j < C; j++) {
@@ -80,6 +80,7 @@ void countDiamonds (int R, int C, int K, char **s, int **board) {
 int main(int argc, char const *argv[]) {
     // 入力
     scanf("%d %d %d", &R, &C, &K);
+    K--;    // Kのデクリメント
     // 文字列の領域を確保
     s = (char **)malloc(sizeof(char *)*R);
     board = (int **)malloc(sizeof(int *)*R);
@@ -89,7 +90,7 @@ int main(int argc, char const *argv[]) {
         scanf("%s", s[i]);  // 文字列を取得
     }
     // 出力
-    countDiamonds(R, C, K, s, board);
+    countDiamonds(R, C, K, board);
     // メモリ解放
     for (size_t i = 0; i < R; i++) {
         free(s[i]);
