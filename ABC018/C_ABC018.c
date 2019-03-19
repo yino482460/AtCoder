@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #define Rmax 500
 #define sizeC 500
-// 色の数字
+// 色に数字を割り当て
 enum {
     black,
     white,
@@ -18,7 +18,7 @@ void structBord (char **s, int **board) {
         for (size_t j = 0; j < C; j++) {
             if (s[i][j] == 'o') {   // 白いマス
                 board[i][j] = white;
-            } else if (s[i][j] == 'x') {
+            } else if (s[i][j] == 'x') {    // 黒いマス
                 board[i][j] = black;
             }
             printf("%2d", board[i][j]);
@@ -43,6 +43,19 @@ void  calcSum (int **board) {
         }
         printf("\n");
     }
+}
+// 点 i,j が一辺 Kの中心になり得るかを判定
+int check (int K, int i, int j) {
+    if (board[i][j] >= K && i+K<=R) {
+        for (int r = K-1; r > 0; r--) {
+            if (board[i+r][j] < board[i][j]+(K-1)) {
+                return 0;
+            }
+        }
+    } else {
+        return 0;   // 菱形を作れない
+    }
+    return 1;   // 菱形を作れる
 }
 
 int main(int argc, char const *argv[]) {
