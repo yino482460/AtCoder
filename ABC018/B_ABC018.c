@@ -12,7 +12,7 @@ void ReverseStr (int n,char S[]) {
         buf[i] = S[no];
         no --;
     }
-    printf("buf %s\n", buf);
+    //printf("buf %s\n", buf);
     no = l[n];
     // 反転した文字列を元の文字列に接続
     for (size_t i = 0; i <= len; i++) {
@@ -29,6 +29,7 @@ int main(int argc, char const *argv[]) {
     scanf("%d", &N);
     for (size_t i = 0; i < N; i++) {
         scanf("%d %d", &l[i], &r[i]);
+        l[i]--; r[i]--;
     }
     // 反転
     for (size_t i = 0; i < N; i++) {
