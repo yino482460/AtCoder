@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 #define swap(a, b) (a+=b, b=a-b, a-=b)
 // ソート
-void quicksort (int left, int right, long a[]) {
-    long pivot = a[(left+right)/2];
+void quicksort (int left, int right, int a[]) {
+    int pivot = a[(left+right)/2];
     int i = left, j = right;
     // ソート
     while (1) {
@@ -23,55 +24,48 @@ void quicksort (int left, int right, long a[]) {
     }
 }
 // 奇数になるまで割り算実行
-long divToOdd (long num) {
+int divToOdd (int num) {
     while (num%2 == 0) {
         num = num/2;
     }
     return num;
 }
 // 重複しない数をカウント
-void countUnipue (int N, long a[]) {
-    long cnt = 0;
+void countUnipue (int N, int a[]) {
     // 数列を降順にソート
     quicksort(0, N-1, a);
     for (size_t i = 0; i < N; i++) {
-        a[i] = divToOdd(a[i]);
+        //a[i] = divToOdd(a[i]);
+        while(a[i]%2==0){
+			a[i]=a[i]/2;
+		}
     }
-    // デバッグ用
+    // デバッグ
+    /*
     for (size_t i = 0; i < N; i++) {
-        printf("%2ld", a[i]);
+        printf("%2d", a[i]);
     }
     printf("\n");
-    printf("call countUnipue\n");
-    /*
+    */
     // 重複していない数をカウント
-    int left = 0, right = left;
-    while (1) {
-        if (a[left] != a[right]) {
+    int cnt = 1;
+    for (size_t i = 0; i < N-1; i++) {
+        if (a[i] != a[i+1]) {
             cnt++;
         }
-        while (a[left] == a[right]) {
-            right ++;
-        }
-
-        left = right;
-        if (right == N) {
-            break;
-        }
     }
-    */
-    printf("%ld\n", cnt);
+    printf("%d\n", cnt);
 }
 
 int main(int argc, char const *argv[]) {
     // 変数
     int N;
-    long *a;
+    int *a;
     // 入力
     scanf("%d", &N);
-    a = (long *)malloc(sizeof(long)*N);
+    a = (int *)malloc(sizeof(int)*N);
     for (size_t i = 0; i < N; i++) {
-        scanf("%ld", &a[i]);
+        scanf("%d", &a[i]);
     }
     // 処理
     countUnipue(N, a);
