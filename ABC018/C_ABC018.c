@@ -27,7 +27,7 @@ void structBord (char **s, int **board) {
     }
 }
 // 累積和を計算
-void  calcSum (int **board) {
+void  calcSumBoard (int **board) {
     for (size_t i = 1; i < R; i++) {
         for (size_t j = 0; j < C; j++) {
             if (board[i][j] != black) {
@@ -45,17 +45,36 @@ void  calcSum (int **board) {
     }
 }
 // 点 i,j が一辺 Kの中心になり得るかを判定
-int check (int K, int i, int j) {
-    if (board[i][j] >= K && i+K<=R) {
-        for (int r = K-1; r > 0; r--) {
-            if (board[i+r][j] < board[i][j]+(K-1)) {
-                return 0;
+int check (int x, int y) {
+    if (board[y][x] >= K) {
+        for (int i = -K; i <= K; i++) {
+            int dif = K - abs(i);   // 縦方向に下がる距離
+            int nx, ny;
+            nx = x+i; ny = y+dif;
+            if (nx<0 || nx>=C || ny<0 || ny>=R) {
+                return 0;   // 菱形を作れない
+            }
+            int boader = dif*2+1;
+            if (board[ny][nx] < boader) {
+                return 0;   // 菱形を作れない
             }
         }
     } else {
         return 0;   // 菱形を作れない
     }
     return 1;   // 菱形を作れる
+}
+// 菱形の数を計算する
+void countDiamonds (int R, int C, int K, char **s, int **board) {
+    structBord(s, board);
+    calcSumBoard(board);
+    int cnt = 0;
+    for (size_t i = 0; i < R; i++) {
+        for (size_t j = 0; j < C; j++) {
+            cnt += check(j, i);
+        }
+    }
+    printf("%d\n", cnt);
 }
 
 int main(int argc, char const *argv[]) {
@@ -69,10 +88,8 @@ int main(int argc, char const *argv[]) {
         board[i] = (int *)malloc(sizeof(int)*C);
         scanf("%s", s[i]);  // 文字列を取得
     }
-    // 確認
-    structBord(s, board);
-    calcSum(board);
-
+    // 出力
+    countDiamonds(R, C, K, s, board);
     // メモリ解放
     for (size_t i = 0; i < R; i++) {
         free(s[i]);
