@@ -8,8 +8,8 @@ void quicksort (int left, int right, int a[]) {
     int i = left, j = right;
     // ソート
     while (1) {
-        while (a[i]  > pivot ) { i++; }
-        while (a[j] < pivot ) { j--; }
+        while (a[i]  < pivot ) { i++; }
+        while (a[j] > pivot ) { j--; }
         if (i >= j) {   // 終了条件
             break;
         }
@@ -32,13 +32,10 @@ int divToOdd (int num) {
 }
 // 重複しない数をカウント
 void countUnipue (int N, int a[]) {
-    // 数列を降順にソート
+    // 数列を昇順にソート
     quicksort(0, N-1, a);
     for (size_t i = 0; i < N; i++) {
-        //a[i] = divToOdd(a[i]);
-        while(a[i]%2==0){
-			a[i]=a[i]/2;
-		}
+        a[i] = divToOdd(a[i]);
     }
     // デバッグ
     /*
@@ -69,5 +66,7 @@ int main(int argc, char const *argv[]) {
     }
     // 処理
     countUnipue(N, a);
+    // メモリ解放
+    free(a);
     return 0;
 }
