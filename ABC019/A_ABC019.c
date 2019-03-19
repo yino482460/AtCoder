@@ -18,11 +18,6 @@ int main(int argc, char const *argv[]) {
             }
         }
     }
-    // 確認
-    for (size_t i = 0; i < 3; i++) {
-        printf("%2d", a[i]);
-    }
-    printf("\n");
     // 出力
     printf("%d\n", a[1]);
     return 0;
