@@ -12,7 +12,6 @@ void ReverseStr (int n,char S[]) {
         buf[i] = S[no];
         no --;
     }
-    //printf("buf %s\n", buf);
     no = l[n];
     // 反転した文字列を元の文字列に接続
     for (size_t i = 0; i <= len; i++) {
