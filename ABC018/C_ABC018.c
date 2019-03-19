@@ -21,9 +21,7 @@ void structBord (char **s, int **board) {
             } else if (s[i][j] == 'x') {    // 黒いマス
                 board[i][j] = black;
             }
-            //printf("%2d", board[i][j]);
         }
-        //printf("\n");
     }
 }
 // 縦方向の累積和を計算
@@ -34,14 +32,6 @@ void  calcBoardSum (int **board) {
                 board[i][j] += board[i-1][j];
             }
         }
-    }
-    printf("\n");
-    // 確認
-    for (size_t i = 0; i < R; i++) {
-        for (size_t j = 0; j < C; j++) {
-            printf("%2d", board[i][j]);
-        }
-        printf("\n");
     }
 }
 // 点 i,j が一辺 Kの中心になり得るかを判定
