@@ -2,14 +2,10 @@
 #include <stdlib.h>
 int H, W, T;
 int sx, sy, gx, gy;
-// 色の数字
-enum {
-    white,
-    black,
-};
-typedef struct point {
+// 座標の情報
+typedef struct que {
     long x, y;
-} point_t;
+} que_t;
 // 二分累乗
 long lPow(int n, int m) {
     if (m == 0) {
@@ -21,9 +17,13 @@ long lPow(int n, int m) {
     }
 }
 // 文字を数字に変換
-void setStartGoal (char **s, point_t **maze) {
+void setBoard (char **s, long **dist) {
+    // 各マスの距離を無前に設定
+    long INF = lPow(10, 10);
     for (size_t i = 0; i < H; i++) {
-        for (size_t j = 0; j < W; j++) {
+        for (size_t j = 0; j < (W+1); j++) {
+            scanf("%s", &s[i][j]);
+            dist[i][j] = INF;
             if (s[i][j] == 'S') {
                 sx = j, sy = i;
                 s[i][j] = '.';
@@ -34,37 +34,40 @@ void setStartGoal (char **s, point_t **maze) {
             }
         }
     }
+    //  スタート地点は0
+    dist[sy][sx] = 0;
 }
 // ダイストラクタ法
+long Dijkstra (int cost, long **dist) {
+    
+
+    return dist[gy][gx];
+}
+
 
 int main(int argc, char const *argv[]) {
     // 変数
     char **s;
-    point_t **maze;
+    long **dist;    // 各マス目までの距離
     // 入力
     scanf("%d %d %d", &H, &W, &T);
     // メモリ確保
     s = (char **)malloc(sizeof(char *)*H);
-    maze = (point_t **)malloc(sizeof(point_t *)*H);
+    dist = (long **)malloc(sizeof(long *)*H);
     for (size_t i = 0; i < H; i++) {
         s[i] = (char *)malloc(sizeof(char)*(W+1));
-        maze[i] = (point_t *)malloc(sizeof(point_t)*W);
+        dist[i] = (long *)malloc(sizeof(long)*W);
     }
-    for (size_t i = 0; i < H; i++) {
-        for (size_t j = 0; j < (W+1); j++) {
-            scanf("%s", &s[i][j]);
-        }
-    }
-    // 数字に変換
-    setStartGoal(s, maze);
+    // 盤面の入力とスタートとゴールの座標の取得
+    setBoard(s, dist);
+    // ダイストラクタ法
 
 
 
     // メモリ解放
-    free(s); free(maze);
+    free(s); free(dist);
     for (size_t i = 0; i < H; i++) {
-        free(s[i]); free(maze[i]);
+        free(s[i]); free(dist[i]);
     }
-
     return 0;
 }
