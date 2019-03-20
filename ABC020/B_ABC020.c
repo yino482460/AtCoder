@@ -13,12 +13,6 @@ void charToDigit (char A[], char B[]) {
     for (size_t i = 0; i < lenb; i++) {
         num[lena+i] = B[i] - '0';
     }
-    printf("num[1] %d\n", num[1]);
-    // デバッグ
-    for (size_t i = 0; i < (lena+lenb); i++) {
-        printf("%d", num[i]);
-    }
-    printf("\n");
     // 数値にする
     for (size_t i = 0; i < (lena+lenb); i++) {
         digit = digit*10 + num[i];
@@ -27,7 +21,7 @@ void charToDigit (char A[], char B[]) {
     printf("%d\n", digit);
 }
 
-
+// メイン
 int main(int argc, char const *argv[]) {
     // 変数
     char A[Sizechar], B[Sizechar];
