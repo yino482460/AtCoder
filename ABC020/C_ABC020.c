@@ -1,31 +1,41 @@
 #include <stdio.h>
 #include <stdlib.h>
 int H, W, T;
+int sx, sy, gx, gy;
 // 色の数字
 enum {
     white,
     black,
 };
 typedef struct point {
-    int x, y;
+    long x, y;
 } point_t;
+// 二分累乗
+long lPow(int n, int m) {
+    if (m == 0) {
+        return n;
+    } else if (m%2 == 2) {
+        return lPow(n, m/2)*lPow(n, m/2);
+    } else {
+        return n*lPow(n, m-1);
+    }
+}
 // 文字を数字に変換
-void MazeToDigit(char **s, point_t **maze) {
+void setStartGoal (char **s, point_t **maze) {
     for (size_t i = 0; i < H; i++) {
         for (size_t j = 0; j < W; j++) {
-            if (s[i][j] == 'S' || s[i][j] == 'G') {
-                maze[i][j].x = j;
-                maze[i][j].y = i;
-            } else if (s[i][j] == '.') {
-                maze[i][j].x = white;
-                maze[i][j].y = white;
-            } else {
-                maze[i][j].x = black;
-                maze[i][j].y = black;
+            if (s[i][j] == 'S') {
+                sx = j, sy = i;
+                s[i][j] = '.';
+            }
+            if (s[i][j] == 'G') {
+                gx = j, gy = i;
+                s[i][j] = '.';
             }
         }
     }
 }
+// ダイストラクタ法
 
 int main(int argc, char const *argv[]) {
     // 変数
@@ -46,7 +56,7 @@ int main(int argc, char const *argv[]) {
         }
     }
     // 数字に変換
-    MazeToDigit(s, maze);
+    setStartGoal(s, maze);
 
 
 
