@@ -14,12 +14,12 @@ void swapNode (heap_t *a, heap_t *b) {
     *a = *b;
     *b = tmp;
 }
+// 配列に追加
 void  addNode (int x, heap_t newnode, heap_t node[]) {
-    node[x].P.x = newnode.P.x;
-    node[x].P.y = newnode.P.y;
+    node[x] = newnode;
     node[x].exist = 1;  // 存在
-    node[x].distance = newnode.distance;
 }
+// 配列から削除
 void deleteNode (int x, heap_t node[]) {
     node[x].exist = 0;
 }
