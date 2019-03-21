@@ -37,15 +37,10 @@ void pushHeap (heap_t newnode, heap_t node[]) {
         if (node[parent].distance > node[n].distance) {
             swapNode(&node[n], &node[parent]);
         }
-        // 右と左の子比較して左の子が小さくなるように
-        int left = 2*parent + 1, right = parent*(parent+1);
-        if (node[left].distance > node[right].distance) {
-            swapNode(&node[left], &node[right]);
-        }
         n = parent;
     }
 }
-// ヒープから最小値を削除する
+// ヒープから最小値を取り出し削除する
 heap_t popHeap (heap_t node[]) {
     int n  = 0; // データ数
     heap_t pop; // 取り出すデータ
@@ -54,20 +49,19 @@ heap_t popHeap (heap_t node[]) {
     }
     int last = n-1;
     pop = node[last];
-    deleteNode(last, node);
     swapNode(&node[0], &node[last]);
     for (int i = 0, child; (child=2*i+1) < n; i++) {
-        // 子と値を入れ替え
-        /*
-        if ((child != last) && (node[i+1].distance < node[i].distance)) {
+        // 左と右を比較して右が小さければ右を上に
+        if ((child != n-1) && (node[child].distance > node[child+1].distance)) {
             child++;
         }
-        */
-        if (node[i].distance < node[child].distance) {
+        // 子と値を入れ替え
+        if (node[i].distance > node[child].distance) {
             swapNode(&node[i], &node[child]);
         }
         i = child;
     }
+    deleteNode(last, node);
     return pop;
 }
 
