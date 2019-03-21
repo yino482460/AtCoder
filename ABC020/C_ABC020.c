@@ -116,6 +116,7 @@ void  addQue (int x, int y, int n, long **dist, heap_t node[]) {
 void deleteQue (int x, heap_t node[]) {
     node[x].exist = 0;
 }
+
 // ヒープ化された配列に要素を追加
 void pushHeap (int x, int y, long **dist, heap_t node[]) {
     int n  = 0; // データ数
@@ -136,6 +137,7 @@ void pushHeap (int x, int y, long **dist, heap_t node[]) {
 }
 // ヒープから最小値を取り出し削除する
 heap_t popHeap (heap_t node[]) {
+    printf("call popHeap\n");
     int n  = 0; // データ数
     heap_t pop; // 取り出すデータ
     while (node[n].exist != 0) {    // 配列の末尾を探す
@@ -170,12 +172,12 @@ long Dijkstra (long c, long **dist, char **s) {
     //printf("call Dijkstra\n");
     // 本体
     while (que[0].exist != 0) {
-        heap_t buf = popHeap(que);
+        heap_t buf = popHeap(que);  // 探索の起点
         int x = buf.P.x, y = buf.P.y;
         for (size_t i = 0; i < 4; i++) {
             int nx = x+dx[i], ny = y+dy[i];
             if (ny < 0 || ny >= H || nx < 0 || nx >= W) { continue; }
-            long cost = s[ny][nx]=='.' ? 1L : c;    // 白はコスト1黒はコストx
+            long cost = s[ny][nx]=='.' ? 1L : c;    // 白はコスト1黒はコストc
             if (dist[ny][nx] > dist[y][x] + cost) {
             dist[ny][nx] = dist[y][x] + cost;
             pushHeap(nx, ny, dist, que);
@@ -212,5 +214,5 @@ void BinarySearch(long **dist, char **s) {
             break;
         }
     }
-    printf("%ld\n", maxTime);
+    printf("ans %ld\n", maxTime);
 }
