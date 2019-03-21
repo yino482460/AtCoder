@@ -23,35 +23,11 @@ void  addQue (int x, int y, int n, long **dist, heap_t node[]);   // 配列に�
 void deleteQue (int x, heap_t node[]); // 配列から削除
 void pushHeap (int x, int y, long **dist, heap_t node[]);  // ヒープ化された配列に要素を追加
 heap_t popHeap (heap_t node[]); // ヒープから最小値を取り出し削除する
-long Dijkstra (int cost, long **dist);  // ダイストラクタ法
-long BinarySearch();    // 二分検索
-
-// ダイストラクタ法
-long Dijkstra (int cost, long **dist) {
-    heap_t *que;
-    que = (heap_t *)malloc(sizeof(heap_t)*H*W);
-    InitQue(H, W, que);
-    addQue(sx, sy, 0, dist, que);
-    // 本体
-    while (que[0].exist != 0) {
-        heap_t buf = popHeap(que);
-        int x = buf.P.x, y = buf.P.y;
-        for (size_t i = 0; i < 4; i++) {
-            int nx = x+dx[i], ny = y+dy[i];
-            if (ny < 0 || ny >= H || nx < 0 || nx >= W) { continue; }
-            if (dist[ny][nx] > dist[y][x] + cost) {
-            dist[ny][nx] = dist[y][x] + cost;
-            pushHeap(nx, ny, dist, que);
-         }
-        }
-    }
-
-    // メモリ解放
-    free(que);
-    return dist[gy][gx];
-}
+long Dijkstra (long cost, long **dist);  // ダイストラクタ法
+void BinarySearch();    // 二分検索
 
 
+//メイン
 int main(int argc, char const *argv[]) {
     // 変数
     char **s;
@@ -83,6 +59,8 @@ int main(int argc, char const *argv[]) {
 // 二分累乗
 long lPow(int n, int m) {
     if (m == 0) {
+        return 1;
+    } else if (m == 1) {
         return n;
     } else if (m%2 == 2) {
         return lPow(n, m/2)*lPow(n, m/2);
@@ -182,4 +160,44 @@ heap_t popHeap (heap_t node[]) {
     }
     deleteQue(last, node);
     return pop;
+}
+// ダイストラクタ法
+long Dijkstra (long cost, long **dist) {
+    heap_t *que;
+    que = (heap_t *)malloc(sizeof(heap_t)*H*W);
+    InitDist(H, W, dist);
+    InitQue(H, W, que);
+    addQue(sx, sy, 0, dist, que);
+    // 本体
+    while (que[0].exist != 0) {
+        heap_t buf = popHeap(que);
+        int x = buf.P.x, y = buf.P.y;
+        for (size_t i = 0; i < 4; i++) {
+            int nx = x+dx[i], ny = y+dy[i];
+            if (ny < 0 || ny >= H || nx < 0 || nx >= W) { continue; }
+            if (dist[ny][nx] > dist[y][x] + cost) {
+            dist[ny][nx] = dist[y][x] + cost;
+            pushHeap(nx, ny, dist, que);
+         }
+        }
+    }
+    // メモリ解放
+    free(que);
+    return dist[gy][gx];
+}
+// 二分検索
+void BinarySearch(long **dist) {
+    long low = 1, high = T;
+    long median = (low+high)/2;
+    long maxTime;
+    // 二分検索
+    while ((high-low) == 1) {
+        maxTime = Dijkstra(median, dist);
+        if (maxTime <= T) {
+            low = median;
+        } else {
+            high = median;
+        }
+    }
+    printf("%ld\n", maxTime);
 }
