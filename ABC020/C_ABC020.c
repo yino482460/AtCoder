@@ -23,8 +23,8 @@ void  addQue (int x, int y, int n, long **dist, heap_t node[]);   // 配列に�
 void deleteQue (int x, heap_t node[]); // 配列から削除
 void pushHeap (int x, int y, long **dist, heap_t node[]);  // ヒープ化された配列に要素を追加
 heap_t popHeap (heap_t node[]); // ヒープから最小値を取り出し削除する
-long Dijkstra (long cost, long **dist);  // ダイストラクタ法
-void BinarySearch(long **dist);    // 二分検索
+long Dijkstra (long cost, long **dist, char **s);  // ダイストラクタ法
+void BinarySearch(long **dist, char **s);    // 二分検索
 //メイン
 int main(int argc, char const *argv[]) {
     // 変数
@@ -41,8 +41,9 @@ int main(int argc, char const *argv[]) {
     }
     // 盤面の入力とスタートとゴールの座標の取得
     setBoard(s, dist);
+    printf("call l44\n");
     // ダイストラクタ法と二分検索
-    BinarySearch(dist);
+    BinarySearch(dist, s);
     // メモリ解放
     free(s); free(dist);
     for (size_t i = 0; i < H; i++) {
@@ -66,8 +67,8 @@ long lPow(int n, int m) {
 // 文字整理
 void setBoard (char **s, long **dist) {
     for (size_t i = 0; i < H; i++) {
-        for (size_t j = 0; j < (W+1); j++) {
-            scanf("%s", &s[i][j]);
+        for (size_t j = 0; j < W; j++) {
+            scanf("%c", &s[i][j]);
             if (s[i][j] == 'S') {
                 sx = j, sy = i; // スタートの座標を記憶
                 s[i][j] = '.';
@@ -78,6 +79,7 @@ void setBoard (char **s, long **dist) {
             }
         }
     }
+    printf("call setBoard\n");
 }
 // ノードを交換
 void swapQue (heap_t *a, heap_t *b) {
@@ -157,12 +159,13 @@ heap_t popHeap (heap_t node[]) {
     return pop;
 }
 // ダイストラクタ法
-long Dijkstra (long cost, long **dist) {
+long Dijkstra (long c, long **dist, char **s) {
     heap_t *que;
     que = (heap_t *)malloc(sizeof(heap_t)*H*W);
     InitDist(H, W, dist);
     InitQue(H, W, que);
     addQue(sx, sy, 0, dist, que);
+    //printf("call Dijkstra\n");
     // 本体
     while (que[0].exist != 0) {
         heap_t buf = popHeap(que);
@@ -170,6 +173,7 @@ long Dijkstra (long cost, long **dist) {
         for (size_t i = 0; i < 4; i++) {
             int nx = x+dx[i], ny = y+dy[i];
             if (ny < 0 || ny >= H || nx < 0 || nx >= W) { continue; }
+            long cost = s[ny][nx]=='.' ? 1L : c;
             if (dist[ny][nx] > dist[y][x] + cost) {
             dist[ny][nx] = dist[y][x] + cost;
             pushHeap(nx, ny, dist, que);
@@ -181,13 +185,13 @@ long Dijkstra (long cost, long **dist) {
     return dist[gy][gx];
 }
 // 二分検索
-void BinarySearch(long **dist) {
+void BinarySearch(long **dist, char **s) {
     long low = 1, high = T;
     long maxTime;
     // 二分検索
     while ((high-low) == 1) {
         long median = (low+high)/2;
-        maxTime = Dijkstra(median, dist);
+        maxTime = Dijkstra(median, dist, s);
         if (maxTime <= T) {
             low = median;
         } else {
