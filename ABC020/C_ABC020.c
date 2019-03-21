@@ -42,7 +42,7 @@ int main(int argc, char const *argv[]) {
     // 盤面の入力とスタートとゴールの座標の取得
     setBoard(s, dist);
     // ダイストラクタ法と二分検索
-    //BinarySearch(dist, s);
+    BinarySearch(dist, s);
     // メモリ解放
     for (size_t i = 0; i < H; i++) {
         free(s[i]); free(dist[i]);
@@ -78,7 +78,7 @@ void setBoard (char **s, long **dist) {
             }
         }
     }
-    printf("%d %d %d %d\n", sy, sx, gy, gx);
+    //printf("%d %d %d %d\n", sy, sx, gy, gx);
 }
 // ノードを交換
 void swapQue (heap_t *a, heap_t *b) {
@@ -105,7 +105,7 @@ void InitQue(int H, int W, heap_t que[]) {
         que[i].exist = 0;
     }
 }
-// 配列に追加 n番目のキューに座標 x,yの距離を追加
+//  座標 x,yの距離を n番目のキューに追加
 void  addQue (int x, int y, int n, long **dist, heap_t node[]) {
     node[n].P.x = x;
     node[n].P.y = y;
@@ -132,6 +132,7 @@ void pushHeap (int x, int y, long **dist, heap_t node[]) {
         }
         n = parent;
     }
+    printf("call pushHeap\n");
 }
 // ヒープから最小値を取り出し削除する
 heap_t popHeap (heap_t node[]) {
@@ -157,8 +158,10 @@ heap_t popHeap (heap_t node[]) {
     deleteQue(last, node);
     return pop;
 }
+
 // ダイストラクタ法
 long Dijkstra (long c, long **dist, char **s) {
+    printf("call Dijkstra\n");
     heap_t *que;
     que = (heap_t *)malloc(sizeof(heap_t)*H*W);
     InitDist(H, W, dist);
@@ -172,12 +175,19 @@ long Dijkstra (long c, long **dist, char **s) {
         for (size_t i = 0; i < 4; i++) {
             int nx = x+dx[i], ny = y+dy[i];
             if (ny < 0 || ny >= H || nx < 0 || nx >= W) { continue; }
-            long cost = s[ny][nx]=='.' ? 1L : c;
+            long cost = s[ny][nx]=='.' ? 1L : c;    // 白はコスト1黒はコストx
             if (dist[ny][nx] > dist[y][x] + cost) {
             dist[ny][nx] = dist[y][x] + cost;
             pushHeap(nx, ny, dist, que);
-         }
+            }
         }
+    }
+    // 距離を確認
+    for (size_t i = 0; i < H; i++) {
+        for (size_t j = 0; j < W; j++) {
+            printf("%ld ", dist[i][j]);
+        }
+        printf("\n");
     }
     // メモリ解放
     free(que);
@@ -185,16 +195,21 @@ long Dijkstra (long c, long **dist, char **s) {
 }
 // 二分検索
 void BinarySearch(long **dist, char **s) {
+    printf("call BinarySearch\n");
     long low = 1, high = T;
     long maxTime;
     // 二分検索
-    while ((high-low) == 1) {
+    while ((high-low) != 1) {
         long median = (low+high)/2;
         maxTime = Dijkstra(median, dist, s);
         if (maxTime <= T) {
             low = median;
         } else {
             high = median;
+        }
+        // 終了条件
+        if ((high-low) == 1) {
+            break;
         }
     }
     printf("%ld\n", maxTime);
