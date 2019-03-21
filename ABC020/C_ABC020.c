@@ -159,7 +159,7 @@ heap_t popHeap (heap_t node[]) {
     return pop;
 }
 
-// ダイストラクタ法
+// ダイクストラ法
 long Dijkstra (long c, long **dist, char **s) {
     printf("call Dijkstra\n");
     heap_t *que;
@@ -175,8 +175,10 @@ long Dijkstra (long c, long **dist, char **s) {
             int nx = x+dx[i], ny = y+dy[i];
             if (ny < 0 || ny >= H || nx < 0 || nx >= W) { continue; }
             long cost = (s[ny][nx]=='.' ? 1L : c);    // 白はコスト1黒はコストc
+            //printf("cost %ld\n", cost);
             if (dist[ny][nx] > dist[y][x] + cost) {
             dist[ny][nx] = dist[y][x] + cost;
+            printf("goal %ld\n", dist[gy][gx]);
             pushHeap(nx, ny, dist, que);
             }
         }
@@ -204,7 +206,7 @@ void BinarySearch(long **dist, char **s) {
         cost = (low+high)/2;
         printf("cost %ld\n", cost);
         maxTime = Dijkstra(cost, dist, s);
-        printf("maxTime %ld\n", maxTime);
+        //printf("maxTime %ld\n", maxTime);
         if (maxTime > T) {
             high = cost;
         } else {
