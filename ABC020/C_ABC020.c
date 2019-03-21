@@ -2,7 +2,8 @@
 #include <stdlib.h>
 long H, W, T;
 int sx, sy, gx, gy;
-int dx[4] = {1, -1, 0, 0}, dy[4] = {0, 0, 1, -1};
+int dx[4] = {1, -1, 0, 0};
+int dy[4] = {0, 0, 1, -1};
 // 座標の情報
 typedef struct point {
     long x, y;
@@ -17,14 +18,14 @@ typedef struct heap {
 long lPow(long n, long m);    // 二分累乗
 void setBoard (char **s, long **dist);    // 文字を整理
 void swapQue (heap_t *a, heap_t *b);   // ノードを交換
-void InitDist(int H, int W, long **dist);   // 距離の初期化
+void InitDist (int H, int W, long **dist);   // 距離の初期化
 void InitQue(int H, int W, heap_t que[]);   // キューの初期化
 void addQue (int x, int y, int n, long **dist, heap_t node[]);   // 配列に追加
 void deleteQue (int x, heap_t node[]); // 配列から削除
 void pushHeap (int x, int y, long **dist, heap_t node[]);  // ヒープ化された配列に要素を追加
 heap_t popHeap (heap_t node[]); // ヒープから最小値を取り出し削除する
 long Dijkstra (long cost, long **dist, char **s);  // ダイストラクタ法
-void BinarySearch(long **dist, char **s);    // 二分検索
+void BinarySearch (long **dist, char **s);    // 二分検索
 //メイン
 int main(int argc, char const *argv[]) {
     // 変数
@@ -173,7 +174,7 @@ long Dijkstra (long c, long **dist, char **s) {
         for (size_t i = 0; i < 4; i++) {
             int nx = x+dx[i], ny = y+dy[i];
             if (ny < 0 || ny >= H || nx < 0 || nx >= W) { continue; }
-            long cost = s[ny][nx]=='.' ? 1L : c;    // 白はコスト1黒はコストc
+            long cost = (s[ny][nx]=='.' ? 1L : c);    // 白はコスト1黒はコストc
             if (dist[ny][nx] > dist[y][x] + cost) {
             dist[ny][nx] = dist[y][x] + cost;
             pushHeap(nx, ny, dist, que);
@@ -199,20 +200,17 @@ void BinarySearch(long **dist, char **s) {
     printf("T %ld\n", T);
     long maxTime, cost;
     // 二分検索
-    while ((high-low) != 1) {
+    while ((high-low) > 1) {
         cost = (low+high)/2;
+        printf("cost %ld\n", cost);
         maxTime = Dijkstra(cost, dist, s);
         printf("maxTime %ld\n", maxTime);
-        if (maxTime <= T) {
-            low = cost;
-        } else {
+        if (maxTime > T) {
             high = cost;
+        } else {
+            low = cost;
         }
         printf("low %ld high %ld\n", low, high);
-        // 終了条件
-        if ((high-low) == 1) {
-            break;
-        }
     }
-    printf("ans %ld\n", cost);
+    printf("ans %ld\n", low);
 }
