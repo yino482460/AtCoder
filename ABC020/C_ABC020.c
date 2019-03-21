@@ -2,7 +2,7 @@
 #include <stdlib.h>
 int H, W, T;
 int sx, sy, gx, gy;
-int dx[4] = {-1, 1, 0, 0}, dy[4] = {0, 0, -1, 1};
+int dx[4] = {1, -1, 0, 0}, dy[4] = {0, 0, 1, -1};
 // 座標の情報
 typedef struct point {
     long x, y;
@@ -14,12 +14,12 @@ typedef struct heap {
     int distance;
 } heap_t;
 // 関数定義
-long lPow(int n, int m);    // 二分累乗
+long lPow(long n, long m);    // 二分累乗
 void setBoard (char **s, long **dist);    // 文字を整理
 void swapQue (heap_t *a, heap_t *b);   // ノードを交換
 void InitDist(int H, int W, long **dist);   // 距離の初期化
 void InitQue(int H, int W, heap_t que[]);   // キューの初期化
-void  addQue (int x, int y, int n, long **dist, heap_t node[]);   // 配列に追加
+void addQue (int x, int y, int n, long **dist, heap_t node[]);   // 配列に追加
 void deleteQue (int x, heap_t node[]); // 配列から削除
 void pushHeap (int x, int y, long **dist, heap_t node[]);  // ヒープ化された配列に要素を追加
 heap_t popHeap (heap_t node[]); // ヒープから最小値を取り出し削除する
@@ -31,7 +31,7 @@ int main(int argc, char const *argv[]) {
     char **s;
     long **dist;    // 各マス目までの距離
     // 入力
-    scanf("%d %d %d", &H, &W, &T);
+    scanf("%d %d %d\n", &H, &W, &T);
     // メモリ確保
     s = (char **)malloc(sizeof(char *)*H);
     dist = (long **)malloc(sizeof(long *)*H);
@@ -41,19 +41,18 @@ int main(int argc, char const *argv[]) {
     }
     // 盤面の入力とスタートとゴールの座標の取得
     setBoard(s, dist);
-    printf("call l44\n");
     // ダイストラクタ法と二分検索
-    BinarySearch(dist, s);
+    //BinarySearch(dist, s);
     // メモリ解放
-    free(s); free(dist);
     for (size_t i = 0; i < H; i++) {
         free(s[i]); free(dist[i]);
     }
+    free(s); free(dist);
     return 0;
 }
 
 // 二分累乗
-long lPow(int n, int m) {
+long lPow(long n, long m) {
     if (m == 0) {
         return 1;
     } else if (m == 1) {
@@ -66,8 +65,8 @@ long lPow(int n, int m) {
 }
 // 文字整理
 void setBoard (char **s, long **dist) {
-    for (size_t i = 0; i < H; i++) {
-        for (size_t j = 0; j < W; j++) {
+    for (int i = 0; i < H; i++) {
+        for (int j = 0; j <= W; j++) {
             scanf("%c", &s[i][j]);
             if (s[i][j] == 'S') {
                 sx = j, sy = i; // スタートの座標を記憶
@@ -79,7 +78,7 @@ void setBoard (char **s, long **dist) {
             }
         }
     }
-    printf("call setBoard\n");
+    printf("%d %d %d %d\n", sy, sx, gy, gx);
 }
 // ノードを交換
 void swapQue (heap_t *a, heap_t *b) {
