@@ -24,9 +24,7 @@ void deleteQue (int x, heap_t node[]); // 配列から削除
 void pushHeap (int x, int y, long **dist, heap_t node[]);  // ヒープ化された配列に要素を追加
 heap_t popHeap (heap_t node[]); // ヒープから最小値を取り出し削除する
 long Dijkstra (long cost, long **dist);  // ダイストラクタ法
-void BinarySearch();    // 二分検索
-
-
+void BinarySearch(long **dist);    // 二分検索
 //メイン
 int main(int argc, char const *argv[]) {
     // 変数
@@ -43,10 +41,8 @@ int main(int argc, char const *argv[]) {
     }
     // 盤面の入力とスタートとゴールの座標の取得
     setBoard(s, dist);
-    // ダイストラクタ法
-
-
-
+    // ダイストラクタ法と二分検索
+    BinarySearch(dist);
     // メモリ解放
     free(s); free(dist);
     for (size_t i = 0; i < H; i++) {
@@ -54,7 +50,6 @@ int main(int argc, char const *argv[]) {
     }
     return 0;
 }
-
 
 // 二分累乗
 long lPow(int n, int m) {
@@ -188,10 +183,10 @@ long Dijkstra (long cost, long **dist) {
 // 二分検索
 void BinarySearch(long **dist) {
     long low = 1, high = T;
-    long median = (low+high)/2;
     long maxTime;
     // 二分検索
     while ((high-low) == 1) {
+        long median = (low+high)/2;
         maxTime = Dijkstra(median, dist);
         if (maxTime <= T) {
             low = median;
