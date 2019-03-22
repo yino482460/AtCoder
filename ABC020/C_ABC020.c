@@ -140,10 +140,10 @@ heap_t popHeap (heap_t node[]) {
     while (node[n].exist != 0) {    // 配列の末尾を探す
         n++;
     }
-    int last = n;
+    int last = n-1;   // ここから下が重要
     heap_t pop = node[0];    // 取り出すデータ
-    swapQue(&node[0], &node[last]);
-    deleteQue(last, node);
+    node[0] = node[last];   // 最後尾を一番上に
+    //swapQue(&node[0], &node[last]);
     for (int i = 0, child; (child=2*i+1) < n; i++) {
         // 左と右を比較して右が小さければ右を上に
         if ((child != last) && (node[child].distance > node[child+1].distance)) {
@@ -155,12 +155,13 @@ heap_t popHeap (heap_t node[]) {
         }
         i = child;
     }
+    deleteQue(last, node);
     return pop;
 }
 
 // ダイクストラ法
 long Dijkstra (long c, long **dist, char **s) {
-    printf("call Dijkstra\n");
+    //printf("call Dijkstra\n");
     heap_t *que;
     que = (heap_t *)malloc(sizeof(heap_t)*H*W);
     InitDist(H, W, dist);
@@ -174,7 +175,7 @@ long Dijkstra (long c, long **dist, char **s) {
         for (size_t i = 0; i < 4; i++) {
             int nx = X+dx[i], ny = Y+dy[i];
             if (ny < 0 || ny >= H || nx < 0 || nx >= W) { continue; }
-            printf("ny:%d nx:%d\n", ny, nx);
+            //printf("ny:%d nx:%d\n", ny, nx);
             long cost = (s[ny][nx]=='.' ? 1L : c);    // 白はコスト1黒はコストc
             //printf("cost %ld\n", cost);
             if (dist[ny][nx] > dist[Y][X] + cost) {
@@ -185,27 +186,29 @@ long Dijkstra (long c, long **dist, char **s) {
         }
     }
     // 距離を確認
+    /*
     for (size_t i = 0; i < H; i++) {
         for (size_t j = 0; j < W; j++) {
             printf("%3ld ", dist[i][j]);
         }
         printf("\n");
     }
+    */
     // メモリ解放
     free(que);
-    printf("sy %d sx %d gy %d gx %d\n", sy, sx, gy, gx);
+    //printf("sy %d sx %d gy %d gx %d\n", sy, sx, gy, gx);
     return dist[gy][gx];
 }
 // 二分検索
 void BinarySearch(long **dist, char **s) {
-    printf("call BinarySearch\n");
+    //printf("call BinarySearch\n");
     long low = 1, high = T;
-    printf("T %ld\n", T);
+    //printf("T %ld\n", T);
     long maxTime, cost;
     // 二分検索
     while ((high-low) > 1) {
         cost = (low+high)/2;
-        printf("cost %ld\n", cost);
+        //printf("cost %ld\n", cost);
         maxTime = Dijkstra(cost, dist, s);
         //printf("maxTime %ld\n", maxTime);
         if (maxTime > T) {
@@ -213,7 +216,7 @@ void BinarySearch(long **dist, char **s) {
         } else {
             low = cost;
         }
-        printf("low %ld high %ld\n", low, high);
+        //printf("low %ld high %ld\n", low, high);
     }
-    printf("ans %ld\n", low);
+    printf("%ld\n", low);
 }
