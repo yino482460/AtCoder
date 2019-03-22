@@ -114,8 +114,8 @@ void  addQue (int x, int y, int n, long **dist, heap_t node[]) {
     node[n].exist = 1;  // 存在
 }
 // x番目のキューから削除
-void deleteQue (int x, heap_t node[]) {
-    node[x].exist = 0;
+void deleteQue (int n, heap_t node[]) {
+    node[n].exist = 0;
 }
 // ヒープ化された配列に要素を追加
 void pushHeap (int x, int y, long **dist, heap_t node[]) {
@@ -137,16 +137,15 @@ void pushHeap (int x, int y, long **dist, heap_t node[]) {
 // ヒープから最小値を取り出し削除する
 heap_t popHeap (heap_t node[]) {
     int n  = 0; // データ数
-    heap_t pop; // 取り出すデータ
     while (node[n].exist != 0) {    // 配列の末尾を探す
         n++;
     }
     int last = n-1;
-    pop = node[last];
+    heap_t pop = node[0];    // 取り出すデータ
     swapQue(&node[0], &node[last]);
     for (int i = 0, child; (child=2*i+1) < n; i++) {
         // 左と右を比較して右が小さければ右を上に
-        if ((child != n-1) && (node[child].distance > node[child+1].distance)) {
+        if ((child != last) && (node[child].distance > node[child+1].distance)) {
             child++;
         }
         // 子と値を入れ替え
@@ -170,15 +169,17 @@ long Dijkstra (long c, long **dist, char **s) {
     // 本体
     while (que[0].exist != 0) {
         heap_t buf = popHeap(que);  // 探索の起点
-        int x = buf.P.x, y = buf.P.y;
+        int X = buf.P.x, Y = buf.P.y;
+        //printf("que[0] y:%d x:%d\n", Y, X);
         for (size_t i = 0; i < 4; i++) {
-            int nx = x+dx[i], ny = y+dy[i];
+            int nx = X+dx[i], ny = Y+dy[i];
             if (ny < 0 || ny >= H || nx < 0 || nx >= W) { continue; }
+            printf("ny:%d nx:%d\n", ny, nx);
             long cost = (s[ny][nx]=='.' ? 1L : c);    // 白はコスト1黒はコストc
             //printf("cost %ld\n", cost);
-            if (dist[ny][nx] > dist[y][x] + cost) {
-            dist[ny][nx] = dist[y][x] + cost;
-            printf("goal %ld\n", dist[gy][gx]);
+            if (dist[ny][nx] > dist[Y][X] + cost) {
+            dist[ny][nx] = dist[Y][X] + cost;
+            //printf("goal %ld\n", dist[gy][gx]);
             pushHeap(nx, ny, dist, que);
             }
         }
