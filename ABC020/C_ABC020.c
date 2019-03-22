@@ -140,9 +140,10 @@ heap_t popHeap (heap_t node[]) {
     while (node[n].exist != 0) {    // 配列の末尾を探す
         n++;
     }
-    int last = n-1;
+    int last = n;
     heap_t pop = node[0];    // 取り出すデータ
     swapQue(&node[0], &node[last]);
+    deleteQue(last, node);
     for (int i = 0, child; (child=2*i+1) < n; i++) {
         // 左と右を比較して右が小さければ右を上に
         if ((child != last) && (node[child].distance > node[child+1].distance)) {
@@ -154,7 +155,6 @@ heap_t popHeap (heap_t node[]) {
         }
         i = child;
     }
-    deleteQue(last, node);
     return pop;
 }
 
