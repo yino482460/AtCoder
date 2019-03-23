@@ -34,7 +34,7 @@ void makeGraph(int node1, int node2, int **graph) {
 // 各ノードの始点からの距離を設定
 void InitDist (int N, int start, long *dist) {
     for (size_t i = 0; i < N; i++) {
-        dist[i] = lPow(10, 3);
+        dist[i] = lPow(10, 9);
     }
     dist[start] = 0;
 }
@@ -104,6 +104,12 @@ que_t popQue (que_t *que) {
     deleteQue(last, que);
     return pop;
 }
+// 動的計画法を初期化
+void InitDP (int N, long *dp) {
+    for (size_t i = 0; i < N; i++) {
+        dp[i] = 0;
+    }
+}
 
 // ダイクストラ法
 void Dijkstra (int N, int start, int goal, int **graph) {
@@ -111,23 +117,36 @@ void Dijkstra (int N, int start, int goal, int **graph) {
     long *dist;
     dist = (long *)malloc(sizeof(long)*N);
     InitDist(N, start, dist);  // 距離を初期化
+    // キュー
     que_t *que;
     que = (que_t *)malloc(sizeof(que_t)*N);
     InitQue(N, que);    // キューを初期化
     setQueDist(0, que, start, 0);    // スタートを0に設定
-    long cost = 1;  // 次のノードに移動するコスト
+    long cost = 1, Mod;  // 次のノードに移動するコスト
+     // 動的計画法
+     long *dp;
+    dp = (long *)malloc(sizeof(long)*N);
+    InitDP(N, dp);
+    dp[0] = 1;
+    Mod = lPow(10, 9)+7;
     //printf("call Dijkstra\n");
     while (que[0].exist != 0) {
         que_t buf = popQue(que);
         int v = buf.node;
-        for (size_t i = 0; i < N; i++) {
-            if (graph[v][i] != 0) {
-                if (dist[i] > dist[v]+cost) {
+        for (int i = 0; i < N; i++) {
+            if (graph[v][i] != 0) { // 接続しているか
+                if (dist[i] > dist[v]+cost) {   // 最短経路となる可能性があるか
                     dist[i] = dist[v]+cost;
+                    // 動的計画法
+                    if (dist[i] == (dist[v]+cost)) {
+                        printf("calc DP\n");
+                        printf("v:%d i:%d\n", v, i);
+                        dp[i] += dp[v];
+                        printf("dp[v]:%ld dp[i]:%ld\n", dp[v], dp[i]);
+                        //dp[i] = dp[i]%Mod;
+                    }
                     pushQue(i, dist[i], que);
                 }
-            } else {
-                continue;
             }
         }
     }
@@ -136,11 +155,14 @@ void Dijkstra (int N, int start, int goal, int **graph) {
         printf("[%d] %ld ", i, dist[i]);
     }
     printf("\n");
+    printf("ans %ld\n", dp[goal]);
     // メモリ解放
     free(dist);
     free(que);
+    free(dp);
 }
 
+// メイン
 int main(int argc, char const *argv[]) {
     // 変数
     int N, start, goal, M;
