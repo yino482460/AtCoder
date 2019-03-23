@@ -1,14 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
-// 辺
-typedef struct edge {
-    int node1, node2;
-} edge_t;
 // 始点からの距離
-typedef struct node {
+typedef struct que {
     int node;
     long distance;
-} node_t;
+    int exist;
+} que_t;
 // 二分累乗
 long lPow (int n, int m) {
     if (m == 0) {
@@ -21,42 +18,153 @@ long lPow (int n, int m) {
         return n*lPow(n, m-1);
     }
 }
-// 各ノードの始点からの距離を設定
-void InitDist (int N, node_t *node) {
+// グラフを初期化
+void InitGraph (int N, int **graph) {
     for (size_t i = 0; i < N; i++) {
-        node[i].distance = lPow(10,9);
+        for (size_t j = 0; j < N; j++) {
+            graph[i][j] = 0;
+        }
     }
 }
-// ノードに距離をセット
-void setNodeDist (int no, long distance, node_t *node) {
-    node[no].node = no;
-    node[no].distance = distance;
+// グラフを構築
+void makeGraph(int node1, int node2, int **graph) {
+    graph[node1][node2] = 1;
+    graph[node2][node1] = 1;
+}
+// 各ノードの始点からの距離を設定
+void InitDist (int N, long *dist) {
+    for (size_t i = 0; i < N; i++) {
+        dist[i] = lPow(10, 3);
+    }
+}
+// キューを初期化
+void InitQue (int N, que_t *que) {
+    for (size_t i = 0; i < N; i++) {
+        que[i].exist = 1;
+    }
+}
+// キューに距離をセット
+void setQueDist (int no, que_t *que, int node, long distance) {
+    que[no].node = node;
+    que[no].distance = distance;
+    que[no].exist = 1;
+}
+// x番目のキューから削除
+void deleteQue (int x, que_t *que) {
+    que[x].exist = 0;
+}
+// キューを交換
+void swapQue (que_t *a, que_t *b) {
+    que_t tmp;
+    tmp = *a;
+    *a = *b;
+    *b = tmp;
+}
+// キューにプッシュ
+void pushQue (int node, int distance, que_t *que) {
+    printf("call push\n");
+    int n = 0;
+    while (que[n].exist != 0) {
+        n++;
+    }
+    setQueDist(n, que, node, distance);
+    // 新規ノードが条件を満たすまで
+    while (n != 0) {
+        int parent = (n-1)/2; // 親の番号
+        // 距離が小さくなるように親と子を入れ替え
+        if (que[parent].distance > que[n].distance) {
+            swapQue(&que[n], &que[parent]);
+        }
+        n = parent;
+    }
+}
+// キューからポップ
+que_t popQue (que_t *que) {
+    int n  = 0; // データ数
+    printf("call pop\n");
+    while (que[n].exist != 0) {    // 配列の末尾を探す
+        n++;
+    }
+    int last = n-1;   // ここから下が重要
+    que_t pop = que[0];    // 取り出すデータ
+    que[0] = que[last];   // 最後尾を一番上に
+    //swapQue(&node[0], &node[last]);
+    for (int i = 0, child; (child=2*i+1) < n; i++) {
+        // 左と右を比較して右が小さければ右を上に
+        if ((child != last) && (que[child].distance > que[child+1].distance)) {
+            child++;
+        }
+        // 子と値を入れ替え
+        if (que[i].distance > que[child].distance) {
+            swapQue(&que[i], &que[child]);
+        }
+        i = child;
+    }
+    deleteQue(last, que);
+    return pop;
 }
 
 // ダイクストラ法
-long Dijkstra (int N, int start, int goal, edge_t *edge) {
-    long distance = 0;
-    node_t *node;
-    node = (node_t *)malloc(sizeof(node_t)*N);
-    InitDist(N, node);
-    setNodeDist(start, 0, node);    // スタートを0に設定
-    long cost = 1;
-
-    return distance;
+void Dijkstra (int N, int start, int goal, int **graph) {
+    //printf("call Dijkstra\n");
+    long *dist;
+    dist = (long *)malloc(sizeof(long)*N);
+    InitDist(N, dist);  // 距離を初期化
+    que_t *que;
+    que = (que_t *)malloc(sizeof(que_t)*N);
+    InitQue(N, que);    // キューを初期化
+    setQueDist(0, que, start, 0);    // スタートを0に設定
+    long cost = 1;  // 次のノードに移動するコスト
+    //printf("call Dijkstra\n");
+    while (que[0].exist != 0) {
+        que_t buf = popQue(que);
+        int v = buf.node;
+        for (size_t i = 0; i < N; i++) {
+            if (graph[v][i] != 0) {
+                if (dist[i] > dist[v]+cost) {
+                    dist[i] = dist[v]+cost;
+                    pushQue(i, dist[i], que);
+                }
+            } else {
+                continue;
+            }
+        }
+    }
+    // 確認
+    for (int i = 0; i < N; i++) {
+        printf("%d %ld ", i, dist[i]);
+    }
+    printf("\n");
+    // メモリ解放
+    free(dist);
+    free(que);
 }
 
 int main(int argc, char const *argv[]) {
     // 変数
     int N, start, goal, M;
-    edge_t *edge;
     int **graph;
     // 入力
     scanf("%d %d %d %d", &N, &start, &goal, &M);
-    edge = (edge_t *)malloc(sizeof(edge_t)*M);
-    for (size_t i = 0; i < M; i++) {
-        scanf("%d %d", &edge[i].node1, &edge[i].node2);
+    graph = (int **)malloc(sizeof(int *)*N);
+    for (size_t i = 0; i < N; i++) {
+        graph[i] = (int *)malloc(sizeof(int)*N);
     }
+    // グラフを構築
+    int node1, node2;
+    InitGraph(N, graph);
+    for (size_t i = 0; i < M; i++) {
+        scanf("%d %d", &node1, &node2);
+        node1--; node2--;
+        makeGraph(node1, node2, graph);
+    }
+    // ダイクストラ法
+    Dijkstra(N, start, goal, graph);
 
-
+    // メモリ解放
+    for (size_t i = 0; i < N; i++) {
+        free(graph[i]);
+    }
+    free(graph);
     return 0;
 }
