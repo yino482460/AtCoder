@@ -41,7 +41,7 @@ void InitDist (int N, int start, long *dist) {
 // キューを初期化
 void InitQue (int N, que_t *que) {
     for (size_t i = 0; i < N; i++) {
-        que[i].exist = 1;
+        que[i].exist = 0;
     }
 }
 // キューに距離をセット
@@ -86,10 +86,9 @@ que_t popQue (que_t *que) {
     while (que[n].exist != 0) {    // 配列の末尾を探す
         n++;
     }
-    int last = n-1;   // ここから下が重要
+    int last = n-1;
     que_t pop = que[0];    // 取り出すデータ
     que[0] = que[last];   // 最後尾を一番上に
-    //swapQue(&node[0], &node[last]);
     for (int i = 0, child; (child=2*i+1) < n; i++) {
         // 左と右を比較して右が小さければ右を上に
         if ((child != last) && (que[child].distance > que[child+1].distance)) {
@@ -113,7 +112,6 @@ void InitDP (int N, long *dp) {
 
 // ダイクストラ法
 void Dijkstra (int N, int start, int goal, int **graph) {
-    //printf("call Dijkstra\n");
     long *dist;
     dist = (long *)malloc(sizeof(long)*N);
     InitDist(N, start, dist);  // 距離を初期化
@@ -122,14 +120,8 @@ void Dijkstra (int N, int start, int goal, int **graph) {
     que = (que_t *)malloc(sizeof(que_t)*N);
     InitQue(N, que);    // キューを初期化
     setQueDist(0, que, start, 0);    // スタートを0に設定
-    long cost = 1, Mod;  // 次のノードに移動するコスト
-     // 動的計画法
-     long *dp;
-    dp = (long *)malloc(sizeof(long)*N);
-    InitDP(N, dp);
-    dp[0] = 1;
-    Mod = lPow(10, 9)+7;
-    //printf("call Dijkstra\n");
+    long cost = 1;  // 次のノードに移動するコスト
+    // ダイクストラ
     while (que[0].exist != 0) {
         que_t buf = popQue(que);
         int v = buf.node;
@@ -137,22 +129,44 @@ void Dijkstra (int N, int start, int goal, int **graph) {
             if (graph[v][i] != 0) { // 接続しているか
                 if (dist[i] > dist[v]+cost) {   // 最短経路となる可能性があるか
                     dist[i] = dist[v]+cost;
-                    // 動的計画法
-                    if (dist[i] == (dist[v]+cost)) {
-                        printf("calc DP\n");
-                        printf("v:%d i:%d\n", v, i);
-                        dp[i] += dp[v];
-                        printf("dp[v]:%ld dp[i]:%ld\n", dp[v], dp[i]);
-                        //dp[i] = dp[i]%Mod;
-                    }
                     pushQue(i, dist[i], que);
                 }
             }
         }
     }
+    // 動的計画法
+    InitQue(N, que);
+    for (int i = 0; i < N; i++) { // 距離順にヒープソート
+       pushQue(i, dist[i], que);
+    }
+   printf("\n");
+   // デバッグ
+   for (int i = 0; i < N; i++) {
+       printf("dist[%d]:%ld ", i, dist[i]);
+       que_t V = popQue(que);
+       int v = V.node;
+       printf("v %d\n", v);
+   }
+
+   long *dp, Mod;
+    dp = (long *)malloc(sizeof(long)*N);
+    InitDP(N, dp);
+    dp[start] = 1;
+    Mod = lPow(10, 9)+7;
+    while (que[0].exist != 0) {
+        que_t V = popQue(que);
+        int v = V.node;
+        printf("v %d\n", v);
+        for (size_t i = 0; i < N; i++) {
+            if (dist[i] == dist[v]+cost) {
+                dp[i] += dp[v];
+                dp[i] = dp[i]%Mod;
+            }
+        }
+    }
     // 確認
     for (int i = 0; i < N; i++) {
-        printf("[%d] %ld ", i, dist[i]);
+        printf("dist[%d], %ld dp[%d]:%ld\n", i, dist[i], i ,dp[i]);
     }
     printf("\n");
     printf("ans %ld\n", dp[goal]);
@@ -184,11 +198,7 @@ int main(int argc, char const *argv[]) {
     }
     // ダイクストラ法
     Dijkstra(N, start, goal, graph);
-
     // メモリ解放
-    for (size_t i = 0; i < N; i++) {
-        free(graph[i]);
-    }
     free(graph);
     return 0;
 }
