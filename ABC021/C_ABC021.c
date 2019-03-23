@@ -32,10 +32,11 @@ void makeGraph(int node1, int node2, int **graph) {
     graph[node2][node1] = 1;
 }
 // 各ノードの始点からの距離を設定
-void InitDist (int N, long *dist) {
+void InitDist (int N, int start, long *dist) {
     for (size_t i = 0; i < N; i++) {
         dist[i] = lPow(10, 3);
     }
+    dist[start] = 0;
 }
 // キューを初期化
 void InitQue (int N, que_t *que) {
@@ -62,7 +63,7 @@ void swapQue (que_t *a, que_t *b) {
 }
 // キューにプッシュ
 void pushQue (int node, int distance, que_t *que) {
-    printf("call push\n");
+    //printf("call push\n");
     int n = 0;
     while (que[n].exist != 0) {
         n++;
@@ -81,7 +82,7 @@ void pushQue (int node, int distance, que_t *que) {
 // キューからポップ
 que_t popQue (que_t *que) {
     int n  = 0; // データ数
-    printf("call pop\n");
+    //printf("call pop\n");
     while (que[n].exist != 0) {    // 配列の末尾を探す
         n++;
     }
@@ -109,7 +110,7 @@ void Dijkstra (int N, int start, int goal, int **graph) {
     //printf("call Dijkstra\n");
     long *dist;
     dist = (long *)malloc(sizeof(long)*N);
-    InitDist(N, dist);  // 距離を初期化
+    InitDist(N, start, dist);  // 距離を初期化
     que_t *que;
     que = (que_t *)malloc(sizeof(que_t)*N);
     InitQue(N, que);    // キューを初期化
@@ -132,7 +133,7 @@ void Dijkstra (int N, int start, int goal, int **graph) {
     }
     // 確認
     for (int i = 0; i < N; i++) {
-        printf("%d %ld ", i, dist[i]);
+        printf("[%d] %ld ", i, dist[i]);
     }
     printf("\n");
     // メモリ解放
@@ -146,6 +147,7 @@ int main(int argc, char const *argv[]) {
     int **graph;
     // 入力
     scanf("%d %d %d %d", &N, &start, &goal, &M);
+    start --; goal--;
     graph = (int **)malloc(sizeof(int *)*N);
     for (size_t i = 0; i < N; i++) {
         graph[i] = (int *)malloc(sizeof(int)*N);
