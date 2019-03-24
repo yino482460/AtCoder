@@ -42,6 +42,30 @@ void WFmethod (int N, long **graph) {
         }
     }
 }
+// 距離を取得
+void getDistance (int N, int start, long *dist, long **graph) {
+    // 始点から各点への距離を取得
+    for (size_t i = 0; i < N; i++) {
+        dist[i] = graph[start][i];
+    }
+}
+// 最短経路の数を計算
+void calcShortestRoutes (int N, int start, int goal, long **graph, long *dist, long *dp) {
+    long Mod = lPow(10, 9)+7;
+    // 動的計画法
+    dp[0] = 1;
+    for (size_t i = 0; i < N; i++) {
+        for (size_t j = 0; j < N; j++) {
+            if (dist[i] == dist[j]+1) {
+                dp[i] += dp[j];
+                dp[i] = dp[i]%Mod;
+            }
+        }
+    }
+    printf("%ld\n", dp[goal]%Mod);
+
+
+}
 
 // メイン
 int main(int argc, char const *argv[]) {
@@ -65,8 +89,16 @@ int main(int argc, char const *argv[]) {
     }
     // ワーシャルフロイド法
     WFmethod(N, graph);
+    // 始点から終点までの距離を取得
+    long *dist;
+    dist = (long *)malloc(sizeof(long)*N);
+    getDistance(N, start, dist, graph);
+    // 最短経路の数を計算
+    long *dp;
+    dp = (long *)malloc(sizeof(long)*N);
+    calcShortestRoutes(N, start, goal, graph, dist, dp);
 
     // メモリ解放
-    free(graph);
+    free(graph); free(dist);
     return 0;
 }
