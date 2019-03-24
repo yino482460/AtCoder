@@ -46,7 +46,7 @@ void  calc_nHk (int n, int k) {
     // 階乗・逆元計算
     factrial[0] = 1; inverse[0] = 1;
     for (size_t i = 1; i <= N; i++) {
-        factrial[i] = i*factrial[i-1]%Mod;
+        factrial[i] = lFactrial(i, Mod, factrial);
         inverse[i] = modlPow(factrial[i], (Mod-2), Mod);
     }
     // nHkの計算
