@@ -27,11 +27,10 @@ long modlPow (long n, long m, long Mod) {
     long ans = 1;
     while (m) {
         if (m&1) {
-            ans *= n;
-            ans %= Mod;
+            ans = (ans*n)%Mod;
         }
         m = m/2;
-        ans = (ans*ans)%Mod;
+        n = (n*n)%Mod;
     }
     return ans;
 }
@@ -42,22 +41,22 @@ void  calc_nHk (int n, int k) {
     long nHk;
     int N = n+k-1;
     long *factrial, *inverse;
-    factrial = (long *)malloc(sizeof(long)*(n+k+1));
-    inverse = (long *)malloc(sizeof(long)*(n+k+1));
-    // 階乗計算
-    for (size_t i = 0; i <= N; i++) {
-        factrial[i] = lFactrial(i, Mod, factrial);
-    }
-    // 逆元の計算
-    for (size_t i = 0; i <= N; i++) {
+    factrial = (long *)malloc(sizeof(long)*(N+1));
+    inverse = (long *)malloc(sizeof(long)*(N+1));
+    // 階乗・逆元計算
+    factrial[0] = 1; inverse[0] = 1;
+    for (size_t i = 1; i <= N; i++) {
+        factrial[i] = i*factrial[i-1]%Mod;
         inverse[i] = modlPow(factrial[i], (Mod-2), Mod);
     }
-    // デバッグ
-    for (int i = 0; i < N; i++) {
-        printf("%2d:%ld\n", i, inverse[i]);
+    // 確認
+    for (size_t i = 0; i < N; i++) {
+        printf("%ld \n", factrial[i]);
+        printf("%ld ", inverse[i]);
     }
+    printf("\n");
     // nHkの計算
-    nHk = (factrial[n+k-1]*inverse[n-1]*inverse[k])%Mod;
+    nHk = factrial[n+k-1]*inverse[n-1]%Mod*inverse[k]%Mod;
     // 出力
     printf("Mod %ld ans %ld\n", Mod, nHk);
     // メモリ解放
@@ -70,9 +69,6 @@ int main(int argc, char const *argv[]) {
     int n, k;
     // 入力
     scanf("%d %d", &n, &k);
-    // 階乗
-    long *fact;
-    fact = (long *)malloc(sizeof(long)*n);
     // 出力
     calc_nHk(n, k);
     return 0;
