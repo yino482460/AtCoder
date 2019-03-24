@@ -49,16 +49,10 @@ void  calc_nHk (int n, int k) {
         factrial[i] = i*factrial[i-1]%Mod;
         inverse[i] = modlPow(factrial[i], (Mod-2), Mod);
     }
-    // 確認
-    for (size_t i = 0; i < N; i++) {
-        printf("%ld \n", factrial[i]);
-        printf("%ld ", inverse[i]);
-    }
-    printf("\n");
     // nHkの計算
     nHk = factrial[n+k-1]*inverse[n-1]%Mod*inverse[k]%Mod;
     // 出力
-    printf("Mod %ld ans %ld\n", Mod, nHk);
+    printf("%ld\n", nHk);
     // メモリ解放
     free(factrial); free(inverse);
 }
