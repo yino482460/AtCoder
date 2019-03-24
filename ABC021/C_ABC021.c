@@ -63,7 +63,6 @@ void swapQue (que_t *a, que_t *b) {
 }
 // キューにプッシュ
 void pushQue (int node, int distance, que_t *que) {
-    //printf("call push\n");
     int n = 0;
     while (que[n].exist != 0) {
         n++;
@@ -82,14 +81,15 @@ void pushQue (int node, int distance, que_t *que) {
 // キューからポップ
 que_t popQue (que_t *que) {
     int n  = 0; // データ数
-    //printf("call pop\n");
     while (que[n].exist != 0) {    // 配列の末尾を探す
         n++;
     }
     int last = n-1;
+    //printf("before node[0]:node %d, distance %ld\n", que[0].node, que[0].distance);
     que_t pop = que[0];    // 取り出すデータ
     que[0] = que[last];   // 最後尾を一番上に
-    for (int i = 0, child; (child=2*i+1) < n; i++) {
+    //printf("after  node[0]:node %d, distance %ld\n", que[0].node, que[0].distance);
+    for (int i = 0, child; (child=2*i+1) < n; ) {
         // 左と右を比較して右が小さければ右を上に
         if ((child != last) && (que[child].distance > que[child+1].distance)) {
             child++;
@@ -140,14 +140,15 @@ void Dijkstra (int N, int start, int goal, int **graph) {
        pushQue(i, dist[i], que);
     }
    printf("\n");
-   // デバッグ
+   // デバッグ push は正常
    for (int i = 0; i < N; i++) {
-       printf("dist[%d]:%ld ", i, dist[i]);
-       que_t V = popQue(que);
-       int v = V.node;
-       printf("v %d\n", v);
+       printf("que[%d]:node %d, distance %ld\n", i, que[i].node, que[i].distance);
+       //printf("dist[%d]:%ld ", i, dist[i]);
+       //que_t V = popQue(que);
+       //int v = V.node;
+      // printf("pop:v %d\n", v);
    }
-
+   printf("\n");
    long *dp, Mod;
     dp = (long *)malloc(sizeof(long)*N);
     InitDP(N, dp);
@@ -156,8 +157,8 @@ void Dijkstra (int N, int start, int goal, int **graph) {
     while (que[0].exist != 0) {
         que_t V = popQue(que);
         int v = V.node;
-        printf("v %d\n", v);
-        for (size_t i = 0; i < N; i++) {
+        //printf("v %d\n", v);
+        for (int i = 0; i < N; i++) {
             if (dist[i] == dist[v]+cost) {
                 dp[i] += dp[v];
                 dp[i] = dp[i]%Mod;
