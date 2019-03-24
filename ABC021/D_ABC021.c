@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 // 二分累乗
 long lPow (long n, long m) {
@@ -29,32 +30,39 @@ long modlPow (long n, long m, long Mod) {
         if (m&1) {
             ans = (ans*n)%Mod;
         }
-        m = m/2;
+        m = m >> 1;
         n = (n*n)%Mod;
     }
     return ans;
 }
+// 逆元の計算
+long Inverse (long x, long Mod, long *factrial) {
+    return modlPow(factrial[x], (Mod-2), Mod);
+}
 
 // nHkの計算
 void  calc_nHk (int n, int k) {
+    // 計測
+    clock_t start, end;
+    start = clock();
     long Mod = lPow(10, 9)+7;
     long nHk;
     int N = n+k-1;
-    long *factrial, *inverse;
+    long *factrial;
     factrial = (long *)malloc(sizeof(long)*(N+1));
-    inverse = (long *)malloc(sizeof(long)*(N+1));
     // 階乗・逆元計算
-    factrial[0] = 1; inverse[0] = 1;
+    factrial[0] = 1;
     for (size_t i = 1; i <= N; i++) {
         factrial[i] = lFactrial(i, Mod, factrial);
-        inverse[i] = modlPow(factrial[i], (Mod-2), Mod);
     }
     // nHkの計算
-    nHk = factrial[n+k-1]*inverse[n-1]%Mod*inverse[k]%Mod;
+    nHk = factrial[n+k-1]*Inverse(n-1, Mod, factrial)%Mod*Inverse(k, Mod, factrial)%Mod;
     // 出力
     printf("%ld\n", nHk);
+    end = clock();
+    //printf("%.4f秒かかりました\n",10*(double)(end-start)/CLOCKS_PER_SEC);
     // メモリ解放
-    free(factrial); free(inverse);
+    free(factrial);
 }
 
 // メイン
