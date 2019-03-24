@@ -43,8 +43,8 @@ long Inverse (long x, long Mod, long *factrial) {
 // nHkの計算
 void  calc_nHk (int n, int k) {
     // 計測
-    clock_t start, end;
-    start = clock();
+    //clock_t start, end;
+    //start = clock();
     long Mod = lPow(10, 9)+7;
     long nHk;
     int N = n+k-1;
@@ -59,7 +59,7 @@ void  calc_nHk (int n, int k) {
     nHk = factrial[n+k-1]*Inverse(n-1, Mod, factrial)%Mod*Inverse(k, Mod, factrial)%Mod;
     // 出力
     printf("%ld\n", nHk);
-    end = clock();
+    //end = clock();
     //printf("%.4f秒かかりました\n",10*(double)(end-start)/CLOCKS_PER_SEC);
     // メモリ解放
     free(factrial);
