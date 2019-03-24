@@ -103,7 +103,7 @@ que_t popQue (que_t *que) {
     deleteQue(last, que);
     return pop;
 }
-// 動的計画法を初期化
+// 動的計画配列を初期化
 void InitDP (int N, long *dp) {
     for (size_t i = 0; i < N; i++) {
         dp[i] = 0;
@@ -120,15 +120,14 @@ void Dijkstra (int N, int start, int goal, int **graph) {
     que = (que_t *)malloc(sizeof(que_t)*N);
     InitQue(N, que);    // キューを初期化
     setQueDist(0, que, start, 0);    // スタートを0に設定
-    long cost = 1;  // 次のノードに移動するコスト
     // ダイクストラ
     while (que[0].exist != 0) {
         que_t buf = popQue(que);
         int v = buf.node;
         for (int i = 0; i < N; i++) {
             if (graph[v][i] != 0) { // 接続しているか
-                if (dist[i] > dist[v]+cost) {   // 最短経路となる可能性があるか
-                    dist[i] = dist[v]+cost;
+                if (dist[i] > dist[v]+1) {   // 最短経路となる可能性があるか
+                    dist[i] = dist[v]+1;
                     pushQue(i, dist[i], que);
                 }
             }
@@ -139,16 +138,6 @@ void Dijkstra (int N, int start, int goal, int **graph) {
     for (int i = 0; i < N; i++) { // 距離順にヒープソート
        pushQue(i, dist[i], que);
     }
-   printf("\n");
-   // デバッグ push は正常
-   for (int i = 0; i < N; i++) {
-       printf("que[%d]:node %d, distance %ld\n", i, que[i].node, que[i].distance);
-       //printf("dist[%d]:%ld ", i, dist[i]);
-       //que_t V = popQue(que);
-       //int v = V.node;
-      // printf("pop:v %d\n", v);
-   }
-   printf("\n");
    long *dp, Mod;
     dp = (long *)malloc(sizeof(long)*N);
     InitDP(N, dp);
@@ -157,20 +146,14 @@ void Dijkstra (int N, int start, int goal, int **graph) {
     while (que[0].exist != 0) {
         que_t V = popQue(que);
         int v = V.node;
-        //printf("v %d\n", v);
         for (int i = 0; i < N; i++) {
-            if (dist[i] == dist[v]+cost) {
+            if (dist[i] == dist[v]+1) {
                 dp[i] += dp[v];
                 dp[i] = dp[i]%Mod;
             }
         }
     }
-    // 確認
-    for (int i = 0; i < N; i++) {
-        printf("dist[%d], %ld dp[%d]:%ld\n", i, dist[i], i ,dp[i]);
-    }
-    printf("\n");
-    printf("ans %ld\n", dp[goal]);
+    printf("%ld\n", dp[goal]);
     // メモリ解放
     free(dist);
     free(que);
