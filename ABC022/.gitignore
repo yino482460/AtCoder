@@ -8,3 +8,4 @@ install_manifest.txt
 compile_commands.json
 CTestTestfile.cmake
 A_ABC022
+B_ABC022
