@@ -24,7 +24,7 @@ center_t TriangleCenter (point_t a, point_t b) {
     center_t area;
     area.xg = (a.x+b.x)/3;
     area.yg = (a.y+b.y)/3;
-    area.Area = a.x*b.y - a.y*b.x;
+    area.Area = fabs( (a.x*b.y - a.y*b.x) )/2;
     return area;
 }
 // 多数の点の重心を計算
