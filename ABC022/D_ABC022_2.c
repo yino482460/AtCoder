@@ -8,11 +8,11 @@ typedef struct point {
     double w;   // 質量
 } point_t;
 // 二点間の距離
-double calcDistance (point_t a, point_t b) {
+double calcSqDistance (point_t a, point_t b) {
     double distance;
     double A, B;
     A = a.x-b.x; B = a.y-b.y;
-    distance = sqrt(A*A+B*B);
+    distance = A*A+B*B;
     return distance;
 }
 // 多数の点の重心
@@ -43,14 +43,15 @@ void calcExpansionRate (int N, point_t A[], point_t B[]) {
     // 重心から最も離れた点までの距離
     double maxDisA = 0, maxDisB = 0;
     for (size_t i = 0; i < N; i++) {
-        maxDisA = max(maxDisA, calcDistance(CenterA, A[i]));
-        maxDisB = max(maxDisB, calcDistance(CenterB, B[i]));
+        maxDisA = max(maxDisA, calcSqDistance(CenterA, A[i]));
+        maxDisB = max(maxDisB, calcSqDistance(CenterB, B[i]));
     }
     // 膨張速度
     double ExpansionRate;
     ExpansionRate = maxDisB/maxDisA;
+    ExpansionRate = sqrt(ExpansionRate);
     // 出力
-    printf("ans %.10lf\n", ExpansionRate);
+    printf("%.10lf\n", ExpansionRate);
 }
 
 // メイン
@@ -68,7 +69,5 @@ int main(int argc, char const *argv[]) {
     }
     // 出力
     calcExpansionRate(N, A, B);
-    // メモリ解放
-    // free(A); free(B);
     return 0;
 }
