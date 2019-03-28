@@ -15,7 +15,7 @@ typedef struct center {
 double calcDistance (point_t a, point_t b) {
     double distance;
     double A, B;
-    A = fabs(a.x-b.x); B = fabs(a.y-b.y);
+    A = a.x-b.x; B = a.y-b.y;
     distance = sqrt(A*A+B*B);
     return distance;
 }
