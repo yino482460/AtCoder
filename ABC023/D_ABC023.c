@@ -60,10 +60,12 @@ bool check (long Opt) {
     }
     // ソート
     quicksort(0, N-1, t);
-    // デバッグ
+    // 確認
+    /*
     for (size_t i = 0; i < N; i++) {
         printf("%lf ", t[i]);
     }
+    */
     // 判定
     for (int i = 0; i < N; i++) {
         if (t[i] < i) {
@@ -75,11 +77,11 @@ bool check (long Opt) {
 // 二分検索
 void binarySearch ( ) {
     long left, right;
-    left = 0; right = lPow(10, 3);
+    left = 0; right = lPow(10, 9);
     // 探索
     while (left+1 < right) {
         long mid = (left+right)/2;
-        printf("mid %ld\n", mid);
+        //printf("mid %ld\n", mid);
         if (check(mid)) {
             right = mid;
         } else {
