@@ -25,11 +25,7 @@ int main(int argc, char const *argv[]) {
         scanf("%s", s);
         scanf("%d", &d);
         char e[] = "East";
-        int flag = 0;
         if (strcmp(s, e)!=0) {  // 西の時は負
-            flag = -1;
-        }
-        if (flag == -1) {
             dist -= Dist(d);
         } else {
             dist += Dist(d);
