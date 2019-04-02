@@ -38,7 +38,7 @@ int calcScore () {
 // 深さ優先探索
 int Dfs (int turn) {
     if (turn == 9) {
-        return calcScore ();
+        return calcScore();
     }
     int ret = (turn%2 == 0) ? -INF:INF;
     for (size_t i = 0; i < 3; i++) {
