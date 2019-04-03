@@ -40,21 +40,15 @@ void calcSalary (int N, int B[]) {
     Sub = (list_t *)malloc(sizeof(list_t)*N);
     // リスト化
     makeList(Sub, N, B);
-    // デバッグ
-    for (int i = 0; i < N; i++) {
-        printf("Sub[%d].size:%d\n", i, (Sub[i].head) -> size);
-    }
     // 逆順で給料を計算
     int P[N], minP[N], maxP[N];
     list_t *buf;
     for (int i = N-1; i >= 0; i--) {
         buf = Sub[i].head;
-        printf("%d:buf -> size:%d\n", i, buf->size);
         if (buf -> size == 0) {
             P[i] = 1;
             continue;
         }
-        printf("i:%d\n", i);
         maxP[i] = 0; minP[i] = (int)1e9;
         while ( (buf -> previous) != '\0' ) {
             int j = buf -> sub;
@@ -69,7 +63,6 @@ void calcSalary (int N, int B[]) {
     // メモリ解放
     free(Sub);
 }
-
 
 // メイン
 int main(int argc, char const *argv[]) {
