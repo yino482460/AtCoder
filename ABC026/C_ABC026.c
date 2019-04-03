@@ -19,19 +19,21 @@ void  InitList (int N, list_t list[]) {
     }
 }
 // リストに追加
-void addList (int Sub, list_t a) {
+void addList (int Sub, int boss, list_t a[]) {
     list_t *new_l;
     new_l = (list_t *)malloc(sizeof(list_t));   // 新規メモリの確保
-    new_l -> size = (a.head) -> size + 1;
+    new_l -> size = ((a[boss].head) -> size) + 1;
     new_l -> sub = Sub;
-    new_l -> previous = a.head;
-    a.head = new_l;
+    new_l -> previous = a[boss].head;
+    a[boss].head = new_l;
+    printf("call addList\n");
+    printf("%d\n", new_l -> size);
 }
 // 部下の情報をリスト化
 void  makeList (list_t *Sub, int N, int B[]) {
     InitList(N, Sub);
     for (int i = 1; i < N; i++) {
-        addList(i, Sub[B[i]]);
+        addList(i, B[i], Sub);
     }
 }
 // 給料を計算
