@@ -26,8 +26,6 @@ void addList (int Sub, int boss, list_t a[]) {
     new_l -> sub = Sub;
     new_l -> previous = a[boss].head;
     a[boss].head = new_l;
-    printf("call addList\n");
-    printf("%d\n", new_l -> size);
 }
 // 部下の情報をリスト化
 void  makeList (list_t *Sub, int N, int B[]) {
@@ -48,13 +46,15 @@ void calcSalary (int N, int B[]) {
     }
     // 逆順で給料を計算
     int P[N], minP[N], maxP[N];
-    int i = N-1;
-    list_t *buf = Sub[i].head;
-    for (i = N-1; i >= 0; i--) {
+    list_t *buf;
+    for (int i = N-1; i >= 0; i--) {
+        buf = Sub[i].head;
+        printf("%d:buf -> size:%d\n", i, buf->size);
         if (buf -> size == 0) {
             P[i] = 1;
             continue;
         }
+        printf("i:%d\n", i);
         maxP[i] = 0; minP[i] = (int)1e9;
         while ( (buf -> previous) != '\0' ) {
             int j = buf -> sub;
