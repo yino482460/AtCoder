@@ -12,15 +12,17 @@ double TakahashiBall (double t) {
 void binSearch (double A, double B, double C) {
     double low = 0, high = 1000;
     double mid;
-    for (size_t i = 0; i < 10000; i++) {
+    for (size_t i = 0; i < 100; i++) {
         mid = (low+high)/2;
-        if ( TakahashiBall (mid) > 100) {
-            high = mid;
-        } else {
+        printf("low:%lf, mid %lf, high:%lf\n", low, mid, high);
+        double Ft = TakahashiBall(mid);
+        if ( Ft <= 100) {
             low = mid;
+        } else {
+            high = mid;
         }
     }
-    printf("M_PI %.30lf\n", M_PI);
+    //printf("M_PI %.30lf\n", M_PI);
     printf("%lf\n", low);
 }
 // メイン
