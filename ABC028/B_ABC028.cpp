@@ -2,13 +2,21 @@
 
 class B_ABC028 {
 private:
-    static const alphabets = 6;
-    int alphabet[alphabets];
+    static const int alp = 6;
+    int alphabet[alp];
 public:
     B_ABC028 ();
     virtual ~B_ABC028 ();
     void cntAlphabet (char S[]);
 };
+// コンストラクタ
+B_ABC028 :: B_ABC028() {
+    for (int i = 0; i < alp; ++i)
+    {
+        alphabet[i] = 0;
+    }
+}
+B_ABC028 :: ~B_ABC028() {};
 // 各アルファベットの数の計算
 void B_ABC028 :: cntAlphabet (char S[]) {
     int i = 0;
@@ -17,11 +25,11 @@ void B_ABC028 :: cntAlphabet (char S[]) {
         alphabet[no] ++;
         i++;
     }
-    for (int i = 0; i < 6; ++i)
+    for (int i = 0; i < alp-1; ++i)
     {
         std::cout << alphabet[i] << " ";
     }
-    std::cout << "\n";
+    std::cout << alphabet[alp-1] << "\n";
 }
 // メイン
 int main(int argc, char* argv[])
