@@ -7,9 +7,11 @@ int main(int argc, char const *argv[]) {
     scanf("%lld", &N);
     // 木の深さを計算
     int depth = 0;
-    for (long long n = N; n > 0; n /= 2) {
-        depth ++;
-    }
+    for ( ; ; depth++) {
+      if ( (1LL<<depth) <= N+1 && 2*(1LL<<depth)-1 >= N+1 ) {
+         break;
+      }
+   }
     // 最善手を計算
     long long x = 1;
     int cnt = 0;
@@ -27,7 +29,7 @@ int main(int argc, char const *argv[]) {
         }
     }
     // 出力
-    printf("cnt %d\n", cnt);
+    // printf("cnt %d\n", cnt);
     if (cnt&1) {
         printf("Aoki\n");
     } else {
