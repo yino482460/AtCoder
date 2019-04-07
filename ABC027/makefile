@@ -6,3 +6,5 @@ C_ABC027 : C_ABC027.c
 	gcc -o $@ $^
 D_ABC027 : D_ABC027.c
 	gcc -o $@ $^
+ccD_ABC027 : D_ABC027.cpp
+	g++ -o $@ $^
