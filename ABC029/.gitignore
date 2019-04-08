@@ -7,3 +7,6 @@ cmake_install.cmake
 install_manifest.txt
 compile_commands.json
 CTestTestfile.cmake
+A_ABC029
+B_ABC029
+C_ABC029
