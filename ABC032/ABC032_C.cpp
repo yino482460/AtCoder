@@ -11,36 +11,38 @@ int main(int argc, char const *argv[])
   {
     cin>> tmp;
     s.push_back(tmp);
+    if (tmp == 0) // 数列に0があるかどうか
+    {
+      cout << NumLen << endl;
+      return 0; // 終了
+    }
   }
 
 
   /* メイン計算 尺取法 */
-  long left, right; // 左端と右端
-  long product; // 数列の積
+  long left = 0, right = 0; // 左端と右端
+  long product = 1; // 数列の積
   long ans = 0; // 答え
-  for (long i = 0; i < NumLen; i++)
+
+  while (left < NumLen)
   {
-    long len;
-    left = i;
-    right = i;
-    product = s[left];
-    // cout << "s[right] = " << s[right] << endl;
-    // cout << "right: " << right << endl;
-    // cout << "product: " << product << endl;
-
-    while (product <= Lim)
+    while ( right < NumLen && (product * s[right] <= Lim) )
     {
-      if (right > NumLen) { break; }  // 文字数を超えたら終了
-      right++;  // 右端を伸ばす
       product *= s[right];
-      cout << "product: " << product << endl;
+      right++;
     }
-
-    len = right - left; // 数列の長さ
-    ans = max(ans, len);
+    ans = max(ans, right - left);
+    // 同じ位置の場合は右端をずらす
+    if (left == right)
+    {
+      right++;
+    } else {
+      product /= s[left];
+    }
+    left ++;
   }
 
   /* 出力 */
-  cout<< ans <<endl;
+  cout << ans << endl;
   return 0;
 }
