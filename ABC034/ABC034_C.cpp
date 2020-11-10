@@ -32,9 +32,6 @@ int main(int argc, char const *argv[])
   long ans = (numerator * invModp) % p;
 
   /* 出力 */
-  cout << numerator << endl;  // 分子の計算はOK
-  cout << invModp << endl;
-  cout << modp[W-1] << endl;
   cout << ans << endl;
 
   return 0;
