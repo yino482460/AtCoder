@@ -25,7 +25,7 @@ int main(int argc, char const *argv[])
   double OK = 0;  // 濃度
   double NG = 100;
   double target; // 目標濃度
-  /* 二峰検索 */
+  /* 二分検索 */
   for (size_t i = 0; i < 100; i++)
   {
     // 目標濃度からのズレを計算し判定
