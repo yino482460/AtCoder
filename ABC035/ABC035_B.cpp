@@ -13,7 +13,7 @@ struct Point
 
 // 最大値の計算
 int calMax (Point p, int unkown) {
-  int distanceMax = abs(p.x) + abs(p.y) + distanceMax;
+  int distanceMax = abs(p.x) + abs(p.y) + unkown;
   return distanceMax;
 }
 
@@ -21,9 +21,9 @@ int calMax (Point p, int unkown) {
 int calMin (string s, Point p, int unkown) {
   int distance = abs(p.x) + abs(p.y);
   int distanceMin;
-  if ( distance > s.size() )
+  if ( distance < unkown )
   {
-    if ((distance - s.size())%2 == 0)
+    if ((distance - unkown)%2 == 0)
     {
       distanceMin = 0;
     }
@@ -34,7 +34,7 @@ int calMin (string s, Point p, int unkown) {
   }
   else
   {
-    distanceMin = s.size() - distance;
+    distanceMin = distance - unkown;
   }
   return distanceMin;
 }
@@ -53,28 +53,22 @@ int main(int argc, char const *argv[])
   p.init(0);
   // 座標の計算
   for (int i = 0; i < S.size(); i++) {
-    cout << "str: " << S[i] << endl;
     switch (S[i])
     {
     case 'L':
-      cout << "L" << endl;
       p.x--;
       break;
     case 'R':
-      cout << "R" << endl;
       p.x++;
       break;
     case 'U':
-      cout << "U" << endl;
       p.y++;
       break;
     case 'D':
-      cout << "D" << endl;
       p.y--;
       break;
     default:
-      cout << "?" << endl;
-      unkown++; // 読み取り不明
+      unkown++; // 読み取り不能
       break;
     }
   }
