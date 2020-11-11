@@ -229,3 +229,5 @@ ABC034/makefile
 ABC034/A
 ABC034/B
 ABC034/C
+ABC034/.vscode/c_cpp_properties.json
+ABC034/D
