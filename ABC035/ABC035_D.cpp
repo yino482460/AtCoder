@@ -14,11 +14,11 @@ struct Edge
   Edge(int toNode, long long cost) : toNode(toNode), cost(cost) {}
 };
 
-using Graph = vector<vector<Edge>>;
+using Graph = vector<vector<Edge> >;
 vector<int> dist(MAX); // 始点からの最短経路を保持
 
 void dijkstra(int start, int N, Graph G){
-  priority_queue<pair<int, int>> PQ;  // weight, nodeID
+  priority_queue<pair<int, int> > PQ;  // weight, nodeID
   vector<int> visit(N, WHITE);
   // 距離の初期化
   for (int i = 0; i < N; i++) {
@@ -57,7 +57,6 @@ void dijkstra(int start, int N, Graph G){
 }
 
 
-
 int main(int argc, char const *argv[])
 {
   /* 入力 */
@@ -77,6 +76,20 @@ int main(int argc, char const *argv[])
   }
 
   /* 計算 */
+  dijkstra(0, N, G1);
+  int dist1[N]; // 始点0からの最短距離
+  for (int i = 0; i < N; i++) {
+    dist1[i] = dist[i];
+  }
+
+  int income = 0; // 獲得金額
+  for (int i = 1; i < N; i++) {
+    dijkstra(i, N, G2);
+    income = max(income, (T-dist1[i]-dist[i])*A[i]);
+  }
+
+  /* 出力 */
+  cout << income << endl;
 
   return 0;
 }
