@@ -17,19 +17,43 @@ struct Edge
 using Graph = vector<vector<Edge>>;
 vector<int> dist(MAX); // 始点からの最短経路を保持
 
-void dijkstra(int start, int N, Graph G[]){
-  priority_queue<pair<int, int>> PQ;  // nodeID, distance
+void dijkstra(int start, int N, Graph G){
+  priority_queue<pair<int, int>> PQ;  // weight, nodeID
   vector<int> visit(N, WHITE);
   // 距離の初期化
   for (int i = 0; i < N; i++) {
     dist[i] = INF;
   }
   dist[start] = 0;
-  PQ.push(make_pair(0, 0));
+  PQ.push(make_pair(dist[start], start));
   visit[start] = GRAY;
 
+  while (!PQ.empty())
+  {
+    pair<int, int> node = PQ.top();
+    PQ.pop();
+    int id = node.second;
+    visit[id] = BLACK;
+    // 最小値を取り出し、それが最短でなければ無視
+    if (dist[id] < node.first*(-1))
+    {
+      continue;
+    }
 
-
+    for (int j = 0; j < G[id].size(); j++) {
+      int v = G[id][j].toNode;
+      if (visit[v] == BLACK)
+      {
+        continue;
+      }
+      if (dist[v] > dist[id]+G[id][j].cost)
+      {
+        dist[v] = dist[id] + G[id][j].cost;   // 距離の更新
+        PQ.push(make_pair(dist[v]*(-1), v));  // 最小値でヒープ
+        visit[v] = GRAY;
+      }
+    }
+  }
 }
 
 
@@ -51,6 +75,8 @@ int main(int argc, char const *argv[])
     G1[a].push_back(Edge(b, c));
     G2[b].push_back(Edge(a, c));
   }
+
+  /* 計算 */
 
   return 0;
 }
