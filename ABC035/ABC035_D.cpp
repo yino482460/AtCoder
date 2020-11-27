@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-static const int MAX = 200000;
+static const int MAX = 100005;
 static const int INF = 1<<21;
 static const int WHITE = 0;
 static const int GRAY = 1;
@@ -9,16 +9,16 @@ static const int BLACK = 2;
 
 struct Edge
 {
-  int toNode;
-  int cost;
-  Edge(int toNode, int cost) : toNode(toNode), cost(cost) {}
+  long long toNode;
+  long long cost;
+  Edge(long long toNode, long long cost) : toNode(toNode), cost(cost) {}
 };
 
 using Graph = vector<vector<Edge> >;
-vector<int> dist(MAX); // 始点からの最短経路を保持
+vector<long long> dist(MAX); // 始点からの最短経路を保持
 
 void dijkstra(int start, int N, Graph G){
-  priority_queue<pair<int, int> > PQ;  // weight, nodeID
+  priority_queue<pair<long long, long long> > PQ;  // weight, nodeID
   int visit[N];
   // 距離の初期化
   for (int i = 0; i < N; i++) {
@@ -31,7 +31,7 @@ void dijkstra(int start, int N, Graph G){
 
   while (!PQ.empty())
   {
-    pair<int, int> node = PQ.top();
+    pair<long long, long long> node = PQ.top();
     PQ.pop();
     int id = node.second;
     visit[id] = BLACK;
@@ -63,12 +63,12 @@ int main(int argc, char const *argv[])
   /* 入力 */
   int N, M, T;
   cin >> N >> M >> T;
-  int A[N];
+  long long A[N];
   Graph G1(N), G2(N);
   for (int i = 0; i < N; i++) {
     cin >> A[i];
   }
-  int a, b, c;
+  long long a, b, c;
   for (int i = 0; i < M; i++) {
     cin >> a >> b >> c;
     a--; b--;
@@ -78,15 +78,14 @@ int main(int argc, char const *argv[])
 
   /* 計算 */
   dijkstra(0, N, G1);
-  int dist1[N]; // 始点0からの最短距離
+  long long dist1[N]; // 始点0からの最短距離
   for (int i = 0; i < N; i++) {
     dist1[i] = dist[i];
   }
-
-  int income = 0;
+  long long income = 0;
   dijkstra(0, N, G2);
   for (int i = 0; i < N; i++) {
-    income = max( income, (T-dist1[i]-dist[i])*A[i] );
+    income = max( income, (long long)(T-dist1[i]-dist[i])*A[i] );
   }
 
   /* 出力 */
