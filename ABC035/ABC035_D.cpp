@@ -2,23 +2,23 @@
 using namespace std;
 
 static const int MAX = 100005;
-static const int INF = 1<<21;
+static const long long INF = LLONG_MAX;
 static const int WHITE = 0;
 static const int GRAY = 1;
 static const int BLACK = 2;
 
 struct Edge
 {
-  long long toNode;
+  int toNode;
   long long cost;
-  Edge(long long toNode, long long cost) : toNode(toNode), cost(cost) {}
+  Edge(int toNode, long long cost) : toNode(toNode), cost(cost) {}
 };
 
 using Graph = vector<vector<Edge> >;
-vector<long long> dist(MAX); // 始点からの最短経路を保持
+long long dist[MAX]; // 始点からの最短経路を保持
 
 void dijkstra(int start, int N, Graph G){
-  priority_queue<pair<long long, long long> > PQ;  // weight, nodeID
+  priority_queue<pair<long long, int> > PQ;  // weight, nodeID
   int visit[N];
   // 距離の初期化
   for (int i = 0; i < N; i++) {
@@ -31,7 +31,7 @@ void dijkstra(int start, int N, Graph G){
 
   while (!PQ.empty())
   {
-    pair<long long, long long> node = PQ.top();
+    pair<long long, int> node = PQ.top();
     PQ.pop();
     int id = node.second;
     visit[id] = BLACK;
@@ -47,7 +47,7 @@ void dijkstra(int start, int N, Graph G){
       {
         continue;
       }
-      if (dist[v] > dist[id]+G[id][j].cost)
+      if (dist[v] > dist[id] + G[id][j].cost)
       {
         dist[v] = dist[id] + G[id][j].cost;   // 距離の更新
         PQ.push(make_pair(dist[v]*(-1), v));  // 最小値でヒープ
@@ -61,14 +61,16 @@ void dijkstra(int start, int N, Graph G){
 int main(int argc, char const *argv[])
 {
   /* 入力 */
-  int N, M, T;
+  int N, M;
+  long long T;
   cin >> N >> M >> T;
   long long A[N];
   Graph G1(N), G2(N);
   for (int i = 0; i < N; i++) {
     cin >> A[i];
   }
-  long long a, b, c;
+  int a, b;
+  long long c;
   for (int i = 0; i < M; i++) {
     cin >> a >> b >> c;
     a--; b--;
@@ -85,7 +87,7 @@ int main(int argc, char const *argv[])
   long long income = 0;
   dijkstra(0, N, G2);
   for (int i = 0; i < N; i++) {
-    income = max( income, (long long)(T-dist1[i]-dist[i])*A[i] );
+    income = max(income, (T-dist1[i]-dist[i])*A[i]);
   }
 
   /* 出力 */
