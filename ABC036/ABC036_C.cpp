@@ -24,7 +24,11 @@ int main(int argc, char const *argv[])
       mp[a[i]] = count;
     }
   }
-
+  cout << "map" << endl;
+  for (int i = 0; i < N; i++) {
+    cout << mp[i] << endl;
+  }
+  cout << "end" << endl;
   /* 出力 */
   for (int i = 0; i < N; i++) {
     cout << mp[b[i]]-1 << endl;
