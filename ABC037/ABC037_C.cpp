@@ -19,10 +19,17 @@ int main(int argc, char const *argv[])
     }
   }
 
-  /* 入力 */
+  /* 計算 */
   long long ans = 0;
   for (int i = 0; i < N-K+1; i++) {
-    ans += S[i+K] - S[i];
+    if (i == 0)
+    {
+      ans = S[K-1];
+    }
+    else
+    {
+      ans += S[i+K-1] - S[i-1];
+    }
   }
 
   /* 出力 */
