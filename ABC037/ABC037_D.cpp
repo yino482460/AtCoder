@@ -6,6 +6,7 @@ static const int MAX = 1005;
 
 int a[MAX][MAX];
 long long dp[MAX][MAX];
+int H, W;
 int dy[] = {1, 0, -1, 0};
 int dx[] = {0, 1, 0, -1};
 
@@ -27,13 +28,13 @@ long long memoDP(int y, int x) {
   for (int i = 0; i < 4; i++) {
     int ny = y+dy[i];
     int nx = x+dx[i];
-    if (nx < 0 || ny < 0 || a[nx][ny] == -1 )
+    if (!(0<=nx && nx<W && 0<=ny && ny<H))
     {
       continue;
     }
     if (a[y][x] < a[ny][nx])
     {
-      ret += memoDP(nx, ny);
+      ret += memoDP(ny, nx);
       ret %= mod;
     }
   }
@@ -43,7 +44,6 @@ long long memoDP(int y, int x) {
 int main(int argc, char const *argv[])
 {
   /* 入力 */
-  int H, W;
   cin >> H >> W;
   init();
   for (int i = 0; i < H; i++) {
@@ -51,7 +51,6 @@ int main(int argc, char const *argv[])
       scanf("%d", &a[i][j]);
     }
   }
-
   /* 計算 */
   long long ans = 0;
   for (int i = 0; i < H; i++) {
