@@ -1,10 +1,10 @@
-A : ABC040_A.cpp
+A : ABC041_A.cpp
 	g++ -o $@ $^
-B : ABC040_B.cpp
+B : ABC041_B.cpp
 	g++ -o $@ $^
-C : ABC040_C.cpp
+C : ABC041_C.cpp
 	g++ -o $@ $^
-D : ABC040_D.cpp
+D : ABC041_D.cpp
 	g++ -o $@ $^
 
 # make A; 実行 ./A
